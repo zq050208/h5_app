@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <title></title>
+    <link rel="stylesheet" href="css/personal.css">
+    <link rel="stylesheet" href="../public/mescroll.min.css">
+</head>
+
+<body>
+    <div style="width: 100%; background: url('image/icon-shareBG.png') no-repeat ; background-size: cover;height: 40px;">
+        <div class="navigation flex" onclick="goApp(3,config.user_id)">
+            <div><img src="image/icon-smallLogo.png" alt="" class="logo">小虎Hoo电竞</div>
+            <div class="download">下载APP</div>
+        </div>
+    </div>
+    <div class="top">
+        <div class="topMsg">
+            <div>
+                <div style="display: flex; align-items: center;padding: 23px 30px">
+                    <img src="" alt="" class="avatar" onclick="goApp(3,config.user_id)">
+                    <div class="message flex"><img src="image/icon-pesonalMessage.png" onclick="goApp()" alt="">私信</div>
+                </div>
+                <div style="padding: 0px 0px 0px 30px; display: flex;">
+                    <div class="nickname"></div><img src="" alt="" class="gender">
+                </div>
+                <div style="display: flex;font-size:10px;padding-bottom: 18px; padding: 7px 0px 0px 30px    ">
+                    <div class="constellation"></div>
+                    <div class="address"></div>
+                </div>
+                <div class="flex" style="padding: 15px 15px 0 30px;">
+                    <div class="flex" style="flex: 2;">
+                        <div class="margin"><span class="num follow_num"></span>关注</div>
+                        <div class="margin"><span class="num fans_num"></span>粉丝</div>
+                        <div class="margin margin_box" ><span class="num like_num"></span><span class="common">获赞</span></div>
+                    </div>
+                    <div style="flex: 1;display: flex;align-items: center;justify-content: flex-end;">
+                        <div class="attention" onclick="goApp(3,config.user_id)">关注</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab">
+        <div class="tabitem" style="margin-right: 36px;">作品</div>
+        <div class="tabitem">点赞</div>
+    </div>
+    <div class="conetnt">
+        <div id="mescroll" class="mescroll">
+            <div>
+                <div class="works"></div>
+                <div class="noData">点赞过的内容会出现在这</div>
+            </div>
+        </div>
+    </div>
+    <div class="bottommsg" onclick="goApp(3,config.user_id)">
+        <div class="bottom">去ta的主页</div>
+    </div>
+
+    <div class="shareModal">
+        <img src="image/icon-guidance.png" alt="">
+    </div>
+
+</body>
+
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+<script src="../public/mescroll.min.js"></script>
+<script src="../public/template-web.js"></script>
+<script type="text/html" id="personalWork">
+    {{each item v i}}
+    <div class="worksitem "  onclick="goApp({{v.type == 1? 1: 2}},{{v.id}})">
+        <div class="itemLeft">
+            <div class="vertical" style="width: 100%;">{{v.title}}</div>
+            <div class=" flex" style="color:rgba(153,153,153,1);font-size:12px;">
+                <div>{{getDateDiff(v.create_time)}} <span class="up"></span></div>
+                <!-- <div><img src="{{v.type == 2 ? 'image/icon-briefPlay_defalut.png' : 'image/icon_watch.png'}}" alt="" style="width: 22px;height: 20px;vertical-align: middle;">{{v.view_num}}</div> -->
+            </div>
+        </div>
+        <div class="itemRight " style="background: url('{{v.cover}}') no-repeat 100%/100%;">
+            {{if v.type == 2}}
+            <img src="image/icon-play.png" alt="" class="paly">
+            {{/if}}
+        </div>
+    </div>
+    {{/each}}
+</script>
+<script>
+    var config = {
+        userHomepage: 'UserHomepage/index',      // 个人信息url
+        type: 'post',
+        indexWorks: 'UserHomepage/indexWorks',   // 作品url
+        indexLike: 'UserHomepage/indexLike',     // 攒url
+        data: {
+            page: 1,
+            per_page: 10,
+            user_id: Number(Request('user_id'))
+        },
+        currentTab: 0,                                                          // 当前点击tab
+        mescroll: initMescroll(),
+        up: 'up',
+        flush: 'flush',
+        user_id: Number(Request('user_id')),
+        noWork: false,
+
+    }
+    requsetHttp(config.userHomepage, config.type, { user_id: config.user_id }, null, (res) => {
+        if (res.code == 200) {
+            if (res.data.userinfo.background_img) {
+                $(".top").css('background', 'url(' + res.data.userinfo.background_img + ') no-repeat 100%/100%')
+            } else {
+                $(".top").css('background', 'url("image/icon-personalBg.png") no-repeat ')
+            }
+            if (res.data.userinfo.user_id) config.user_id = res.data.userinfo.user_id
+            $('.nickname').text(res.data.userinfo.nickname)
+            $(".avatar").attr('src', res.data.userinfo.avatar)
+            if (res.data.userinfo.constellation != '') {
+                $(".constellation").show()
+                $('.constellation').text(res.data.userinfo.constellation)
+            }
+            if (res.data.userinfo.provcn  || res.data.userinfo.citycn ) {
+                $(".address").show()
+                if (res.data.userinfo.provcn == res.data.userinfo.citycn) {
+                    $(".address").text(res.data.userinfo.provcn)
+                } else {
+                    $(".address").text(res.data.userinfo.provcn + '.' + res.data.userinfo.citycn)
+                }
+            }
+            if (res.data.userinfo.gender === 1) {
+                $('.gender').attr('src', 'image/icon-gender_man.png')
+            } else if (res.data.userinfo.gender === 2) {
+                $('.gender').attr('src', 'image/icon-gender_women.png')
+            } else {
+                $('.gender').hide()
+            }
+            $('.like_num').text(returnNum(res.data.like_num))
+            $(".follow_num").text(returnNum(res.data.follow_num))
+            $(".fans_num").text(returnNum(res.data.fans_num))
+            if (res.data.is_mutual) {
+                $(".attention").show()
+                if (res.data.is_mutual == -1) {
+                    $(".attention").text('关注')
+                } else if (res.data.is_mutual == 0) {
+                    $(".attention").text('已关注')
+                } else {
+                    $(".attention").text('相互关注')
+                }
+            }
+        }
+    })
+
+    getWork().then(res => {
+        if (res.data.data.length == 0) {config.noWork = true}
+        getIndexWorks()
+    })
+    $(".tabitem").eq(0).addClass("active")
+    $(".tabitem").click(function () {
+        $(this).addClass('active').siblings().removeClass('active')
+        config.currentTab = $(this).index()
+        config.data.page = 1
+        $(".works").empty()
+        $(".noData").hide()
+        getIndexWorks(config.flush)
+    })  
+
+    $(".shareModal").click(function () {
+        $(".shareModal").hide()
+    })
+
+    function getWork() {
+        return new Promise((resolve, reject) => {
+            requsetHttp(config.indexWorks, config.type, config.data, null, (res) => {
+                if (res.code == 200) {
+                    resolve(res)
+                }
+            }) 
+        })
+    }
+
+    // 获取数据列表
+    function getIndexWorks(type) {
+        if (type == "flush") {
+            config.mescroll.optUp.page.num = 1;
+            config.data.page = 1
+        }
+        if (config.noWork == false) {
+            var url = config.currentTab == 0 ? config.indexWorks : config.indexLike
+        } else {
+            $(".tabitem").eq(0).hide()
+            $(".tabitem").eq(1).removeClass("active")
+            var url = config.indexLike
+        }
+        config.mescroll.setPageSize(config.data.per_page)
+        if (config.user_id) config.data.user_id = config.user_id
+        requsetHttp(url, config.type, config.data, null, (res) => {
+            if (res.code == 200) {
+                if (res.data.data.length == 0) $(".noData").show()
+                var works = template('personalWork', { item: res.data.data })
+                if (type == config.flush) {
+                    config.mescroll.optUp.page.num = 1;
+                    config.mescroll.setPageNum(config.data.page)
+                    config.mescroll.endByPage(res.data.data.length, res.data.last_page);
+                    $(".works").html(works);
+                } else {
+                    config.mescroll.endByPage(res.data.data.length, res.data.last_page);
+                    $(".works").append(works)
+                }
+                if (config.noWork == false) {
+                    $(".up").text(config.currentTab == 0 ? '发布' : '赞过') 
+                } else {
+                    $(".up").text('赞过')
+                }
+                 
+                config.data.page++;
+            }
+        })
+    }
+    template.defaults.imports.getDateDiff = getDateDiff
+    template.defaults.imports.currentTab = config.currentTab
+    /**
+   * mescroll 配置
+   */
+    function initMescroll() {
+        var mescroll = new MeScroll("mescroll", {
+            up: {
+                callback: upCallback,
+                isBounce: true,
+                noMoreSize: 0,
+                auto: false,
+                htmlNodata: '<p class="upwarp-nodata">没有更多了</p>'
+            },
+            down: {
+                auto: false,
+                callback: downCallback
+            }
+        });
+        return mescroll;
+    }
+
+    /**
+     * 下拉刷新的回调
+     */
+    function downCallback() {
+        getIndexWorks(config.flush);
+    }
+
+    /**
+     * 上拉加载的回调
+     */
+    function upCallback() {
+        getIndexWorks(config.up);
+    }
+
+
+
+</script>

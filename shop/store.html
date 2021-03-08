@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="css/swiper-4.3.3.min.css">
+    <link rel="stylesheet" href="css/store.css?param=Math.random()">
+    <title>积分商城</title>
+</head>
+<body>
+    <div class="header-top"></div>
+    <div class="draw">
+        <h4 class="draw-title">抽奖</h4>
+        <div class="swiper-container">
+            <div class="swiper-wrapper"></div>
+        </div>
+    </div>
+
+    <section class="page-down">
+        <div class="page-down-top"> <img src="img/icon-adorn.png"/><span>服务兑换</span></div>
+        <div class="list">
+            <div class="container">
+                <div class="container-left" >
+                    <img src="img/icon-person.jpg"/>
+                </div>
+                <div class="container-right" >
+                    <p>僵尸赛人类位置</p>
+                    <span class="tips">120积分</span>
+                </div>
+            </div>
+            <div class="container">
+                <div class="container-left" >
+                    <img src="img/icon-room.jpg"/>
+                </div>
+                <div class="container-right" >
+                    <p>自定义房间特权</p>
+                    <span class="tips">2700积分</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/swiper-4.3.3.min.js"></script>
+    <script src="js/service.js?v=Math.random()"></script>
+    <script>
+        var load = {
+          getGoodsList: function (url,type,data) {
+              requsetHttp(url,type,data,(res)=>{
+                  console.log(res);
+                  var list = res.data.data;
+                  if(list.length){
+                      for(var i=0; i<list.length; i++){
+                          $('.swiper-wrapper').append('<div class="swiper-slide" goods_id='+list[i].goods_id+' ><div class="card"><img src='+list[i].goods_image+' /><p class="goods-name">'+list[i].goods_name+'</p></div></div>');
+                      }
+                  }else{
+                      $('.swiper-wrapper').append('<span class="not">暂无抽奖活动</span>');
+                      $('.page-down').css('margin-top','-5%');
+                  }
+                  var swiper = new Swiper('.swiper-container', {
+                      slidesPerView: 'auto',
+                      spaceBetween: 20,
+                      freeMode: true,
+                      pagination: {
+                          el: '.swiper-pagination',
+                          clickable: true,
+                      }
+                  });
+                  $('.swiper-slide').click(function () {
+                      location.href = 'draw.html'+ '?id=' + $(this).attr('goods_id');
+                  });
+              });
+          }
+        };
+        var config = {
+            goodsListUrl: baseUrl + '/Lottery/GoodsList',
+        };
+        load.getGoodsList(config.goodsListUrl,'post',{page:1});
+        $('.list .container').click(function () {
+            var type = $(this).index() + 1 ;
+            location.href = 'cash.html?type=' + type;
+        })
+
+    </script>
+</body>
+</html>

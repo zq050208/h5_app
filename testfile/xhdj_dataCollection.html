@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,viewport-fit=cover, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <title>小虎互联电竞实时数据采集分析软件</title>
+    <link rel="stylesheet" type="text/css" href="css/jqcloud.css" />
+    <script src="js/jquery-2.1.0.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../public/service.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .canshu{
+            width:100%;
+        }
+     .title{
+        padding: 15px;
+        height:40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: antiquewhite  ;
+     }
+     .title p,.caption p,.item p{
+        font-size:16px;
+        font-family:PingFangSC-Medium,PingFang SC;
+        font-weight:500;
+        color:rgba(51,51,51,1);
+        line-height:22px;
+     }
+     .caption{
+         background: rgb(180, 180, 179);
+     }
+     .item,.caption{
+        background: rgb(180, 180, 179);
+border-bottom: 1px solid beige;
+        padding:0 15px ;
+        height:40px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+    }
+    </style>
+</head>
+<body>
+    <div id="canshu">
+         <div class="title">
+             <p>小虎互联电竞实时数据采集分析软件</p>
+         </div>
+         <div class="item" onclick="clickCollection()">
+             <p>数据采集</p>
+         </div>
+         <div class="item" onclick="clickAnalyze()">
+             <p>数据分析</p>
+            </div>
+         <div class="item" onclick="clickTransfer()">
+             <p>数据传输</p>
+            </div>
+    </div>
+    <script type="text/javascript">
+    
+        function clickCollection(e) {
+            location.href='./xhdj_datacollectionDe.html'
+        }
+        function clickAnalyze(e) {
+            location.href='./xhdj_dataAnalyze.html'
+        }
+        function clickTransfer(e) {
+            location.href='./xhdj_dataTransfer.html'
+        }
+    </script>
+</body>
+</html>

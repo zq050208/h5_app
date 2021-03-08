@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,viewport-fit=cover, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .canshu{
+            width:100%;
+        }
+        .canshu img{
+            width:100%
+        }
+        .titleDiv{
+            margin: 0 auto;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            
+        }
+        .titleDiv p{
+            font-size:22px;
+            font-family:PingFangSC-Medium,PingFang SC;
+            font-weight:500;
+            color:rgba(51,51,51,1);
+            line-height:22px;
+        }
+        .typepage{
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            white-space:pre
+        }
+        .typepage img{
+            width: 700px;
+        }
+    </style>
+</head>
+<body>
+    <div class="canshu">
+        <div class=titleDiv><p></p></div>
+       
+       <div class='typepage'>
+
+       </div>
+    </div>
+    <script src="../public/jquery.min.js"></script>
+    <script src="../public/service.js"></script>
+    <script>
+        var typepage=Request('type')
+        var titleDivhtml=''
+        var html=``
+        if(typepage==1){
+            titleDivhtml=`测试报告`
+            html=`<img src="./img/微信图片_20200318180214.png">`
+        }
+        else if(typepage==2){
+            titleDivhtml=`漏洞报告`
+            html=`<img src="./img/item1.png">
+            <img src="./img/item2.png">
+            <img src="./img/item3.png">
+            <img src="./img/item4.png">
+            <img src="./img/item5.png">
+            <img src="./img/item6.png">
+            <img src="./img/item7.png">
+            <img src="./img/item8.png">
+            <img src="./img/item9.png">
+            <img src="./img/item10.png">`
+
+        }
+        else if(typepage==3){
+            titleDivhtml=`接口测试脚本`
+            html=`<p> from selenium import webdriver 
+from selenium.webdriver.common.action_chains import ActionChains
+import time
+import unittest
+from tinytiger_common.opration import Op
+from tinytiger_common.allrequest import Requestmethod
+import pymysql
+class WebCommmon(unittest.TestCase):
+    #得到浏览器
+    host="http://192.168.1.232:9092/"
+    OP =Op()
+    r =Requestmethod()
+    def drivers(self):
+        driver = webdriver.Chrome()
+        driver.get("http://192.168.1.232/admin/index.php/team/teamApply")
+        return  driver
+    #通过陪玩审核
+    def Accompany_01(self):
+        time.sleep(1)
+        driver =self.drivers()
+        driver.find_element_by_xpath('//*[@id="username"]').send_keys("admin@qq.com")
+        driver.find_element_by_xpath('//*[@id="password"]').send_keys("1234567")
+        driver.find_element_by_xpath('//*[@id="login_form"]/div[3]/div[2]/button').click()
+        driver.find_element_by_link_text("约玩管理").click()
+        #约玩管理界面的进入的href
+        Accompany_play_Application_Audit_href =driver.find_element_by_xpath('//*[@id="list_key106"]/ul/li[2]/a').get_attribute("href")
+        driver.get(Accompany_play_Application_Audit_href)
+        #通过陪玩审核
+        Application_pass =driver.find_element_by_xpath('//*[@id="example1"]/tbody/tr[1]/td[16]/a[1]').get_attribute("href")
+        driver.get(Application_pass)
+        driver.close()
+        print("通过陪玩审核")
+    #通过战队审核
+    def team_02(self):
+        time.sleep(1)
+        driver = self.drivers()
+        self.OP.warn()
+        driver.find_element_by_xpath('//*[@id="username"]').send_keys("admin@qq.com")
+        driver.find_element_by_xpath('//*[@id="password"]').send_keys("1234567")
+        driver.find_element_by_xpath('//*[@id="login_form"]/div[3]/div[2]/button').click()
+        driver.find_element_by_link_text("绝地求生-训练赛").click()
+        #进入战队的href
+        team_href =driver.find_element_by_xpath('//*[@id="list_key1002"]/ul/li[3]/a').get_attribute("href")
+        driver.get(team_href)
+        #通过按钮的href
+        team_pass_href =driver.find_element_by_xpath('//*[@id="example1"]/tbody/tr[1]/td[9]/a[1]').get_attribute("href")
+
+        driver.get(team_pass_href)
+        driver.close()
+    #战队认证审核
+    def Authentication_03(self):
+        time.sleep(1)
+        driver = self.drivers()
+        self.OP.warn()
+        driver.find_element_by_xpath('//*[@id="username"]').send_keys("admin@qq.com")
+        driver.find_element_by_xpath('//*[@id="password"]').send_keys("1234567")
+        driver.find_element_by_xpath('//*[@id="login_form"]/div[3]/div[2]/button').click()
+        driver.find_element_by_link_text("绝地求生-训练赛").click()
+        # 进入认证审核的href
+        team_href = driver.find_element_by_xpath('//*[@id="list_key1002"]/ul/li[7]/a').get_attribute(
+            "href")
+        driver.get(team_href)
+        # 通过认证审核按钮的href
+        team_pass_href = driver.find_element_by_xpath('//*[@id="example1"]/tbody/tr[1]/td[9]/a[1]').get_attribute(
+            "href")
+        driver.get(team_pass_href)
+        driver.close()
+    # 通过金币和用户获取金币
+    def order_04(self):
+        time.sleep(1)
+        self.OP.warn()
+        driver4 = self.drivers()
+        # 登录
+        driver4.find_element_by_xpath('//*[@id="username"]').send_keys("admin@qq.com")
+        driver4.find_element_by_xpath('//*[@id="password"]').send_keys("1234567")
+        driver4.find_element_by_xpath('//*[@id="login_form"]/div[3]/div[2]/button').click()
+        driver4.find_element_by_link_text("金币统计").click()
+        # 进入系统金币池
+        statistics_href = driver4.find_element_by_xpath(
+            '//*[@id="list_key113"]/ul/li[8]/a').get_attribute("href")
+        driver4.get(statistics_href)
+        # 进入申请金币池
+        Apply_href = driver4.find_element_by_xpath(
+            "/html/body/div[1]/div/section[2]/div/div/div/div[2]/div/a").get_attribute("href")
+        driver4.get(Apply_href)
+        # 选择时间
+        driver4.find_element_by_xpath('//*[@id="use_start"]').click()
+        driver4.find_element_by_xpath('/html/body/div[3]/div[1]/div/table/tbody/tr[5]/td[2]').click()
+        driver4.find_element_by_xpath('//*[@id="use_end"]').click()
+        driver4.find_element_by_xpath('/html/body/div[4]/div[1]/div/table/thead/tr[1]/th[3]').click()
+        driver4.find_element_by_xpath('/html/body/div[4]/div[1]/div/table/thead/tr[1]/th[3]').click()
+        driver4.find_element_by_xpath('/html/body/div[4]/div[1]/div/table/thead/tr[1]/th[3]').click()
+        driver4.find_element_by_xpath('/html/body/div[4]/div[1]/div/table/tbody/tr[5]/td[7]').click()
+        driver4.find_element_by_xpath(
+            '/html/body/div[1]/div/section[2]/div/div/div/form/div/div/div[3]/div/input').send_keys("300000")
+        driver4.find_element_by_xpath(
+            '/html/body/div[1]/div/section[2]/div/div/div/form/div/div/div[4]/div/textarea').send_keys("林测试")
+        driver4.find_element_by_xpath('/html/body/div[1]/div/section[2]/div/div/div/form/div/div/div[5]/button').click()
+        driver4.close()
+        # 金币池的金币通过
+        driver2 = self.drivers()
+        # 登录
+        driver2.find_element_by_xpath('//*[@id="username"]').send_keys("admin@qq.com")
+        driver2.find_element_by_xpath('//*[@id="password"]').send_keys("1234567")
+        driver2.find_element_by_xpath('//*[@id="login_form"]/div[3]/div[2]/button').click()
+        driver2.find_element_by_link_text("财务流水").click()
+        pool_href = driver2.find_element_by_xpath('//*[@id="list_key107"]/ul/li[7]/a').get_attribute(
+            "href")
+
+        driver2.get(pool_href)
+        pass_pool_href = driver2.find_element_by_xpath(
+            "/html/body/div[1]/div/section[2]/div[1]/div/div/div[3]/table/tbody/tr[1]/td[6]/a[1]").get_attribute("href")
+
+        driver2.get(pass_pool_href)
+        driver2.close()
+        # 申请金币
+        time.sleep(1)
+        driver = self.drivers()
+        # 登录
+        driver.find_element_by_xpath('//*[@id="username"]').send_keys("admin@qq.com")
+        driver.find_element_by_xpath('//*[@id="password"]').send_keys("1234567")
+        driver.find_element_by_xpath('//*[@id="login_form"]/div[3]/div[2]/button').click()
+        driver.find_element_by_link_text("金币统计").click()
+        # 金币统计的进入的href
+        Gold_coin_statistics_href = driver.find_element_by_xpath(
+            '//*[@id="list_key113"]/ul/li[1]/a').get_attribute("href")
+
+        driver.get(Gold_coin_statistics_href)
+        # 选择全部用户
+        driver.find_element_by_xpath(
+        '/html/body/div[1]/div/section[2]/div[1]/div/div/form/div/div/div[2]/div/label').click()
+        # 选择发送10金币
+        driver.find_element_by_xpath(
+            '/html/body/div[1]/div/section[2]/div[1]/div/div/form/div/div/div[6]/div/input').send_keys("100")
+        # 输入推送原因
+        driver.find_element_by_xpath('//*[@id="content"]/div/textarea').send_keys("林测试")
+        # 选择立即发送
+        driver.find_element_by_xpath('//*[@id="plan_type"]/div/label[1]/input').click()
+        # 点击提交申请
+        driver.find_element_by_xpath(
+            '/html/body/div[1]/div/section[2]/div[1]/div/div/form/div/div/div[10]/button').click()
+        driver.close()
+        time.sleep(1)
+        # 金币审核通过
+        time.sleep(1)
+        driver1 = self.drivers()
+        # 登录
+        driver1.find_element_by_xpath('//*[@id="username"]').send_keys("admin@qq.com")
+        driver1.find_element_by_xpath('//*[@id="password"]').send_keys("1234567")
+        driver1.find_element_by_xpath('//*[@id="login_form"]/div[3]/div[2]/button').click()
+        driver1.find_element_by_link_text("金币统计").click()
+        #  金币审核的进入的href
+
+        Gold_To_examine_href = driver1.find_element_by_xpath('//*[@id="list_key113"]/ul/li[2]/a').get_attribute("href")
+
+        driver1.get(Gold_To_examine_href)
+        #通过金币审核
+        Gold_To_examine_pass = driver1.find_element_by_xpath(
+            '/html/body/div[1]/div[1]/section[2]/div/div/div/div[3]/table/tbody/tr[1]/td[7]/a[1]').get_attribute("href")
+
+        driver1.get(Gold_To_examine_pass)
+        driver1.close()
+    # 通过金币和用户获取金币
+
+    def order_04_user_id(self,G_respond_token,G_respond_user_id):
+        time.sleep(1)
+        self.OP.warn()
+        driver4 = self.drivers()
+        # 登录
+        driver4.find_element_by_xpath('//*[@id="username"]').send_keys("admin@qq.com")
+        driver4.find_element_by_xpath('//*[@id="password"]').send_keys("1234567")
+        driver4.find_element_by_xpath('//*[@id="login_form"]/div[3]/div[2]/button').click()
+        driver4.find_element_by_link_text("金币统计").click()
+        # 进入系统金币池
+        statistics_href = driver4.find_element_by_xpath(
+            '//*[@id="list_key113"]/ul/li[8]/a').get_attribute("href")
+        driver4.get(statistics_href)
+        # 进入申请金币池
+        Apply_href = driver4.find_element_by_xpath(
+            "/html/body/div[1]/div/section[2]/div/div/div/div[2]/div/a").get_attribute("href")
+        driver4.get(Apply_href)
+        # 选择时间
+        driver4.find_element_by_xpath('//*[@id="use_start"]').click()
+        driver4.find_element_by_xpath('/html/body/div[3]/div[1]/div/table/tbody/tr[5]/td[2]').click()
+        driver4.find_element_by_xpath('//*[@id="use_end"]').click()
+        driver4.find_element_by_xpath('/html/body/div[4]/div[1]/div/table/thead/tr[1]/th[3]').click()
+        driver4.find_element_by_xpath('/html/body/div[4]/div[1]/div/table/thead/tr[1]/th[3]').click()
+        driver4.find_element_by_xpath('/html/body/div[4]/div[1]/div/table/thead/tr[1]/th[3]').click()
+        driver4.find_element_by_xpath('/html/body/div[4]/div[1]/div/table/tbody/tr[5]/td[7]').click()
+        driver4.find_element_by_xpath(
+            '/html/body/div[1]/div/section[2]/div/div/div/form/div/div/div[3]/div/input').send_keys("300000")
+        driver4.find_element_by_xpath(
+            '/html/body/div[1]/div/section[2]/div/div/div/form/div/div/div[4]/div/textarea').send_keys("林测试")
+        driver4.find_element_by_xpath('/html/body/div[1]/div/section[2]/div/div/div/form/div/div/div[5]/button').click()
+        driver4.close()
+        # 金币池的金币通过
+        driver2 = self.drivers()
+        # 登录
+        driver2.find_element_by_xpath('//*[@id="username"]').send_keys("admin@qq.com")
+        driver2.find_element_by_xpath('//*[@id="password"]').send_keys("1234567")
+        driver2.find_element_by_xpath('//*[@id="login_form"]/div[3]/div[2]/button').click()
+        driver2.find_element_by_link_text("财务流水").click()
+        pool_href = driver2.find_element_by_xpath('//*[@id="list_key107"]/ul/li[7]/a').get_attribute(
+            "href")
+
+        driver2.get(pool_href)
+        pass_pool_href = driver2.find_element_by_xpath(
+            "/html/body/div[1]/div/section[2]/div[1]/div/div/div[3]/table/tbody/tr[1]/td[6]/a[1]").get_attribute("href")
+
+        driver2.get(pass_pool_href)
+        driver2.close()
+        # 申请金币
+        time.sleep(1)
+        driver = self.drivers()
+        # 登录
+        driver.find_element_by_xpath('//*[@id="username"]').send_keys("admin@qq.com")
+        driver.find_element_by_xpath('//*[@id="password"]').send_keys("1234567")
+        driver.find_element_by_xpath('//*[@id="login_form"]/div[3]/div[2]/button').click()
+        driver.find_element_by_link_text("金币统计").click()
+        # 金币统计的进入的href
+        Gold_coin_statistics_href = driver.find_element_by_xpath(
+            '//*[@id="list_key113"]/ul/li[1]/a').get_attribute("href")
+
+        driver.get(Gold_coin_statistics_href)
+        # 选择全部用户
+        driver.find_element_by_xpath(
+        '/html/body/div[1]/div/section[2]/div[1]/div/div/form/div/div/div[2]/div/label').click()
+        # 选择发送10金币
+        driver.find_element_by_xpath(
+            '/html/body/div[1]/div/section[2]/div[1]/div/div/form/div/div/div[6]/div/input').send_keys("100")
+        # 输入推送原因
+        driver.find_element_by_xpath('//*[@id="content"]/div/textarea').send_keys("林测试")
+        # 选择立即发送
+        driver.find_element_by_xpath('//*[@id="plan_type"]/div/label[1]/input').click()
+        # 点击提交申请
+        driver.find_element_by_xpath(
+            '/html/body/div[1]/div/section[2]/div[1]/div/div/form/div/div/div[10]/button').click()
+        driver.close()
+        time.sleep(1)
+        # 金币审核通过
+        time.sleep(1)
+        driver1 = self.drivers()
+        # 登录
+        driver1.find_element_by_xpath('//*[@id="username"]').send_keys("admin@qq.com")
+        driver1.find_element_by_xpath('//*[@id="password"]').send_keys("1234567")
+        driver1.find_element_by_xpath('//*[@id="login_form"]/div[3]/div[2]/button').click()
+        driver1.find_element_by_link_text("金币统计").click()
+        #  金币审核的进入的href
+
+        Gold_To_examine_href = driver1.find_element_by_xpath('//*[@id="list_key113"]/ul/li[2]/a').get_attribute("href")
+
+        driver1.get(Gold_To_examine_href)
+        #通过金币审核
+        Gold_To_examine_pass = driver1.find_element_by_xpath(
+            '/html/body/div[1]/div[1]/section[2]/div/div/div/div[3]/table/tbody/tr[1]/td[7]/a[1]').get_attribute("href")
+
+        driver1.get(Gold_To_examine_pass)
+        driver1.close()
+        # 获取用户红包列表
+        url_redPacketList = self.host + "RedPacketController/redPacketList"
+        data_redPacketList = {
+            "page": 1,
+            "status": 1
+        }
+        print(data_redPacketList)
+        headers_redPacketList = {
+            "token": G_respond_token
+        }
+        respond_redPacketList = self.r.request_post(url=url_redPacketList, data=data_redPacketList,
+                                                    headers=headers_redPacketList)
+        print(" 获取用户红包列表1领取%s" % respond_redPacketList)
+        # 获取红包id
+        respond_redPacketList_red_packet_id = respond_redPacketList.get("data").get("list")[0].get("red_packet_id")
+        print("获取红包id%s" % respond_redPacketList_red_packet_id)
+        # 分享回调(除任务外
+        url_share = self.host + "InitController/share"
+        data_share = {
+            "user_id": G_respond_user_id,
+            "type": 4,
+            "share_key": "redPacket",
+            "red_packet_id": respond_redPacketList_red_packet_id,
+            "take_type": 2
+
+        }
+        print(data_share)
+        headers_share = {
+            "token": G_respond_token
+        }
+        respond_share = self.r.request_post(url=url_share, data=data_share, headers=headers_share)
+        print("#Init - 分享回调(除任务外)1.微信网页 redPacket=领取红包　%s" % respond_share)
+        print("领取红包成功")
+    def info_05(self,infomation):
+        infomation_code =infomation.get("code")
+        self.assertEqual(infomation_code,200)
+        print(infomation_code)
+    #实名认证审核
+    def Real_name_06(self):
+        time.sleep(1)
+        driver = self.drivers()
+        driver.find_element_by_xpath('//*[@id="username"]').send_keys("admin@qq.com")
+        driver.find_element_by_xpath('//*[@id="password"]').send_keys("1234567")
+        driver.find_element_by_xpath('//*[@id="login_form"]/div[3]/div[2]/button').click()
+        driver.find_element_by_link_text("大神管理").click()
+        Real_name_href =driver.find_element_by_xpath('//*[@id="list_key106"]/ul/li[1]/a').get_attribute("href")
+        driver.get(Real_name_href)
+        pass_Real_name_href=driver.find_element_by_xpath('//*[@id="example1"]/tbody/tr[1]/td[7]/a[1]').get_attribute("href")
+        driver.get(pass_Real_name_href)
+        driver.close()
+        print("实名认证审核通过")
+    def test_mysql(self):
+        connect = pymysql.Connect(
+            host='192.168.1.232',
+            port=3306,
+            user='root',
+            passwd='123456',
+            db='xhdj_dev',
+            charset='utf8'
+        )
+
+        # 获取游标
+        cursor = connect.cursor()
+        sql='SELECT user_id FROM xhdj_userinfo ORDER BY user_id DESC  LIMIT 1'
+        cursor.execute(sql)
+        data = cursor.fetchone()
+        print(data[0])
+        return data[0]
+    def send_money(self):
+        time.sleep(1)
+        driver = self.drivers()
+        driver.find_element_by_xpath('//*[@id="username"]').send_keys("admin@qq.com")
+        driver.find_element_by_xpath('//*[@id="password"]').send_keys("1234567")
+        driver.find_element_by_xpath('//*[@id="login_form"]/div[3]/div[2]/button').click()
+        driver.find_element_by_link_text("财务流水").click()
+        href =driver.find_element_by_xpath('//*[@id="list_key107"]/ul/li[11]/a').get_attribute('href')
+        driver.get(href)
+        driver.find_element_by_xpath('/html/body/div[1]/div[1]/section[2]/div/div/div/div[2]/div/a').click()
+        time.sleep(1)
+        use_id=self.test_mysql()
+        driver.find_element_by_xpath('//*[@id="add_send_currency"]/div/div/div/form/div[1]/div[1]/div/input').send_keys(use_id)
+        driver.find_element_by_xpath('//*[@id="add_send_currency"]/div/div/div/form/div[1]/div[2]/div/select').click()
+        driver.find_element_by_xpath('//*[@id="add_send_currency"]/div/div/div/form/div[1]/div[2]/div/select/option[2]').click()
+        driver.find_element_by_xpath('//*[@id="add_send_currency"]/div/div/div/form/div[1]/div[3]/div/input').send_keys('10000')
+        driver.find_element_by_xpath('//*[@id="add_send_currency"]/div/div/div/form/div[1]/div[4]/div/textarea').send_keys('测试')
+        driver.find_element_by_xpath('//*[@id="add_send_currency"]/div/div/div/form/div[2]/button[1]').click()
+        href2 =driver.find_element_by_xpath('/html/body/div[1]/div[1]/section[2]/div/div/div/div[3]/table/tbody/tr[1]/td[9]/a[1]').get_attribute('href')
+        driver.get(href2)
+        driver.quit()
+    def test_coupon_how(self):
+        time.sleep(1)
+
+        driver = self.drivers()
+        driver.find_element_by_xpath('//*[@id="username"]').send_keys("admin@qq.com")
+        driver.find_element_by_xpath('//*[@id="password"]').send_keys("1234567")
+        driver.find_element_by_xpath('//*[@id="login_form"]/div[3]/div[2]/button').click()
+        driver.find_element_by_link_text("优惠券").click()
+        href =driver.find_element_by_xpath('//*[@id="list_key115"]/ul/li[2]/a').get_attribute('href')
+
+        driver.get(href)
+        driver.find_element_by_xpath('/html/body/div[1]/div/section[2]/div/div/div/div[2]/div/a').click()
+
+        use_id = self.test_mysql()
+        driver.find_element_by_xpath('/html/body/div[1]/div/section[2]/div/div/div/form/div/div/div[1]/div/input').send_keys(use_id)
+
+        driver.find_element_by_xpath('/html/body/div[1]/div/section[2]/div/div/div/form/div/div/div[6]/div/select/option[1]').click()
+        driver.find_element_by_xpath('/html/body/div[1]/div/section[2]/div/div/div/form/div/div/div[7]/div/input').send_keys('测试')
+        driver.find_element_by_xpath('/html/body/div[1]/div/section[2]/div/div/div/form/div/div/div[8]/div/input').send_keys(3)
+        driver.find_element_by_xpath('/html/body/div[1]/div/section[2]/div/div/div/form/div/div/div[10]/div/input').send_keys(3)
+        driver.find_element_by_xpath('/html/body/div[1]/div/section[2]/div/div/div/form/div/div/div[11]/div/input').send_keys('测试')
+        driver.find_element_by_xpath('/html/body/div[1]/div/section[2]/div/div/div/form/div/div/div[12]/button').click()
+        href2 =driver.find_element_by_xpath('//*[@id="list_key115"]/ul/li[3]/a').get_attribute('href')
+        driver.get(href2)
+        href3 =driver.find_element_by_xpath('/html/body/div[1]/div[1]/section[2]/div/div/div/div[2]/table/tbody/tr[1]/td[8]/a[1]').get_attribute('href')
+        driver.get(href3)
+        driver.quit()
+if __name__ =="__main__":
+    T =WebCommmon()
+    T.team_02()</p>`
+        }
+        $('.titleDiv').html(titleDivhtml)
+        $('.typepage').html(html)
+
+    </script>
+</body>
+</html>

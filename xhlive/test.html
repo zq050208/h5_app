@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <title>打开小虎电竞</title>
+</head>
+<body>
+    <a class="download" onclick="clickDownload()" >打开APP</a>
+
+    <script src="../public/jquery.min.js"></script>
+    <script src="../public/service.js"></script>
+    <script>
+
+      function clickDownload () {
+        console.log(333)
+        if (browser.versions.iPhone || browser.versions.ios || browser.versions.iPad) {
+          var loadDateTime = new Date();
+          window.location = "tt://titi:8888/from";//schema链接或者universal link
+          window.setTimeout(function() { //如果没有安装app,便会执行setTimeout跳转下载页
+            var timeOutDateTime = new Date();
+            if (timeOutDateTime - loadDateTime < 5000) {
+              window.location = "tt://titi:8888/from"; //ios下载地址
+            } else {
+              window.close();
+            }
+          }, 500);
+
+        } else if (browser.versions.android) {
+          var state = null;
+          try {
+            window.location = 'tt://titi:8888/from'; //schema链接或者universal link
+            window.setTimeout(function() {
+              window.location = "http://192.168.1.241/web_app/new_information/download.html"; //android下载地址
+            }, 500);
+          } catch (e) {
+
+          }
+        }
+      }
+
+    </script>
+    <style>
+      a{
+        width: 200px;
+        height: 200px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+    </style>
+</body>
+</html>

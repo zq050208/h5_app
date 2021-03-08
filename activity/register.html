@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="css/register.css?v=Math.random()">
+    <title>注册领现金</title>
+</head>
+<body>
+
+    <div class="page">
+        <header>
+            <div class="logo"><img src="img/remind-logo.png"></div>
+            <div class="flex-box" style="padding-top: 10px;"><img src="img/register-theme.png" style="width: 95%"/></div>
+            <div class="flex-box" style=" font-size: 18px;color: #FFFFFF;padding-top: 5px;margin-bottom: -15px;">更有大神免费陪你玩</div>
+            <div class="flex-box"><img src="img/register-game.png" style="width: 100%" /> </div>
+        </header>
+        <div class="flex-box">
+            <img src="img/register-girl.png" style="width: 90%;margin-top: -100px;margin-left: 15px;z-index: 9;"/>
+        </div>
+        <div class="flex-box" style="color: #FFFFFF;padding-bottom: 10px;">
+            <span>注册就送<span style="color: #FFE200;font-size: 20px;font-family: PingFangSC-Medium;">10元现金</span><span style="color:#FFE200 ">（可提现）</span></span>
+        </div>
+
+        <div class="flex-box phone">
+            <input id="mobile" placeholder="输入手机号注册" />
+        </div>
+        <div class="flex-box error"><span>请填写正确手机号</span></div>
+        <div class="flex-box">
+            <div class="flex-box btn get-btn">领取奖励</div>
+        </div>
+    </div>
+
+    <div class="showModel remind">
+        <div class="modal">
+            <div class="modal-content">
+                <div class="modal-line-box amount-title">
+                    <span>填写验证码马上领取</span>
+                </div>
+                <div class="modal-line-box amount-info">
+                    <div class="flex-box" >
+                        <input class="getCode" placeholder="输入验证码" />
+                    </div>
+                    <div class="flex-box modal-error"><span></span></div>
+                    <div class="flex-box">
+                        <div class="flex-box btn submit">马上领取</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-box modal-cancel"><img style="margin-top: 30px;" width="39" src="img/remind-close.png"/></div>
+        </div>
+        <div class="mask" ></div>
+    </div>
+
+    <div class="showModel down">
+        <div class="left">
+            <img class="down-tips" src="img/register-tips.png"/>
+        </div>
+        <div class="right" >
+            <img class="down-succee" src="img/register-succee.png"/>
+        </div>
+        <div class="mask" ></div>
+    </div>
+
+    <script src="../public/jquery.min.js"></script>
+    <script src="../public/config.js"></script>
+    <script src="../public/service.js"></script>
+    <script>
+        var config = {
+            loginUrl: 'LoginController/phoneLogin',
+            codeUrl: 'LoginController/sendVerificationCode',
+            downloadUrl: 'https://h5.tinytiger.cn/web_app/knapsack/download.html',
+            type: 'post',
+            txt1: '请输入正确手机号',
+            txt2: '请输入验证码'
+        };
+        $('.get-btn').click(function () {
+            var mobile = $('#mobile').val();
+            if(checkmobile(mobile)){
+                requsetHttp(config.codeUrl, config.type, { phone: mobile},null,(res)=>{
+                    if(res.status){
+                        $('.remind').addClass('isShow');
+                    }else{
+                        $('.error span').text(res.msg).addClass('isShow');
+                    }
+                });
+            }else{
+                $('.error span').text(config.txt1).addClass('isShow');
+            }
+        });
+
+        $('.submit').click(function () {
+            var user_id = Request('user_id') || null;
+            var data = { phone: $('#mobile').val(), verification_code:  $('.getCode').val() };
+            if(user_id) data.invite_user_id = user_id;
+            if(data.verification_code){
+                requsetHttp(config.loginUrl, config.type, data ,null,(res)=>{
+                    if(res.status){
+                        alert('注册成功');
+                        location.href = config.downloadUrl;
+                    }else{
+                        $('.modal-error span').text(res.msg).addClass('isShow');
+                    }
+                });
+            }else{
+                $('.modal-error span').text(config.txt2).addClass('isShow');
+            }
+        });
+
+        $('.down').click(function () {
+            $('.down').removeClass('isShow');
+        });
+
+        $('#mobile').focus(function () {
+            $('.error span').removeClass('isShow');
+        });
+        $('.getCode').focus(function () {
+            $('.modal-error span').removeClass('isShow');
+        });
+        $('.modal-cancel').click(function () {
+            $('.remind').removeClass('isShow');
+        });
+    </script>
+</body>
+</html>

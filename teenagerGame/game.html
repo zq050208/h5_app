@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
+    <title>赛制</title>
+    <link rel="stylesheet" href="iconfont/iconfont.css">
+    <link rel="stylesheet" href="mui/mui.min.css">
+    <link rel="stylesheet" href="mui/mui.picker.min.css">
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+    
+    ul,
+    li {
+        list-style: none;
+    }
+    
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        font-size: 14px;
+        box-sizing: border-box;
+        font-family: PingFangSC-Semibold;
+        background: rgba(51, 51, 51, 1);
+        position: relative
+    }
+    
+    .main {
+        width: 100%;
+        height: 100%;
+        z-index: 999;
+    }
+    
+    .tab {
+        display: flex;
+        padding: 12px;
+        background-color: #333333;
+        justify-content: space-between
+    }
+    
+    .tab-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        width: 21vw;
+        height: 12vw;
+        background: url('https://cdn.tinytiger.cn/icon-teenagernoSelect.png') no-repeat 100%/100%;
+        color: rgba(110, 110, 110, 1)
+    }
+    
+    .notGame {
+        font-size: 10px;
+        color: rgba(255, 255, 255, 1)
+    }
+    
+    .tab-item.tab-active {
+        width: 21vw;
+        height: 12vw;
+        background: url("https://cdn.tinytiger.cn/icon-teenagerSelect.png") no-repeat 100%/100%;
+        font-weight: 600;
+    }
+    
+    .tab-item.tab-active .game_name {
+        color: rgba(0, 0, 0, 1);
+    }
+    
+    .content .content-item {
+        display: none;
+    }
+    
+    .content .content-item.active {
+        display: block;
+    }
+    
+    .scoll-view {
+        display: flex;
+        overflow-x: scroll;
+        white-space: nowrap;
+        margin-bottom: 7px;
+        background-color: #222222;
+        color: #ffffff;
+    }
+    
+     ::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+        background-color: none;
+    }
+    
+    .scoll-list,
+    .scoll-list-fixed {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        width: 21vw;
+        height: 12vw;
+        font-size: 10px;
+        position: relative;
+        flex-shrink: 0;
+    }
+    
+    .line {
+        display: none;
+    }
+    
+    .line.active {
+        width: 100%;
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        height: 4px;
+        left: 0;
+        background: linear-gradient(90deg, rgba(227, 187, 57, 1) 0%, rgba(206, 105, 22, 1) 100%);
+        display: block
+    }
+    
+    .icon-ln_jiantouxia {
+        position: absolute;
+        right: 10%;
+        font-size: 12px;
+        bottom: 5%
+    }
+    
+    .scoll-list .time {
+        font-size: 12px;
+        color: rgba(227, 187, 57, 1)
+    }
+    
+    .scoll-view-scoll {
+        overflow-x: scroll;
+        white-space: nowrap;
+        display: flex
+    }
+    /* 榜单 */
+    
+    .integral-kill {
+        padding: 0 12px;
+        background: rgba(51, 51, 51, 1)
+    }
+    
+    .main-contnet {
+        background: rgba(34, 34, 34, 1);
+        position: relative;
+        z-index: 999;
+    }
+    
+    .list-tab-contnet {
+        border: 1px solid;
+        border-image: linear-gradient(90deg, rgba(227, 187, 57, 1), rgba(206, 105, 22, 1)) 1 1;
+        border-top-color: #fff;
+        border-top-width: 0px;
+        width: 100%;
+        height: 58vh;
+        overflow-y: scroll;
+    }
+    
+    .list-tab {
+        display: flex;
+    }
+    
+    .list-tab-item {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        padding: 10px 0;
+        color: #fff;
+        border: 1px solid;
+        border-image: linear-gradient(90deg, rgba(227, 187, 57, 1), rgba(206, 105, 22, 1)) 1 1;
+        border-bottom-color: transparent;
+        border-top-width: 0px;
+        border-left-width: 0px;
+        border-right-width: 0px;
+        position: relative;
+    }
+    
+    .tablines.active {
+        visibility: visible
+    }
+    
+    .tablines {
+        visibility: hidden;
+        position: absolute;
+        bottom: -1px;
+        width: 100%;
+        height: 1px;
+        left: 0;
+        background: linear-gradient(90deg, rgba(227, 187, 57, 1) 0%, rgba(206, 105, 22, 1) 100%);
+    }
+    
+    .list-tab-item.active {
+        color: rgba(227, 187, 57, 1);
+        border: 1px solid;
+        border-image: linear-gradient(90deg, rgba(227, 187, 57, 1), rgba(206, 105, 22, 1)) 1 1;
+        border-bottom-color: transparent;
+        border-bottom-width: 0px;
+    }
+    /* 滑动选择器*/
+    
+    .mui-poppicker-header {
+        background-color: #fff;
+        border-bottom: none
+    }
+    
+    .mui-poppicker-header .mui-btn {
+        border: none
+    }
+    
+    .-webkit-mask-box-image {
+        background-color: #fff;
+    }
+    
+    .mui-btn-blue {
+        background-color: #fff;
+        color: black
+    }
+    
+    .mui-picker-inner {
+        background-color: #fff;
+        -webkit-mask-box-image: none;
+        border-top: 0px
+    }
+    
+    .mui-poppicker-body {
+        border-top: 0px
+    }
+    
+    button.mui-btn.mui-poppicker-btn-cancel,
+    button.mui-btn.mui-btn-blue.mui-poppicker-btn-ok {
+        font-size: 18px;
+        background-color: #fff;
+    }
+    
+    button.mui-btn.mui-btn-blue.mui-poppicker-btn-ok {
+        color: rgba(227, 187, 57, 1)
+    }
+    /* 榜单导航 */
+    
+    .tab-title {
+        display: flex;
+        color: rgba(255, 255, 255, 0.5);
+        padding: 5px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08)
+    }
+    
+    .title-left,
+    .title-right {
+        flex: 1;
+        overflow: hidden;
+    }
+    
+    .left-main {
+        display: flex;
+    }
+    
+    .right-main {
+        display: flex;
+    }
+    
+    .mian-title {
+        flex: 1;
+        /* width: 100%; */
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        padding-left: 10px;
+    }
+    
+    .listmsg {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end
+    }
+    
+    .listmsg .iconfont {
+        flex: 0;
+        margin-left: 5px
+    }
+    /* .mian-title span:nth-child(2) {
+        margin-left: -20px
+    }
+    
+    .mian-title span:nth-child(3) {
+        padding-right: 10px
+    } */
+    
+    .ranking-flex4 {
+        flex: 1;
+        display: flex
+    }
+    
+    .ranking-flex4 span:first-child {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-left: 10px
+    }
+    
+    .ranking-flex4 span:last-child {
+        flex: 4;
+        display: flex;
+        padding-left: 20px
+    }
+    
+    .ranking-flex1 {
+        flex: 1;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+    
+    .ranking-flex1 span {
+        padding-right: 30px
+    }
+    
+    .item-left-list {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        padding-left: 10px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    .item-rankingMsg {
+        flex: 1;
+        padding: 0 10px;
+        display: flex
+    }
+    
+    .teamMsg {
+        flex: 3;
+        display: flex;
+        align-items: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        padding: 0 10px
+    }
+    
+    .ranking {
+        flex: 1;
+        justify-content: flex-start;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .integral {
+        flex: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center
+    }
+    
+    .icon-ln_jiantouzuo,
+    .icon-ln_jiantouyou {
+        flex: 1;
+        font-size: 12px;
+        display: flex;
+        justify-content: flex-end
+    }
+    
+    .right-mian-title {
+        font-size: 12px;
+        overflow-x: scroll;
+        white-space: nowrap;
+        flex: 9;
+        display: flex;
+        justify-content: space-between
+    }
+    
+    .right-mian-title span {
+        flex: 1;
+        margin-left: 8px;
+        padding: 0 3px;
+        width: 65px
+    }
+    /* 榜单列表 */
+    
+    .items {
+        display: flex;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 5px 0;
+        color: #fff
+    }
+    
+    .items img {
+        width: 20px;
+        height: 20px;
+        flex: 1;
+        margin-right: 3px
+    }
+    
+    .item-left,
+    .item-right {
+        display: flex;
+        flex: 1;
+        align-items: center
+    }
+    
+    .item-left {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    .iconfont {
+        flex: 1;
+        color: #fff
+    }
+    
+    .list-name {
+        flex: 4;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    .item-right {
+        overflow: hidden;
+    }
+    
+    .team-list {
+        flex: 9;
+        font-size: 12px;
+        overflow-x: scroll;
+        white-space: nowrap;
+        display: flex
+    }
+    
+    .list-num {
+        margin-left: 8px;
+        flex-shrink: 0;
+        width: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center
+    }
+    
+    .bottom {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 38vw;
+        background: url("https://cdn.tinytiger.cn/icon-teenagerBottomBg.png") no-repeat 100%/100%
+    }
+    
+    .rule {
+        color: #fff;
+        z-index: 999;
+        text-decoration: underline;
+        position: absolute;
+        right: 12px;
+        bottom: 20%;
+    }
+</style>
+
+<body>
+    <div class="main">
+        <div class="tabs-container">
+            <div class="tab">
+            </div>
+            <!-- 内容 -->
+            <div class="content">
+                <div class="content-item"></div>
+            </div>
+        </div>
+
+    </div>
+    <!-- bottom -->
+    <div class="bottom">
+        <div class="rule">赛事积分规则</div>
+    </div>
+</body>
+
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/service.js"></script>
+<script src="../public/config.js"></script>
+<script src="mui/mui.min.js"></script>
+<script src="mui/mui.picker.min.js"></script>
+<script>
+    baseUrl = 'https://tinytigersmall.tinytiger.cn/' //正式
+    // baseUrl = 'http://120.77.181.145:9032/' //正式ip
+        // baseUrl = 'https://tinytiger.lsjdj.cn/';             //测试
+        // baseUrl = 'https://tinytigersmallrelease.lsjdj.cn/'; //预发布
+
+
+    $('.content-item').eq(0).addClass('active')
+        // 积分击杀排行榜
+    $(".tab-content").eq(0).addClass('active')
+        // 总榜单active
+    $(".scoll-list-fixed").find(".list_totalname").addClass("active")
+    var config = {
+        url: "YouthTrainController/getSelectData",
+        RankingListurl: "YouthTrainController/getRankingList",
+        type: 'post',
+        token: null,
+        data: {},
+        RankingListdata: {
+            type_id: 1, // 赛事类型id
+            is_all_ranking: 1, // 是否获取总榜单 1是 0否
+            // schedule_id: 1, // 赛程id        is_all_ranking=0 必传
+            group_id: 1, // 分组id          is_all_ranking=1必传
+            ranking_type: 1 // 榜单类型 1积分榜 2击杀榜
+        }
+    }
+    requsetHttp(config.url, config.type, config.data, config.token,(res)=>{
+        var type_list = res.data.type_list
+        var type_list_str = ''
+        for (var i = 0; i < type_list.length; i++) {
+            type_list_str += `<div class="tab-item" data-status="${type_list[i].status}" data-id="${i}" data-typeid="${type_list[i].id}" >
+                        <span class="game_name">${type_list[i].name}</span>
+                        <span class="notGame">${type_list[i].status == 0 ? '未开赛':''}</span>
+                    </div>`
+
+        }
+        $(".tab").append(type_list_str)
+        $('.tab-item').eq(0).addClass('tab-active')
+        loadTotalList(0)
+        config.RankingListdata.group_id = type_list[0].all_ranking[0].group_id
+        $(".tab-item").click(function() {
+            var index = $(this).index()
+            var status = $(this).attr("data-status") // 获取赛事状态
+            config.RankingListdata.type_id = $(this).attr("data-typeid") // 获取赛事类型id
+            config.RankingListdata.group_id = type_list[index].all_ranking[0].group_id;
+            if (status == 0) {
+                return
+            }
+
+            $(this).addClass('tab-active').siblings().removeClass('tab-active')
+            $('.content-item').eq(index).addClass('active').siblings().removeClass('active')
+            loadTotalList(index)
+
+        })
+        loadTotalList(0)
+
+    })
+
+    //榜单详情
+    function loadTotalList(index) {
+        requsetHttp(config.url, config.type, config.data, config.token,(res)=>{
+            var group_list = res.data.type_list[index].schedule_list
+
+            $(".content-item").empty()
+            var group_lsit_str = ''
+            $(".content-item").html(
+                ` <div class="scoll-view">
+                        <div class="scoll-view-fixation">
+                            <li class="scoll-list-fixed"><span class="list_totalname">总榜单</span>
+                                <div class="list_groups">
+                                    <span style="color:rgba(227,187,57,1)" id="groupName"></span>
+                                    <span class="icon iconfont icon-ln_jiantouxia"></span>
+                                </div>
+                                <div class="line"></div>
+                            </li>
+                        </div>
+                        <div class="scoll-view-scoll">
+
+                        </div>
+
+                    </div>
+
+                    <div class="integral-kill">
+                        <div class="main-contnet">
+
+                            <div class="list-tab">
+                                <div class="list-tab-item">积分榜<div class="tablines"></div></div>
+                                <div class="list-tab-item">击杀榜<div class="tablines"></div></div>
+                            </div>
+
+                            <div class="list-tab-contnet">
+                                <div class="tab-content">
+                                </div>
+                            </div>
+                        </div>
+                    </div>`
+            )
+            if (group_list.length == 0) {
+                $(".integral-kill").empty()
+            }
+            for (var i = 0; i < group_list.length; i++) {
+                group_lsit_str += `<li class="scoll-list" data-scheduleid="${group_list[i].id}"><span>${group_list[i].name}</span>
+                                <div><span class="time">${formeDate(group_list[i].match_time)}</span></div>
+                                <div class="line"></div>
+                            </li>`
+
+            }
+            $(".scoll-view-scoll").append(group_lsit_str)
+
+            $('.list-tab-item').eq(0).find(".tablines").removeClass("tablines")
+            $('.list-tab-item').eq(0).find(".tablines").removeClass("active")
+            $(".list-tab-item").siblings().find(".tablines").addClass("active")
+                // 总榜单默认值
+            $("#groupName").text(res.data.type_list[index].all_ranking[0].group_name)
+            $(".scoll-list-fixed").find(".line").addClass("active")
+
+            // 总榜单
+            $(".scoll-list-fixed").click(function() {
+                    $(".scoll-list-fixed").find(".line").addClass("active")
+                    $(".scoll-list").children(".line").removeClass("active")
+                    var pickdataList = []
+                    var list = res.data.type_list[index].all_ranking
+                    for (var i = 0; i < list.length; i++) {
+                        pickdataList.push({
+                            value: list[i].group_id,
+                            text: list[i].group_name
+                        })
+                    }
+                    var picker = new mui.PopPicker();
+                    var picData = pickdataList
+                    picker.setData(picData);
+                    picker.show(function(picData) {
+                        config.RankingListdata.group_id = picData[0].value // 获取分组id
+                        config.RankingListdata.is_all_ranking = 1
+                        $("#groupName").text(picData[0].text)
+                        reloadListData()
+                    })
+                })
+                // 分组点击
+            $(".scoll-list").click(function() {
+                    config.RankingListdata.is_all_ranking = 0
+                    config.RankingListdata.schedule_id = $(this).attr("data-scheduleid") // 获取赛事id
+                    $(".scoll-list-fixed").find(".line").removeClass("active")
+                    $(this).children(".line").addClass("active").parent().siblings().children(".line").removeClass("active")
+                    reloadListData()
+                })
+                // 积分 击杀
+            $(".list-tab-item").eq(0).addClass("active")
+            $(".list-tab-item").click(function() {
+                var index = $(this).index()
+                config.RankingListdata.ranking_type = index + 1 // 获取榜单类型 1积分榜 2击杀榜
+                $(this).addClass("active").siblings().removeClass("active")
+                $(this).find(".tablines").removeClass("active")
+                $(this).siblings().children().addClass('tablines')
+                $(this).siblings().find(".tablines").addClass("active")
+
+                reloadListData()
+            })
+            reloadListData()
+        })
+    }
+
+    function reloadListData() {
+        requsetHttp(config.RankingListurl, config.type, config.RankingListdata, config.token,(res)=>{
+            var rankingListStr = ''
+            var rankingList = res.data.ranking_list
+
+            $(".tab-content").html(
+                `  <div class="tab-title">
+                                        <div class="title-left">
+                                            <div class="left-main">
+                                                <div class="mian-title" style="${config.RankingListdata.is_all_ranking == 1? 'display:flex;justify-content: flex-start;':''}">
+                                                    <span>排名</span>
+                                                    <span style="${config.RankingListdata.is_all_ranking == 1? 'margin-left: 40px':''}">战队</span>
+                                                 
+                                                </div>
+                                                <div class="listmsg">
+                                                        <span style="${config.RankingListdata.is_all_ranking == 1? 'padding-right:40px':''}">${config.RankingListdata.ranking_type == 2? '总击杀':'总积分'}</span>
+                                                        <span class="icon iconfont icon-ln_jiantouzuo" style="${config.RankingListdata.is_all_ranking == 1? 'display:none':''}"></span>
+                                                </div>
+                                               
+
+                                            </div>
+                                        </div>
+                                        <div class="title-right"  style="${config.RankingListdata.is_all_ranking == 1? 'display:none':''}">
+                                            <div class="right-main">
+                                                <div class="right-mian-title">
+                                                    <span>第一场</span>
+                                                    <span>第二场</span>
+                                                    <span >第三场</span>
+                                                    <span>${config.RankingListdata.type_id == 3 || config.RankingListdata.type_id == 4 ? "第四场" : ""}</span>
+                                                    <span>${config.RankingListdata.type_id == 3 || config.RankingListdata.type_id == 4 ? "第五场" : ""}</span>
+                                                </div>
+                                                <span class="icon iconfont icon-ln_jiantouyou" ></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                             
+                                    <div class="list">
+                                        <ul>
+                                        
+                                        </ul>
+                                    </div>`
+            )
+            for (var i = 0; i < rankingList.length; i++) {
+                rankingListStr += ` <li class="items" style="${config.RankingListdata.is_all_ranking == 1? 'display:flex':''}">
+                                                <div class="item-left">
+                                                    <div class="item-left-list" >
+                                        
+                                                            <span class="ranking" style="${config.RankingListdata.is_all_ranking == 1? 'flex:0;padding-left:10px':''}">${i+1}</span>
+                                                        <div class="teamMsg" style="${config.RankingListdata.is_all_ranking == 1? 'margin-left: 15px':''}">
+                                                            <img src="${rankingList[i].team_logo}" alt="" style="${config.RankingListdata.is_all_ranking == 1? 'flex:0':''}">
+                                                            <span class="list-name"  style="${config.RankingListdata.is_all_ranking == 1? ' overflow: hidden;text-overflow: ellipsis; white-space: nowrap':''}">${rankingList[i].team_name}</span>
+                                                        </div>
+                                                      
+
+                                                        <div  class="integral" style="${config.RankingListdata.is_all_ranking == 1? 'text-align: center;display:block':''}"><span>${config.RankingListdata.ranking_type == 2 ?  rankingList[i].total_kill : rankingList[i].total_point}</span>
+                                                            <span class="icon iconfont  style="${config.RankingListdata.is_all_ranking == 1? 'display:none':''}""></span></div>
+                                                      
+                                                    </div>
+                                                    <span class="icon iconfont  "></span>
+                                                </div>
+                                                <div class="item-right" style="${config.RankingListdata.is_all_ranking == 1? 'display:none':''}">
+                                                    <div class="team-list">
+                                                        <div class="list-num"><span>${config.RankingListdata.ranking_type == 2 ?  rankingList[i].first_kill || 0 : rankingList[i].first_point || 0}</span></div>
+                                                        <div class="list-num"><span>${config.RankingListdata.ranking_type == 2 ?  rankingList[i].second_kill || 0 : rankingList[i].second_point || 0}</span></div>
+                                                        <div class="list-num"><span>${config.RankingListdata.ranking_type == 2 ?  rankingList[i].third_kill || 0 : rankingList[i].third_point || 0}</span></div>`
+                if (config.RankingListdata.type_id == 3 || config.RankingListdata.type_id == 4) {
+                    rankingListStr += `  <div class="list-num"><span>${config.RankingListdata.ranking_type == 2 ?  rankingList[i].fourth_kill || 0 : rankingList[i].fourth_point || 0}</span></div>
+                                                        <div class="list-num"><span>${config.RankingListdata.ranking_type == 2 ?  rankingList[i].fifth_kill || 0 : rankingList[i].fifth_point || 0}</span></div>
+                                                    </div>
+                                                    <span class="icon iconfont "></span>
+
+                                                </div>
+                                            </li>`
+                }
+            }
+            $(".list ul").append(rankingListStr)
+        })
+    }
+
+    // 跳转到赛事积分规则
+    $(".rule").click(function() {
+        location.href = "rule.html"
+    })
+
+    // 格式化时间
+    function formeDate(time) {
+        time = time.substring(4, 10).replace(/-/g, ".").substr(1)
+        return time
+    }
+</script>

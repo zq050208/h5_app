@@ -1,0 +1,616 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <title>资讯</title>
+    <link rel="stylesheet" href="../public/mescroll.min.css">
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0
+    }
+
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        font-size: 14px;
+    }
+
+    li {
+        list-style: none;
+    }
+
+    .scoll-view {
+        white-space: nowrap;
+        padding: 7px 15px;
+        overflow-x: scroll;
+        background:rgba(255,255,255,1);
+    }
+
+    ::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+        background-color: transparent;
+    }
+
+    .tab-item {
+        margin-right: 5px;
+        padding: 6px 10px;
+        display: inline-block;
+        color: rgba(37, 39, 42, 0.5)
+    }
+
+    .tab-item.tab-active {
+        background: rgba(237, 238, 240, 1);
+        color: rgba(37, 39, 42, 1);
+        border-radius: 15px;
+        font-weight: 600;
+        font-family: PingFangSC-Semibold;
+    }
+
+    .tabs-container .tab-content {
+        display: none;
+    }
+
+    .tabs-container .tab-content.active {
+        display: block;
+    }
+
+    .list-item {
+        padding: 15px;
+        display: flex;
+        padding-top: 0;
+        border-bottom: 1px solid rgba(221, 221, 221, .5);
+    }
+
+    .haspadding {
+        padding: 15px;
+        display: flex;
+        padding-top: 16px;
+        border-bottom: 1px solid rgba(221, 221, 221, .5);
+    }
+
+    .item-left {
+        flex: 2;
+        padding-right: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .item-right {
+        flex: 1;
+        position: relative;
+        display: flex;
+    }
+
+    .item-right img {
+        border-radius: 4px;
+        width: 120px;
+        height: 72px;
+    }
+
+    .left-bottom,
+    .bottom-right {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: rgba(37, 39, 42, 0.5);
+    }
+
+    .left-bottom {
+        width: 100%;
+        font-size: 12px;
+        margin-top: 2px;
+    }
+
+    .bottom-left img,
+    .bottom-right img {
+        width: 12px;
+        height: 10px;
+        margin-right: 4px
+    }
+
+    .bottom-right div {
+        display: flex;
+        align-items: center
+    }
+
+    .left-top {
+        width: 100%;
+        overflow: hidden;
+        display: -webkit-box;
+        text-overflow: ellipsis;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        white-space: normal;
+
+    }
+
+    .left-topele {
+        width: 100%;
+        padding-bottom: 35px
+    }
+
+    .mask {
+        position: absolute;
+        background: rgba(0, 0, 0, 0.5);
+        top: 0;
+        left: 0;
+        z-index: 111;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 4px;
+    }
+
+    .play {
+        border-style: solid;
+        border-width: 12px 0 12px 16px;
+        border-color: transparent transparent transparent #fff;
+    }
+
+    .bottom-left,
+    .bottom-right span {
+        font-size: 12px;
+        font-family: PingFangSC-Regular;
+        font-weight: 400;
+        color: rgba(37, 39, 42, 0.5);
+    }
+
+    .hot-comment {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px;
+        background: rgba(245, 246, 247, 1);
+    }
+
+    .hot-nocomment {
+        display: none
+    }
+
+    .hot-message {
+        width: 100%;
+        display: flex;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        margin-left: 5px;
+        color: rgba(153, 153, 153, 1)
+    }
+
+    .hot-reply {
+        flex: 8;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis
+    }
+
+    .nolength {
+        text-align: center;
+        margin-top: 100px;
+        color: rgba(153, 153, 153, 1)
+    }
+
+    .tab-noitem {
+        display: none
+    }
+
+    .stick {
+        width: 40px;
+        height: 16px;
+        display: block;
+    }
+
+    .nostick {
+        display: none
+    }
+
+    /* 赛事 */
+    .game {
+        padding: 0 15px;
+        background: rgba(255, 255, 255, 1);
+        /* display: none */
+    }
+
+    .gameTitle {
+        display: none
+    }
+
+    .game_name {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 10px;
+        padding-top: 5px
+    }
+
+    .gameevent_name {
+        color: rgba(37, 39, 42, 1);
+        font-size: 16px
+    }
+
+    .gameevent_more {
+        color: #fff;
+        background: rgba(255, 148, 0, 1);
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 10px
+    }
+
+    .game_box {
+        padding-bottom: 20px;
+        overflow-x: scroll;
+        white-space: nowrap
+    }
+
+    .game_box li {
+        width: 136px;
+        /* height: 80px; */
+        background: rgba(255, 255, 255, 1);
+        box-shadow: 0px 0px 6px 0px rgba(0, 0, 0, 0.1);
+        border-radius: 4px;
+        padding: 8px 7px;
+        margin-right: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        display: inline-block
+    }
+
+    .game_title {
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        color: rgba(37, 39, 42, 1);
+        font-size: 10px
+    }
+
+    .game_box li:last-child {
+        margin-right: 0
+    }
+
+    .game_team {
+        display: flex;
+        padding: 1px 13px;
+        justify-content: space-between;
+        align-items: center
+    }
+
+    .game_team img {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%
+    }
+
+    .game_msg {
+        font-size: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: rgba(153, 153, 153, 1)
+    }
+
+    .forecast {
+        color: rgba(255, 148, 0, 1)
+    }
+
+    .division_line {
+        width: 100%;
+        height: 6px;
+        background: rgba(245, 246, 247, 1);
+        display: none
+    }
+
+    .comment-list {
+        padding-top: 5px;
+        background:rgba(255,255,255,1);
+    }
+
+    .god_prediction {
+        width: 61px;
+        height: 16px;
+        display: block
+    }
+
+    .nogod_prediction {
+        display: none
+    }
+
+    .match_format {
+        margin-left: 5px
+    }
+
+    .match_content {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis
+    }
+
+    /* 分页 */
+    .mescroll {
+        position: fixed;
+        top: 46px;
+        bottom: 0;
+        height: auto;
+        padding: 0;
+    }
+</style>
+
+<body>
+    <div class="scoll-view mescroll-touch-x"></div>
+    <div style="position:fixed;width: 100%;height: 400px;">
+        <div id="mescroll" class="mescroll">
+            <div class="mescroll-content">
+                <!-- <div class="game">
+                    <div class="gameTitle">
+                        <div class="game_name">
+                            <span class="gameevent_name">赛事</span>
+                            <span class="gameevent_more">更多</span>
+                        </div>
+                    </div>
+
+                    <ul class="game_box "></ul>
+                </div> -->
+                <div class="division_line"></div>
+                <ul class="content-list "></ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+<script src="../public/mescroll.min.js"></script>
+<script>
+    var config = {
+        newListUrl: 'NewsController/getNewsList',                       // 资讯列表
+        categoryListUrl: 'NewsController/categoryList',                 // 资讯类型
+        type: 'post',                                                   // 请求方式
+        totalPage: 1,                                                   // 总页数
+        data: {
+            category_id: "",                                            // 资讯分类id
+            index: "",                                                  // 资讯分类权重
+            page: 1,                                                    // 当前页
+            // pageSize: 10 //每页显示数量
+        },
+        jumpUrl: '',                                                    // 跳转地址
+        mescroll: initMescroll(),
+        up: 'up',
+        flush: 'flush',
+        wkzstoken: Request('wkzstoken'),                                // 网咖助手token 
+        hotsign: null,                                                  // 是否是热门的标识
+        channel: Request('wxsource'),                                   // 区别小虎电竞的字段
+        xhdj_uid: Request('uid')                                       // 小虎电竞的user_id 
+    }
+
+
+    if (config.wkzstoken) {
+        // baseUrl='https://appweekly.lsjdj.cn/'
+    }
+
+    requsetHttp(config.categoryListUrl, config.type, {}, null, (res) => {
+        if (res.code == 200) {
+            var data = res.data;
+            var str = '';
+            for (var i = 0; i < data.length; i++) {
+                str += `<li class="tab-item ${data[i].category_type == 1 ? '' : 'tab-noitem'}" data-id="${data[i].id}" data-index="${data[i].index}">${data[i].name}</li>`;
+            }
+            config.data.category_id = data[0].id;
+            config.data.index = data[0].index;
+            $(".scoll-view").append(str);
+            $(".tab-item").eq(0).addClass("tab-active");
+            $(".tabs-container .tab-content").eq(0).addClass("active");
+            config.hotsign = $(".tab-item").attr("data-id");
+            $(".tab-item").click(loadData);
+            loadData();
+        }
+    })
+
+    function loadData(type) {
+        var type = arguments[0] ? arguments[0] : 'flush';
+        if (type == config.flush) config.data.page = 1;
+        var $index = $(this).index() >= 0 ? $(this).index() : 0;
+        var category_id = $(this).attr('data-id');
+        var index = $(this).attr('data-index');
+        config.hotsign = category_id == undefined ? config.hotsign : category_id;
+        if (category_id) config.data.category_id = category_id;
+        if (index) {
+            config.data.index = index;
+            config.data.page = 1;
+            config.mescroll.optUp.page.num = 1;
+        }
+        $(this).addClass('tab-active').siblings().removeClass('tab-active');
+        $('.tabs-container .tab-content').eq($index).addClass('active').siblings().removeClass('active');
+        requsetHttp(config.newListUrl, config.type, config.data, null, (res) => {
+            // 显示赛事
+            //$(".game_box").html("")
+            //var matchlist = res.data.match
+            //var matchstr = ''
+            //for (var i = 0; i < matchlist.length; i++) {
+            //    matchstr += ` <li class="goDetail" data-categoryid = "${matchlist[i].news_category_id}" data-newsid = "${matchlist[i].news_id}">
+            //                            <div class="game_title">${matchlist[i].match_name}</div>
+            //                            <div class="game_team">
+            //                                <img src="${matchlist[i].team1.team_logo}" alt="">
+            //                                <span>vs</span>
+            //                                <img src="${matchlist[i].team2.team_logo}" alt="">
+            //                            </div>
+            //                            <div class="game_msg">
+            //                                <div class="match_content">
+            //                                    <span class="game_time">${formatTime(matchlist[i].match_time)}</span><span class="match_format">${matchlist[i].match_format}</span>
+            //                                </div>
+            //                                <span class="forecast">分析</span>
+            //                            </div>
+            //                        </li>`
+
+            //}
+            //if (config.hotsign == 24) {
+            //    $(".gameTitle").show()
+            //    $(".game").show()
+            //    $(".division_line").show()
+            //    $(".game_box").append(matchstr)
+            //} else {
+            //    $(".game").hide()
+            //    $(".division_line").hide()
+
+            //}
+            //// 赛事跳转详情
+            //$(".goDetail").click(function () {
+            //    var news_category_id = $(this).attr("data-categoryid")
+            //    var news_id = $(this).attr("data-newsid")
+            //    window.location.href = config.jumpUrl+'?news_id='+news_id+"&category_id="+news_category_id+"&channel="+config.channel+"&xhdj_uid="+config.xhdj_uid
+            //})
+
+            //显示数据
+            if (index) $(".content-list").empty();
+            var str = '';
+            var obj = res.data.list;
+            if (obj.length == 0) $(".content-list").append('<div class="nolength">暂无数据！</div>');
+            config.jumpUrl = res.data.news_detail;
+            for (var i = 0; i < obj.length; i++) {
+                var itemObj = obj[i];
+                if (itemObj.news_type != 1) {
+                    $(".content-list").append('');
+                    return
+                }
+                str += `<li class="comment-list">
+                    <img src="image/icon-stick.png" class="${itemObj.sort == 1 ? 'stick' : 'nostick'}"/>
+                    <img src="image/icon-god_prediction.png" class="${itemObj.god_prediction == 1 ? 'god_prediction' : 'nogod_prediction'}"/>
+                    <div  onclick="toDetail(${itemObj.id})" class="${itemObj.sort == 1 ? 'list-item' : 'haspadding'}">
+                        <div class="item-left">
+                            <div class="${itemObj.cover_img == '' ? 'left-topele' : 'left-top'}" >${itemObj.title}</div>
+                            <div class="left-bottom">
+                                <div class="bottom-left"><span>${ getDateDiff(itemObj.update_time)}</span></div>
+                                <div class="bottom-right">
+                                    <div><img src="image/icon-trample.png" ><span>${itemObj.views || 0}</span></div>
+                                    <div style="margin-left:10px"><img src="image/icon-nopraise.png" alt=""><span>${itemObj.support || 0}</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="${itemObj.cover_img == "" || itemObj.cover_img == null ? '' : 'item-right'}">
+                            ${itemObj.news_type == 1 ? `` : `<div class="mask"><div class="play"></div></div>`}
+                            <img src="${itemObj.cover_img}" />
+                        </div>
+                    </div>
+                    <div class="${itemObj.hot_review.length == 0 ? 'hot-nocomment' : 'hot-comment'}">
+                        <img src="image/icon-hot-comment.png"  style="width:11px;height:14px"/>
+                        <div class="hot-message"><span class="hot-name">${itemObj.hot_review.nickname}：</span> <span class="hot-reply">${itemObj.hot_review.content}</span><div>
+                    </div>
+                </li>`;
+            }
+            if (type == config.flush) {
+                config.mescroll.endSuccess();
+                config.mescroll.optUp.page.num = 1;
+                config.mescroll.endByPage(res.data.list.length, res.data.page.totalPage);
+                $(".content-list").html(str);
+            } else {
+                config.mescroll.endByPage(res.data.list.length, res.data.page.totalPage);
+                $(".content-list").append(str);
+            }
+            config.data.page++;
+        })
+    }
+
+    //  跳转到赛事详情页
+    $(".gameevent_more").click(function () {
+        window.location.href = 'game.html?channel='+config.channel+"&xhdj_uid="+config.xhdj_uid
+    })
+
+    function toDetail(news_id) {
+        console.log(config)
+        if (config.wkzstoken) {
+            window.location.href = config.jumpUrl + '?news_id=' + news_id + "&category_id=" + config.data.category_id + '&wkzstoken=' + config.wkzstoken
+        } else if (config.channel){
+            window.location.href = config.jumpUrl+'?news_id=' + news_id + "&category_id=" + config.data.category_id+'&channel='+config.channel+"&xhdj_uid="+config.xhdj_uid
+        } else {
+            var url = config.jumpUrl + "?news_id=" + news_id + '&category_id=' + config.data.category_id
+            // callNewWeb(url);
+            window.location.href = url
+        }
+    }
+
+
+    // // 时间转换
+    function getDateDiff(endTime) {
+        var oldtime = new Date(endTime.replace(/-/g, "/"));
+        var minute = 1000 * 60;
+        var hour = minute * 60;
+        var day = hour * 24;
+        var now = new Date();
+        var diffValue = now.getTime() - oldtime.getTime();
+        if (diffValue < 0) {
+            return;
+        }
+        var dayC = diffValue / day;
+        var hourC = diffValue / hour;
+        var minC = diffValue / minute;
+        if (minC >= 1 && minC <= 60) {
+            result = " " + parseInt(minC) + "分钟前";
+        } else if (hourC >= 1 && hourC <= 24) {
+            result = " " + parseInt(hourC) + "小时前";
+        } else if (dayC >= 1 && dayC <= 3) {
+            result = " " + parseInt(dayC) + "天前";
+        } else if (dayC > 3) {
+            result = endTime.substring(0, 10);
+        } else {
+            result = "刚刚";
+        }
+        return result;
+    }
+
+    /**
+  * mescroll 配置
+  */
+    function initMescroll() {
+        var mescroll = new MeScroll("mescroll", {
+            up: {
+                callback: upCallback,
+                isBounce: false,
+                noMoreSize: 0,
+                auto: false,
+                htmlNodata: '<p class="upwarp-nodata">没有更多了</p>'
+            },
+            down: {
+                auto: false,
+                callback: downCallback
+            }
+        });
+        return mescroll;
+    }
+
+    /**
+     * 下拉刷新的回调
+     */
+    function downCallback() {
+        loadData(config.flush);
+    }
+
+    /**
+     * 上拉加载的回调
+     */
+    function upCallback() {
+        loadData(config.up);
+    }
+
+    /**
+     * 截取时间
+     */
+    function formatTime(str) {
+        return str.substring(5, 16)
+    }
+
+
+</script>

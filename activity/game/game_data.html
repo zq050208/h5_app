@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="css/game_data.css">
+</head>
+
+
+<body>
+<div>
+        <div class="main">
+                <!-- 顶部tab -->
+                <div class="top_tab">
+                    <img src="../img/icon-data_logo.png" alt="" style="width: 178px;height:26px;">
+                    <div class="final_content">
+                        <span>战队榜</span>
+                        <span>选手榜</span>
+                    </div>
+                </div>
+                <!-- 内容 -->
+                <div class="content ">
+                    <!-- 子集tab -->
+                    <div class="allContent">
+                        <div class="topchild_tab ">
+                            <div class="tophd">
+                                <img src="img/icon-smallarrow_left.png" alt="" class="topprev" style="z-index: 999;">
+                                <img src="img/icon-smallarrow_right.png" alt="" class="topnext" style="z-index: 999;">
+                            </div>
+                            <div class="topbd">
+                                <ul class="topdata_list">
+            
+                                </ul>
+                            </div>
+                        </div>
+            
+                        <div class="child_tab ">
+                            <div class="hd">
+                                <img src="img/icon-smallarrow_left.png" alt="" class="prev" style="z-index: 999;">
+                                <img src="img/icon-smallarrow_right.png" alt="" class="next" style="z-index: 999;">
+                            </div>
+                            <div class="bd">
+                                <ul class="data_list">
+            
+                                </ul>
+                            </div>
+                        </div>
+            
+                        <table class="data_table">
+                            <thead>
+                                <th>排名</th>
+                                <th class="difrent_name">战队</th>
+                                <th>场均淘汰</th>
+                                <th>场均伤害</th>
+                                <th>场均击倒</th>
+                                <th>场均助攻</th>
+                                <th>场均救援</th>
+                                <th>场均爆头率</th>
+                            </thead>
+                            <tbody class="content_tbody">
+            
+                            </tbody>
+                        </table>
+                    </div>
+        
+                </div>
+        </div>
+            <div class="game_team margin" style="margin-top: 50px;">
+                <div style="width: 100%;display: flex;justify-content: center;margin-bottom: 32px;"> <img
+                        src="img/icon-joingame.png" alt="" class="imgMiddle" style=" width: 748px; height: 100px;"></div>
+                <div class="jointeam_content main">
+                    
+                </div>
+            </div>
+</div>
+
+</body>
+
+</html>
+<script src="../../public/jquery.min.js"></script>
+<script src="../js/superSlide.js"></script>
+<script src="../../public/config.js"></script>
+<script src="../../public/service.js"></script>
+<script>
+    // baseUrl = "http://192.168.1.241:9063/"
+    var config = {
+        cureentTab: 0,                                    // 当前点击的tab
+        url: 'YouthTrainController/getPlayerDataList',      // 地址
+        gameurl: 'MatchCooperation/getContestData',
+        teamUrl:'MatchCooperation/getTeamDataRanking',
+        palyUrl: 'MatchCooperation/getPlayerDataRanking',
+        type: 'post',
+        data: {
+            type: 1
+        },
+        gameData: {                                         // 获取战队数据
+            contest_id: Request("contest_id") 
+        },
+        weekList: [],
+        all_data_list: [],
+        isClick: -1,
+        topCurrentTab: 0,
+        mainData: {
+            contest_area_id: 0,
+            match_id:0
+        }
+    }
+ 
+
+    $(".final_content span").eq(0).addClass("active")
+    $(".final_content span").click(function () {
+        config.cureentTab = $(this).index()
+        $(this).addClass("active").siblings().removeClass("active")
+        config.cureentTab == 0 ? $(".difrent_name").text("战队") : $(".difrent_name").text("选手")
+        getTeamDate(config.mainData.match_id);
+    })
+
+    getSelect()
+    function getSelect() {
+        requsetHttp(config.gameurl, config.type, config.gameData, null, (res) => {
+            if (res.code == 200) {
+                var contest_data_select = res.data.contest_data_select
+                var selectStr = ''
+                for (var i = 0; i < contest_data_select.length; i++) {
+                    var match_list = contest_data_select[i].match_list
+                    selectStr += ` <li data-areaid = "${contest_data_select[i].id}">${contest_data_select[i].name}</li>`
+                }
+                $(".topdata_list").append(selectStr)
+                $(".topdata_list li").eq(0).addClass('active')
+                config.mainData.contest_area_id =contest_data_select[0].id
+                $(".topdata_list li").click(function () {
+                    $(this).addClass("active").siblings().removeClass("active")
+                    config.topCurrentTab = $(this).index()
+                    config.mainData.contest_area_id = $(this).attr('data-areaid')
+                    loadSubItem(contest_data_select[config.topCurrentTab])
+                })
+                loadSubItem(contest_data_select[0])
+                topSlide()
+                
+            }
+        })
+    }
+
+    function loadSubItem(select_content) {
+        var matchListStr = ''
+        $(".data_list").empty()
+        if (Number(select_content.show_total_integral) == 1) {
+            matchListStr = `<li data-matchid="0">总场次</li>`
+        }
+        var match_list = select_content.match_list
+        for (var j = 0; j < match_list.length; j++) {
+            matchListStr += `<li data-matchid="${match_list[j].id}">${match_list[j].name}</li>`
+        }
+        $(".data_list").append(matchListStr)
+        $(".data_list li").eq(0).addClass('active')
+        if(match_list.length) {
+            Number(select_content.show_total_integral) == 1 ? config.mainData.match_id = 0 : config.mainData.match_id = match_list[0].id
+        }
+        getTeamDate(config.mainData.match_id)
+        $(".data_list li").click(function () {
+            $(this).addClass("active").siblings().removeClass("active")
+            config.mainData.match_id = $(this).attr('data-matchid')
+            getTeamDate(config.mainData.match_id)
+        })
+        initSlide()
+    }
+
+    function tagTop(list) {
+        var top = {
+            DBNOs: 0,
+            assists: 0,
+            damageDealt: 0,
+            headshotKills: 0,
+            kills: 0,
+            revives: 0
+        }
+        for (var i = 0; i < list.length; i++) {
+            if (parseInt(list[i].DBNOs) > parseInt(top.DBNOs)) top.DBNOs = list[i].DBNOs
+            if (parseInt(list[i].assists) > parseInt(top.assists)) top.assists = list[i].assists
+            if (parseInt(list[i].damageDealt) > parseInt(top.damageDealt)) top.damageDealt = list[i].damageDealt
+            if (parseInt(list[i].headshotKills) > parseInt(top.headshotKills)) top.headshotKills = list[i].headshotKills
+            if (parseInt(list[i].kills) > parseInt(top.kills)) top.kills = list[i].kills
+            if (parseInt(list[i].revives) > parseInt(top.revives)) top.revives = list[i].revives
+        }
+        return top
+    }
+
+    function getTeamDate (item_id) {
+        var url
+        if(config.cureentTab == 0 ) {
+            url = config.teamUrl
+        } else {
+            url = config.palyUrl
+        }
+        requsetHttp(url,config.type,config.mainData,null,(res) => {
+            if(res.code == 200) {
+                $('tbody').empty()
+                $(".game_team").hide()
+                var str = ""
+                var match_team = res.data.match_team
+                if(config.cureentTab == 0) {
+                    var list = res.data.team_data_list
+                } else {
+                    var list = res.data.person_list
+                }
+                if (!list.length) $("tbody").html("<div class='nolength'>暂无数据!</div>")
+                var numTop = tagTop(list);
+                for(var i = 0; i <list.length; i++) {
+                    str +=` <tr>
+                        <td>${i + 1}</td>
+                        <td class="team_playername"><div class="team_content"><img class="${config.cureentTab == 0 ? 'team_logobox' : 'team_nologobox'}" src="${list[i].team_logo || 'img/icon-defalelogo.png'}"  /><span class="team_name">${config.cureentTab == 0 ? list[i].team_name || '' : list[i].name || ''}</span></div></td>
+                        <td class="${ list[i].kills == numTop.kills ? 'coloryellow' : ''}">${list[i].kills || 0}</td>
+                        <td class="${ list[i].damageDealt == numTop.damageDealt ? 'coloryellow' : ''}">${list[i].damageDealt || 0}</td>
+                        <td class="${ list[i].DBNOs == numTop.DBNOs ? 'coloryellow' : ''}">${list[i].DBNOs || 0}</td>
+                        <td class="${ list[i].assists == numTop.assists ? 'coloryellow' : ''}">${list[i].assists || 0}</td>
+                        <td class="${ list[i].revives == numTop.revives ? 'coloryellow' : ''}">${list[i].revives || 0}</td>
+                        <td class="${ list[i].headshotKills == numTop.headshotKills ? 'coloryellow' : ''}">${list[i].headshotKills == null || list[i].headshotKills == 0 ? 0 : list[i].headshotKills + "%"}</td>
+                    </tr>`
+                }
+                $("tbody").append(str)
+                    window.parent.getHeight($("body").height())
+                if(Number(item_id) != 0 || match_team.length) {
+                    $(".game_team").show()
+                    $(".jointeam_content").empty()
+                    var teamlistStr = ''
+                    for(var j = 0; j <match_team.length; j++) {
+                        teamlistStr+=`<div class="join_item"> <img src="${match_team[j].logo || 'img/icon-defalogo_team.png'} " class=" ${match_team[j].logo ? 'jion_itemimg' : 'jion_itemimgdefa'}"> <span class="join_itemtext">${match_team[j].name}</span></div>`
+                    }
+                    $(".jointeam_content").append(teamlistStr)
+                    window.parent.getHeight($("body").height())
+                }
+            }
+        })
+    }
+
+    function initSlide() {
+        
+        jQuery(".child_tab").slide(
+            {
+                titCell: ".hd img",
+                mainCell: ".bd ul",
+                autoPage: true,
+                effect: 'left',
+                vis: 6,
+                pnLoop: false,
+                prevCell: '.prev',
+                nextCell: '.next',
+                defaultPlay: false
+            });
+    }
+
+    function topSlide() {
+        jQuery(".topchild_tab").slide(
+            {
+                titCell: ".tophd img",
+                mainCell: ".topbd ul",
+                autoPage: true,
+                effect: 'left',
+                vis: 5,
+                pnLoop: false,
+                prevCell: '.topprev',
+                nextCell: '.topnext'
+            });
+    }
+
+</script>
+
+
+</script>

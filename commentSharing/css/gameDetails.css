@@ -1,0 +1,521 @@
+﻿* {
+    padding: 0;
+    margin: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    height: 100%;
+}
+
+.gameDetails {
+    position: relative;
+    min-height: 100%;
+}
+.shareModal{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    background:rgba(0,0,0,0.5);
+    display: none;
+}
+.shareModal img{
+    width: 53vw;
+    height: 38.6vw;
+    position: fixed;
+    right: 47px;
+    top: 16px;
+}
+.sharetop {
+    background: rgba(255,255,255,1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.startwrap {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.startstart {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.startcenter {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.startcentercolumn {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.startcenterrow {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.centercenterrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+}
+
+.centercenterrowwrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.centercentercolumn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.startend {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+}
+
+.centerend {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.endbetween {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+.endbetweencolumn {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    flex-direction: column;
+}
+
+.startbetween {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.centerbetween {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.color1 {
+    color: rgba(15,181,10,1);
+}
+
+.color2 {
+    color: rgba(215,171,0,1);
+}
+
+.color3 {
+    color: rgba(255,85,110,1);
+}
+
+.IntroductionVideo {
+    font-size: 16px;
+    font-family: PingFangSC-Medium,PingFang SC;
+    font-weight: 500;
+    color: rgba(51,51,51,1);
+    line-height: 18px;
+}
+
+.VideoScore {
+    margin-bottom: 15px;
+}
+
+.iconhoo, .iconhoo img {
+    width: 35px;
+    height: 35px;
+    margin-right: 11px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.openapp {
+    width: 80px;
+    height: 31px;
+    background: linear-gradient(126deg,rgba(255,232,7,1) 0%,rgba(255,204,3,1) 100%);
+    border-radius: 15px;
+}
+
+.appname {
+    font-size: 14px;
+    font-family: PingFangSC-Medium,PingFang SC;
+    font-weight: 500;
+    color: rgba(51,51,51,1);
+    line-height: 14px;
+}
+
+.slogan {
+    font-size: 11px;
+    font-family: PingFangSC-Regular,PingFang SC;
+    font-weight: 400;
+    color: rgba(119,119,119,1);
+    line-height: 12px;
+    margin-top: 5px;
+}
+
+.datavideotitle {
+    width: 130px;
+    height: 38px;
+    font-size: 12px;
+    font-family: PingFangSC-Regular,PingFang SC;
+    font-weight: 400;
+    color: rgba(51,51,51,1);
+    line-height: 19px;
+    word-wrap:break-word;
+    word-break:normal;
+}
+/*分享页顶部*/
+.detailsTopback {
+    height: 211px;
+}
+
+.headPortrait {
+    position: relative;
+}
+.headPortrait img {
+    width: 80px;
+    height: 80px;
+    background: rgba(255,255,255,1);
+    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.1);
+    border-radius: 12px;
+    margin-right: 10px;
+    object-fit: cover;
+}
+/*内容栏目*/
+.content {
+    width: 100%;
+    position: absolute;
+    top: 215px;
+}
+
+.gametitle {
+    width: 160px;
+    word-wrap:break-word;
+    font-size: 18px;
+    font-family: PingFangSC-Medium,PingFang SC;
+    font-weight: 500;
+    color: rgba(51,51,51,1);
+    line-height: 18px;
+    margin-bottom: 12px;
+}
+/*基本信息*/
+.titlediv {
+    width: 74%;
+    font-size: 12px;
+    font-family: PingFangSC-Regular,PingFang SC;
+    font-weight: 400;
+    color: rgba(170,170,170,1);
+    line-height: 18px;
+    word-wrap:break-word;
+    word-break:normal;
+}
+
+.attentionuser {
+    margin-top: 10px;
+}
+
+.userbackanniu {
+    width: 30px;
+    height: 45px;
+}
+
+.download {
+    margin-right: 30px;
+    background-size: 100% auto;
+    background-image: url(https://cdn.tinytiger.cn/icon-download1.png);
+    background-repeat: no-repeat;
+}
+
+.followed {
+    background-size: 100% auto;
+    background-image: url(https://cdn.tinytiger.cn/icon-followed1.png);
+    background-repeat: no-repeat;
+}
+
+.giveMark {
+    width: 80px;
+    height: 80px;
+}
+
+.giveMarkvalue {
+    font-size: 18px;
+}
+
+/*大家说*/
+.comment {
+    background: rgba(255,255,255,1);
+}
+
+.synopsis {
+    background: rgba(255,255,255,1);
+}
+/*简介*/
+.synopsistxt {
+    padding: 10px 15px 0px 15px;
+    word-wrap:break-word;
+    word-break:normal;
+}
+
+.fewer {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    padding: 0 12px;
+}
+.lve {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+/*游戏评分*/
+.grade {
+    padding: 0px 15px 0 15px;
+    background: rgba(255,255,255,1);
+}
+
+
+/*评论信息*/
+.reviewInformation {
+    background: #ffffff;
+    padding-top: 10px;
+}
+
+.reviewInformation-top {
+    height: 44px;
+    background: rgba(255,255,255,1);
+}
+
+.nav {
+    font-size: 16px;
+    font-family: PingFangSC-Medium,PingFang SC;
+    font-weight: 500;
+    line-height: 36px;
+    margin-right: 35px;
+}
+
+.selectnav {
+    color: rgba(51,51,51,1);
+}
+
+.noselectnav {
+    color: rgba(170,170,170,1);
+}
+.noselectFist{
+    color: rgba(170,170,170,1);
+} 
+
+
+.selectbox {
+    width: 17px;
+    height: 4px;
+    background: rgba(255,204,3,1);
+    margin-right: 35px;
+    border-radius: 2px;
+}
+.selectbox1 {
+    width: 17px;
+    height: 4px;
+    background: rgba(255,204,3,1);
+    margin-right: 35px;
+    border-radius: 2px;
+}
+
+.noselectbox {
+    width: 10px;
+    height: 4px;
+    background: #fff;
+    margin-right: 35px;
+    border-radius: 2px;
+}
+
+.navright {
+    width:59px;
+    height:30px;
+    background:rgba(248,247,241,1);
+    border-radius:15px;
+    font-size:12px;
+    font-family:PingFangSC-Medium,PingFang SC;
+    font-weight:500;
+    color:rgba(255,204,3,1);
+    line-height:12px;
+}
+
+.noselectboxright {
+    width: 10px;
+    height: 4px;
+    background: #fff;
+    border-radius: 2px;
+}
+
+.retext {
+    font-size: 16px;
+    font-family: PingFangSC-Medium, PingFang SC;
+    font-weight: 500;
+    color: rgba(81,70,23,1);
+    line-height: 16px;
+}
+
+.commentinfo {
+    min-height: 324px;
+}
+
+.commentinfoitemTop {
+    padding:10px 12px;
+}
+/*评论消息*/
+.userIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.userattention {
+    width: 60px;
+    height: 22px;
+    border-radius: 11px;
+    border: 1px solid rgba(255,204,3,1);
+    font-size: 14px;
+    font-family: PingFangSC-Regular,PingFang SC;
+    font-weight: 400;
+    color: rgba(255,204,3,1);
+    line-height: 14px;
+}
+
+.nouserattention {
+    width:69px;
+    height:31px;
+    border-radius:16px;
+    border:1px solid rgba(170,170,170,1);
+    font-size:15px;
+    font-family:PingFangSC-Medium,PingFang SC;
+    font-weight:500;
+    color:rgba(170,170,170,1);
+    line-height:15px;
+}
+
+.staritem {
+    width: 11px;
+    height: 10px;
+}
+
+.userstar {
+    width: 67px;
+    height: 10px;
+}
+
+.morenews {
+    margin-bottom: 8px;
+    width: 22px;
+    height: 22px;
+}
+
+.usertime {
+    font-size: 11px;
+    font-family: PingFangSC-Regular,PingFang SC;
+    font-weight: 400;
+    color: rgba(153,153,153,1);
+    line-height: 11px;
+}
+
+.usercontent {
+}
+
+.usercommentimg {
+    width: 100px;
+    height: 75px;
+    border-radius: 5px;
+}
+
+.actionType {
+    margin-top: 15px;
+    /* border-radius: 0 0 10px 10px; */
+    padding-left: 37px;
+}
+
+.icondianzan {
+    margin-right: 13px;
+    width: 22px;
+    height: 22px;
+}
+
+
+.cut-off {
+    width: 1px;
+    height: 16px;
+    background: #E7E7E7
+}
+
+.msg {
+    margin-top: 25px;
+    padding-bottom: 62px;
+    text-align: center;
+    font-size: 11px;
+    font-family: PingFangSC-Regular,PingFang SC;
+    font-weight: 400;
+    color: rgba(153,153,153,1);
+    line-height: 16px;
+}
+.actionTypefont {
+    font-size: 13px;
+    font-family: PingFangSC-Regular,PingFang SC;
+    font-weight: 400;
+    color: rgba(102,102,102,1);
+    line-height: 18px;
+}
+.gamefooter-msg{
+    font-size:11px;
+    font-family:PingFangSC-Regular,PingFang SC;
+    font-weight:400;
+    color:rgba(153,153,153,1);
+    line-height:16px;
+}
+.gamefooter-left{
+    width:44px;
+    height:1px;
+    background:linear-gradient(270deg,rgba(153,153,153,1) 0%,rgba(201,201,201,0) 100%);
+    border-radius:1px;
+}
+.gamefooter-right{
+    width:44px;
+    height:1px;
+    background:linear-gradient(270deg,rgba(201,201,201,0) 0%,rgba(153,153,153,1) 100%);
+}
+.comment_imgs_sty{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}

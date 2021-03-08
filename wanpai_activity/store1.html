@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <title>门面选拔</title>
+    <link rel="stylesheet" href="../public/ydui.css">
+    <style>
+        * {
+            padding: 0;
+            margin: 0
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            font-size: 14px;
+            position: relative;
+            padding-bottom: constant(safe-area-inset-bottom);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .top {
+            width: 100%;
+            height: 108.5vw;
+            background: url("image/icon-store_bg.png") no-repeat;
+            background-color: rgba(215, 0, 0, 1);
+            background-size: cover;
+            position: relative;
+        }
+
+        .dateBox {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            position: absolute;
+            bottom: 20px;
+        }
+
+        .middle {
+            width: 100%;
+            /* height: 100%; */
+            background: url("image/icon-bg.png") repeat;
+            background-size: cover;
+            padding-bottom: 50px;
+
+        }
+
+        .tab_content {
+            display: flex;
+            padding: 0 35px 0 50px;
+            justify-content: space-between;
+        }
+
+        .tabItem img {
+            width: 118px;
+            height: 110px;
+        }
+
+        .storeTipBox {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding-top: 20px;
+
+        }
+
+        .storeTip {
+            width: 87.2vw;
+            height: 40px;
+        }
+
+        .nominate_desc {
+            width: 100%;
+            height: 72.2vw;
+        }
+
+        .nominate_content {
+            width: 100%;
+            height: 137.3vw;
+            background: url("image/icon-store_nostart.png") no-repeat;
+            background-size: contain;
+            /* padding: 10px 0 120px 0; */
+            position: relative;
+            /* margin-bottom: 25px; */
+        }
+
+        /* 活动内容 */
+        .content {
+            width: 80%;
+            max-height: 93vw;
+            position: absolute;
+            top: 10%;
+            left: 10%;
+            overflow-y: auto;
+        }
+
+        /* 未开始 */
+        .nocontent {
+            width: 100%;
+            height: 100%;
+            font-size: 20px;
+            font-family: PangMenZhengDao;
+            color: rgba(185, 46, 2, 1);
+            display: none;
+        }
+
+        /* 已开始 */
+        .startContent {
+            padding: 0 10px;
+            max-height: 93vw;
+            overflow: scroll;
+        }
+
+        .startItem {
+            display: flex;
+            margin-bottom: 6px;
+            color: rgba(185, 46, 2, 1);
+        }
+
+        .item_ranking {
+            width: 35px;
+            height: 37px;
+            background: url("image/icon-ranking.png") no-repeat 100%/100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 7px;
+            flex-shrink: 0;
+        }
+
+        .ranking {
+            margin-left: 5px;
+            font-size: 14px;
+            font-family: PingFang-SC-Bold, PingFang-SC;
+            font-weight: bold;
+            color: rgba(255, 219, 0, 1);
+        }
+
+        .itemLeft {
+            flex: 6;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .item_name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .itemRight {
+            flex: 4;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        /* 底部 */
+        .bottom {
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            background: rgba(255, 237, 200, 1);
+            z-index: 999;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .bottom_contnet {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* mask */
+        .maskContnet {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            z-index: 999;
+            display: none;
+        }
+
+        .mask {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: rgba(0, 0, 0, .1);
+        }
+
+        .pupContent {
+            width: 69.3vw;
+            background: rgba(0, 0, 0, .7);
+            z-index: 9999;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 8px;
+            padding: 7px;
+        }
+
+        .closeImg {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .close {
+            width: 22px;
+            height: 22px;
+        }
+
+        .startBegin {
+            display: none;
+        }
+
+        .noStart {
+            font-size: 16px;
+            font-family: PingFang-SC-Bold, PingFang-SC;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding-bottom: 20px;
+
+        }
+
+        .nominateClick {
+            display: none
+        }
+
+        .pupNominate {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input {
+            width: 43.4vw;
+            height: 35px;
+            border: 1px solid rgba(255, 255, 255, 1);
+            padding: 7px 8px;
+            background: none;
+            outline: none;
+            color: rgba(255, 255, 255, 1);
+        }
+
+        .confirmButton {
+            width: 119px;
+            height: 38px;
+            margin-top: 24px;
+        }
+
+        .text {
+            font-size: 12px;
+            font-family: PingFang-SC-Regular, PingFang-SC;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 1);
+            margin: 6px 0;
+        }
+
+        /* 无提名机会 */
+        .noChance {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            display: none;
+        }
+
+        .change {
+            font-size: 16px;
+            font-family: PingFang-SC-Bold, PingFang-SC;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="top">
+        <div class="dateBox"><img src="image/icon-store_title.png" style="width: 234px; height: 63px;"></div>
+    </div>
+    <div class="middle">
+        <!-- tab -->
+        <div class="tab_content">
+            <div class="tabItem"><img src="image/icon-store_timing.png"></div>
+            <div class="tabItem"><img src="image/icon-store_xuanba.png" class="selectClick"></div>
+        </div>
+        <div class="storeTipBox" style=" margin-top: 40px;"><img src="image/icon-store_tip.png"></div>
+        <img src="image/icon-store_desc.png" class="nominate_desc">
+        <div class="storeTipBox"><img src="image/icon-store_timing_title.png"></div>
+        <div style="padding-top: 20px">
+            <div class="nominate_content">
+                <div class="content">
+                    <!-- 未开始 -->
+                    <div class="nocontent">
+                        <div style="display: flex;flex-direction: column;justify-content: center;
+                align-items: center;padding-top: 100px;"><span>活动还未开始哦~ </span> <span>1月17日 18:00 敬请期待！</span></div>
+                    </div>
+                    <!-- 已开始 -->
+                    <div class="startContent">
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="bottom_contnet">
+            <img src="image/icon-store_join.png" style="width: 146px; height: 50px;padding-top: 6px;"
+                class="launchNomination">
+        </div>
+    </div>
+    <!-- mask -->
+    <div class="maskContnet">
+        <div class="mask"></div>
+        <div class="pupContent">
+            <div class="closeImg"><img src="image/icon-close.png" class="close"></div>
+            <!-- 活动未开始 -->
+            <div class="startBegin">
+                <div class="noStart"><span>活动还未开始哦~ </span> <span>1月17日 18:00 敬请期待！</span></div>
+            </div>
+            <!-- 提名 -->
+            <div class="nominateClick">
+                <div class="pupNominate">
+                    <input type="text" placeholder="请输入你的提名" oninput="inputClick()">
+                    <img src="image/icon-confirm.png" alt="" class="confirmButton confirmClick">
+                    <span class="text">（输入多个名字不会被系统统计哦）</span>
+                </div>
+            </div>
+            <!-- 无提名机会 -->
+            <div class="noChance">
+                <span class="change">没有提名机会了哦~请明天再来</span>
+                <span class="text">（输入多个名字不会被系统统计哦）</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+<script src="../public/template-web.js"></script>
+<!-- <script src="https://res.wx.qq.com/open/js/jweixin-1.3.0.js"></script> -->
+<script src="../public/jweixin-1.3.2.js"></script>
+<script src="../public/ydui.js"></script>
+<script type="text/html" id="dataList">
+    {{each item v i}}
+    <div class="startItem">
+        <div class="itemLeft">
+            <div class="item_ranking"><span class="ranking">{{i+1}}</span></div>
+            <div class="item_name">{{v.name}}</div>
+        </div>
+        <div class="itemRight">{{v.total}}次提名</div>
+    </div>
+    {{/each}}
+</script>
+<script>
+    baseUrl = 'http://192.168.1.241/wanpai_api/public/index.php/'
+    var config = {
+        url: 'NewyearFacade/getNominationList',
+        nominationUrl: 'NewyearFacade/launchNomination',
+        type: 'get',
+        token: Request('token'),
+        data: {
+            name: ''
+        },
+        number: null
+    }
+   
+
+    // 获取提名数据
+    function getDataList() {
+        alert(history.length)
+        if(history.length > 1) {
+            wx.miniProgram.redirectTo({url: `/pages/explore/explore`})
+        } else {
+            requsetHttp(config.url, config.type, {}, null, (res) => {
+                if (res.code == 200) {
+                    var list = template('dataList', { item: res.data })
+                    $(".startContent").html(list)
+                    $(".nocontent").hide()
+                } else if (res.code == 6000) {
+                    $(".nocontent").show()
+                } else if (res.code == 6001) {
+                    window.location.href = 'store_select.html'
+                }
+            })
+        }
+    }
+
+    // 参与提名
+    $(".launchNomination").click(function () {
+        if (config.number == null || config.number <= 3) {
+            $(".maskContnet").show()
+            $(".startBegin").hide()
+            $(".noChance").hide()
+            $(".nominateClick").show()
+        } else {
+            if (config.number > 3) {
+                $(".maskContnet").show()
+                $(".startBegin").hide()
+                $(".noChance").show()
+                $(".nominateClick").hide()
+            }
+        }
+
+    })
+    // 获取输入框的值
+    function inputClick() {
+        config.data.name = $("input").val()
+    }
+    // 解决安卓键盘收起底部按钮顶起问题
+    let screenHeight = document.body.offsetHeight
+    window.onresize = function () {
+        getDataList()
+        let nowHeight = document.body.offsetHeight
+        if (nowHeight < screenHeight) {
+            $(".bottom").css("display", "none");
+        } else {
+            $(".bottom").css("display", "block");
+        }
+    }
+    $("input").on('blur', function () {
+        setTimeout(function () {
+            $(window).scrollTop(document.body.scrollTop);
+        }, 100)
+    })
+    // 确定提名
+    $(".confirmClick").click(function (e) {
+        e.stopPropagation()
+        e.preventDefault()
+        var content = config.data.name.trim()
+        if (content.length <= 0) {
+            YDUI.dialog.toast('请输入提名', 2000)
+            return
+        }
+        requsetHttp(config.nominationUrl, config.type, config.data, config.token, (res) => {
+            if (res.code == 200) {
+                config.number = res.data.num
+                $(".maskContnet").hide()
+                $(".startBegin").hide()
+                $(".noChance").hide()
+                $(".nominateClick").hide()
+                getDataList()
+                $("input").val('')
+            } else {
+                YDUI.dialog.toast(res.msg, 2000)
+            }
+        })
+    })
+
+    $(".mask, .close").click(function () {
+        $(".maskContnet").hide()
+        $(".startBegin").hide()
+        $(".noChance").hide()
+        $(".nominateClick").hide()
+        $("input").val('')
+    })
+    $(".selectClick").click(function () {
+        // $(".maskContnet").show()
+        // $(".startBegin").show()
+        window.location.href = 'store_select.html?token=' + config.token
+    })
+</script>

@@ -1,0 +1,605 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width,viewport-fit=cover, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <title></title>
+    <link rel="stylesheet" href="../public/mescroll.min.css">
+    <link rel="stylesheet" href="css/gameDetails.css">
+    <style>
+        html,body{-webkit-text-size-adjust: 100%;-webkit-tap-highlight-color: rgba(0, 0, 0, 0);}
+        .selectbox,
+        .noselectbox {
+            margin: 0;
+        }
+
+        .mescroll {
+            position: fixed;
+            width: 100vw;
+            top: 24px;
+            bottom: 0;
+            height: auto;
+            /*如设置bottom:50px,则需height:auto才能生效*/
+            background: #FBF8FB;
+        }
+
+        .commentinfo {
+            background: #FBF9F9;
+            min-height: 210px;
+        }
+
+        .retext {
+            margin: 0;
+            padding: 0 12px;
+        }
+
+        .numbeccount {
+            font-size: 12px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: rgba(255, 204, 3, 1);
+            line-height: 12px;
+        }
+
+        .userIcon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .detailsTopback {
+            height: 160px
+        }
+
+        .detailsTopbackbotton {
+            width: 100%;
+            height: 32px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .topbacktxt {
+            font-size: 15px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 1);
+            line-height: 21px;
+        }
+
+        .whiteright {
+            width: 7px;
+            height: 12px;
+        }
+
+        .icon-dianzan {
+            width: 11px;
+            height: 10px;
+            margin-left: 7px;
+            margin-right: 2px;
+        }
+
+        /*标签*/
+        .label {
+            padding: 0 15px;
+            background: #ffffff;
+        }
+
+        .labelitem {
+            margin-right: 10px;
+            margin-bottom: 10px;
+            padding: 10px 10px 9px 10px;
+            background: rgba(248, 241, 241, 1);
+            border-radius: 15px;
+        }
+
+        .labelitemfont {
+            font-size: 12px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            line-height: 12px;
+        }
+
+        /*点评*/
+        .comment {
+            padding: 0 15px;
+        }
+
+        .commentdiv {
+            position: relative;
+            width: 100%;
+            padding-bottom: 20px;
+            word-wrap: break-word;
+        }
+
+        /*点评输入栏*/
+        .commentinput {
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            background: rgba(255, 255, 255, 1);
+            padding: 6px 0;
+        }
+
+        .inputbox {
+            padding-left: 4vw;
+            width: 51.5vw;
+            height: 40px;
+            background: rgba(247, 247, 247, 1);
+            border-radius: 20px;
+            font-size: 14px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: rgba(119, 119, 119, 1);
+            line-height: 20px;
+        }
+
+        .inputicon {
+            width: 22px;
+            height: 22px;
+        }
+
+        .userattentionbtn {
+            width: 69px;
+            height: 31px;
+            background: linear-gradient(126deg, rgba(255, 232, 7, 1) 0%, rgba(255, 204, 3, 1) 100%);
+            border-radius: 16px;
+            font-size: 14px;
+            font-family: PingFangSC-Semibold, PingFang SC;
+            font-weight: 600;
+            color: rgba(51, 51, 51, 1);
+            line-height: 15px;
+        }
+
+        .timeago {
+            font-size: 11px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: rgba(153, 153, 153, 1);
+            line-height: 11px;
+        }
+
+        .nickname {
+            font-size: 15px;
+            font-family: PingFangSC-Semibold, PingFang SC;
+            font-weight: 600;
+            color: rgba(51, 51, 51, 1);
+            line-height: 15px;
+        }
+
+        .labeltitle {
+            width: 100%;
+            /* padding-left: 15px; */
+            padding-bottom: 15px;
+            font-size: 12px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: rgba(170, 170, 170, 1);
+            line-height: 12px;
+        }
+
+        .commentdiv img {
+            width: 100%;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            object-fit: cover;
+        }
+
+        .commentdiv p {
+            font-size: 15px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: rgba(51, 51, 51, 1);
+            line-height: 22px;
+        }
+
+        .commenttitlefont {
+            font-size: 16px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: rgba(81, 70, 23, 1);
+            line-height: 16px;
+        }
+
+        .newestnav,
+        .hotnav {
+            font-size: 16px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            line-height: 36px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="mescroll" class="mescroll">
+        <div>
+            <!--顶部展示栏*小虎Hoo图标+名称+slogan+打开app按钮-->
+            <div class="sharetop" style="padding:8px 15px 8px 15px;">
+                <!-- 左 * 小虎Hoo图标+名称+slogan、-->
+                <div class="startstart">
+                    <!--小虎Hoo图标-->
+                    <div class="iconhoo">
+                        <img
+                            src="https://cdn.tinytiger.cn/b55e2898efbe44673559b1a287a9960.png" />
+                    </div>
+                    <!--名称+slogan-->
+                    <div>
+                        <!--名称-->
+                        <p>小虎Hoo</p>
+                        <!--slogan-->
+                        <p class="slogan">玩“好”游戏</p>
+                    </div>
+                </div>
+                <!-- 右 * 打开app-->
+                <div>
+                    <div class="openapp appname centercenterrow" onclick="clickgoapp()">打开APP</div>
+                </div>
+            </div>
+
+            <!--详情页顶部-->
+            <div class="detailsTopbackbox">
+
+            </div>
+
+            <!--用户信息-->
+            <div style="background: #ffffff;">
+                <!--顶部信息*用户信息-->
+                <div class="startbetween usercommentinfoitemTop" style='padding: 22px 15px 20px 15px;'>
+
+                </div>
+            </div>
+
+            <!--标签-->
+            <div class="labeltitle" style="background: #ffffff;"><p style="margin-left: 15px;">轻点标签表示赞同</p></div>
+            <div class="startwrap label">
+
+            </div>
+
+            <!--点评-->
+            <div class="comment" style="padding-top: 10px;">
+                <div class="commenttitle"></div>
+                <div class="commentdiv">
+
+                </div>
+            </div>
+
+            <!--评论-->
+            <div class="reviewInformation" style="padding-bottom: 10px;">
+                <div class="reviewInformation-top centerbetween" style="padding:0 15px">
+                    <div class="startstart">
+                        <div class="centercentercolumn" onclick="newestClick()" style="margin-right: 35px;">
+                            <div class="selectnav newestnav">最新</div>
+                            <div class="selectbox newestbox"></div>
+
+                        </div>
+                        <div class="centercentercolumn" onclick="hotClick()">
+                            <div class="noselectnav hotnav">最热</div>
+                            <div class="noselectbox hotbox"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="comment_num numbeccount"></div>
+                    </div>
+                </div>
+
+                <!--评论消息数据集-->
+                <div class="commentinfo" style="margin:10px 15px;border-radius:10px;background: #ffffff;">
+
+                </div>
+                <div class="centercenterrow gamefooter" style=" padding: 35px 0 0px 0;">
+
+                </div>
+            </div>
+
+            <!--输入框-->
+            <div class="commentinput sharetop">
+                <div class="inputbox startcentercolumn" onclick="clickgoapp()" style="margin-left:15px;">悄咪咪的说几句…</div>
+                <div style="margin:0 4vw;width: 32.5vw;" class="centerbetween">
+                    <img class="inputicon" onclick="clickgoapp()" src="https://cdn.tinytiger.cn/icon-dianzan1.png" />
+
+                    <img class="inputicon" onclick="clickgoapp()" src="https://cdn.tinytiger.cn/icon-pinglun1.png" />
+
+                    <img class="inputicon" onclick="clickgoapp()" src="https://cdn.tinytiger.cn/icon-fenxiang1.png" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="msgdialog"></div>
+    <div class="shareModal">
+        <img src="../new_information/image/icon-guidance.png" alt="">
+    </div>
+    <script src="../public/template-web.js"></script>
+    <script src="../public/tool.js"></script>
+    <script src="../public/jquery.min.js"></script>
+    <script src="../public/mescroll.min.js"></script>
+    <script src="../public/module/msgDialog.js"></script>
+    <script src="../public/config.js"></script>
+    <script src="../public/service.js"></script>
+
+    <!--详情页顶部-->
+    <script type="text/html" id="detailsTopbackdiv">
+        <div class="detailsTopback endbetween" style="background:url({{item.img}});background-repeat:no-repeat;background-size:100% 100%;">
+            <div class="detailsTopbackbotton sharetop">
+                <div class="topbacktxt" style="margin-left:15px;">{{item.name}}</div>
+                <div class="topbacktxt" style="margin-right:15px;" onclick="clickgoapp()">
+                    {{item.count}}条安利
+                    <img class="whiteright" src="https://cdn.tinytiger.cn/icon-whiteright.png" />
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <!--用户信息-->
+    <script type="text/html" id="usercommentinfoitemTop">
+        {{each item v i}}
+        <!-- 左 -->
+        <div class="startcenter">
+            <!--头像-->
+            <div class="startstart" style="margin-right:10px;"><img class="userIcon" src="{{v.avatar}}" /></div>
+            <!--昵称及星数-->
+            <div class="startcentercolumn">
+                <!--昵称+关注按钮-->
+                <div class="startstart">
+                    <div class="nickname" style="margin-right:10px;margin-bottom:5px;">{{v.nickname}}</div>
+                </div>
+                <!--星数-->
+                <div class="startcenter">
+                    <% for(var i = 0;i < v.score;i++){ %>
+                    <img class="staritem" src=" https://cdn.tinytiger.cn/icon-starselect.png" style='margin-right:3px;'/>
+                    <% } %>
+                    <% for(var i = 0;i < 5-v.score;i++){ %>
+                    <img class="staritem" src="https://cdn.tinytiger.cn/icon-starnoselect.png" style='margin-right:3px;'/>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <!--右-->
+        <div>
+            <div class="userattentionbtn centercenterrowwrap" onclick='clickgoapp()'>+ <span style='margin-left:2px;'>关注</span></div>
+        </div>
+        {{/each}}
+    </script>
+
+    <!--评论消息-->
+    <script type="text/html" id="commentinfoDataList">
+        {{each item v i}}
+        <div class="commentinfoitem" style="background:#ffffff;border-radius: 10px;">
+            <!--顶部信息*用户信息-->
+            <div class="commentinfoitemTop startbetween">
+                <!-- 左 -->
+                <div class="startcenter">
+                    <!--头像-->
+                    <div class="startstart" style="margin-right:10px;"><img class="userIcon" src="{{v.avatar}}" /></div>
+                    <!--昵称及星数-->
+                    <div class="startcentercolumn">
+                        <!--昵称+关注按钮-->
+                        <div class="startstart">
+                            <div style="margin-right:10px;line-height:14px" class='nickname'>{{v.nickname}}</div>
+                        </div>
+                    </div>
+                </div>
+                <!--右-->
+                <div style='padding-top5px;'>
+                    <div class="centerend"><img class="morenews" src="https://cdn.tinytiger.cn/icon-morenews.png" /></div>
+                </div>
+            </div>
+            <!--评论内容-->
+            <div class='fewer retext'>{{v.content}}</div>
+            <!--图片信息-->
+            <div class="sharetop" style=" padding :0 12px;">
+                {{each v.photos sub i}}
+                {{if i<3}}
+                <img class="usercommentimg" src="{{sub}}" alt="" style="margin-top:15px">
+                {{/if}}
+                {{/each}}
+            </div>
+
+            <!--操作类型-->
+            <div class="actionType sharetop">
+                <div style="margin-left:12px;" class="timeago">{{v.create_time}}</div>
+                <div class="startend">
+                    <div class="centerend" onclick="clickgoapp()">
+                        <img class="icondianzan" src="https://cdn.tinytiger.cn/icon-dianzan1.png" />
+                        <div>{{v.like_num}}</div>
+                    </div>
+                    <div class="centerend" style="margin-right:12px;margin-left:36px;" onclick="clickgoapp()">
+                        <img class="icondianzan" src="https://cdn.tinytiger.cn/icon-pinglun1.png" />
+                        <div>{{v.comment_num}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="centercenterrow">
+            <div style="width:95%;border-bottom:1px solid #F2F2F2"></div>
+        </div>
+        {{/each}}
+        <!--<div class="msg">人家是一只有底线的小脑斧</div>-->
+    </script>
+
+    <script>
+        // 当前页
+        var currentPage = 0
+        // 总页数
+        var last_page = 1
+        // 类型标识 0: 最新 1:最热
+        var type = 0
+        //评价id
+        // var assess_id = 0
+        var mescroll = new MeScroll("mescroll", { //第一个参数"mescroll"对应上面布局结构div的id
+            //如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考第一个基础案例
+            //解析: down.callback默认调用mescroll.resetUpScroll(),而resetUpScroll会将page.num=1,再触发up.callback
+            down: {
+                auto: false,
+                callback: downCallback //下拉刷新的回调,别写成downCallback(),多了括号就自动执行方法了
+            },
+            up: {
+                use: true,
+                isBounce: false,
+                callback: upCallback //上拉加载的回调
+            }
+        });
+
+        window.onload = function () {
+            getGameInfo();
+            $(".shareModal").click(function () {
+                $(".shareModal").hide()
+            })
+        }
+
+        // 前去app
+        function clickgoapp() {
+            goApp(5, Request('game_id'), Request('assess_id'))
+        }
+
+        // 获取评价详情
+        function getGameInfo() {
+            var config = {
+                gameInfoUrl: 'GameAssess/getAssessInfo',
+                type: 'get',
+                token: Request('token'),// '3242e967170efb88b776787ab8bfa91f',
+                data: {
+                    game_id: Request('game_id'),
+                    assess_id: Request('assess_id'),
+                    page: currentPage,
+                }
+            };
+            RequsetHttp(config.gameInfoUrl, config.type, config.token, config.data, function (res) {
+                if (res.code == 200) {
+                    document.title =  `《${res.data.name}》的评价`;  
+                    //详情页顶部
+                    var detailsTopbacklist = { img: res.data.background, name: res.data.name, count: res.data.assess_num }
+                    var detailsTopbackitem = template('detailsTopbackdiv', { item: detailsTopbacklist })
+                    $(".detailsTopbackbox").html(detailsTopbackitem)
+
+                    //用户信息
+                    var usercommentinfoitemToplist = { useritem: res.data }
+                    var usercommentinfoitemTopitem = template('usercommentinfoitemTop', { item: usercommentinfoitemToplist })
+                    $(".usercommentinfoitemTop").html(usercommentinfoitemTopitem)
+
+                    //标签
+                    var labellist = res.data.assess_tag
+                    var html = ""
+                    for (var i = 0; i < labellist.length; i++) {
+                        var count = parseInt(Math.random() * 3, 3) + 1
+                        html += `<div class="startwrap labelitem" onclick='clickgoapp()'>
+                                                            <div class="labelitemfont color`+ count + `" >
+                                                               `+ labellist[i].name + `
+                                                                <img class="icon-dianzan" src="https://cdn.tinytiger.cn/icon-dianzan.png" />`+ labellist[i].like_num + `
+                                                            </div>
+                                                        </div>`
+                    }
+                    $(".label").html(html)
+
+                    // 标题
+                    var commenttitlestr = `<div class='commenttitlefont' style='padding-bottom: 15px;'>` + res.data.title + `</div>`
+                    $(".commenttitle").html(commenttitlestr)
+
+                    // 内容
+                    var commentdiv = res.data.content
+                    $(".commentdiv").html(commentdiv)
+
+                    var comment_num = `共` + res.data.comment_num + `条`
+                    $(".comment_num").html(comment_num)
+
+                } else {
+
+                }
+            })
+        }
+
+        // 评价下的评论列表
+        function indexComment(refresh) {
+            var config = {
+                gameInfoUrl: 'GameAssessComment/indexComment',
+                type: 'get',
+                token: Request('token'),//'3242e967170efb88b776787ab8bfa91f'
+                data: {
+                    game_id: Request('game_id'),
+                    assess_id: Request('assess_id'),
+                    page: currentPage,
+                    type: type
+                }
+            };
+            RequsetHttp(config.gameInfoUrl, config.type, config.token, config.data, function (res) {
+                if (res.code == 200) {
+                    last_page = res.data.last_page
+                    var commentinfoDataList = res.data.data
+                    for (var i = 0; i < commentinfoDataList.length; i++) {
+                        commentinfoDataList[i].create_time = timeago((new Date(commentinfoDataList[i].create_time.replace(/\-/g, "/"))).getTime());
+                        var str = commentinfoDataList[i].content
+                        if (str) {
+                            commentinfoDataList[i].photos = getSimpleImgList(str)
+                        }
+                        commentinfoDataList[i].content = getSimpleText(commentinfoDataList[i].content)
+                    }
+
+                    if (refresh) {
+                        var commentinfoList = template('commentinfoDataList', { item: commentinfoDataList })
+                        $(".commentinfo").append(commentinfoList)
+                    } else {
+                        var commentinfoList = template('commentinfoDataList', { item: commentinfoDataList })
+                        $(".commentinfo").html(commentinfoList)
+                    }
+                    if (last_page <= currentPage) {
+                        var footerhtml = `  <div class="gamefooter-left"></div>
+                                          <div class="gamefooter-msg" style="padding: 0 10px;">人家是一只有底线的小脑斧</div>
+                                          <div class="gamefooter-right"></div>`
+                        $(".gamefooter").html(footerhtml)
+                    }
+                } else {
+                    mescroll.endErr();
+                }
+            })
+        }
+
+        // 点击最新
+        function newestClick(e) {
+            replaceClass("hotbox", "selectbox", "noselectbox")
+            replaceClass("newestbox", "noselectbox", "selectbox")
+            replaceClass("hotnav", "selectnav", "noselectnav")
+            replaceClass("newestnav", "noselectnav", "selectnav")
+
+            currentPage = 1
+            type = 0
+            indexComment(false)
+        }
+
+        // 点击最热
+        function hotClick(e) {
+            replaceClass("newestbox", "selectbox", "noselectbox")
+            replaceClass("hotbox", "noselectbox", "selectbox")
+            replaceClass("newestnav", "selectnav", "noselectnav")
+            replaceClass("hotnav", "noselectnav", "selectnav")
+
+            currentPage = 1
+            type = 1
+            indexComment(false)
+        }
+
+        //下拉刷新的回调
+        function downCallback() {
+            currentPage = 1;
+            console.log('下拉刷新的回调')
+            getGameInfo()
+            indexComment(false)
+            mescroll.endErr();
+        }
+
+        //上拉加载的回调 page = {num:1, size:10}; num:当前页 默认从1开始, size:每页数据条数,默认10
+        function upCallback(page) {
+            console.log('上拉加载的回调')
+            if (last_page >= currentPage) {
+                currentPage++
+                indexComment(true)
+            }
+            mescroll.endErr();
+        }
+    </script>
+    <div style="display: none;">
+        <script type="text/javascript">document.write(unescape("%3Cspan id='cnzz_stat_icon_1278943282'%3E%3C/span%3E%3Cscript src='https://v1.cnzz.com/z_stat.php%3Fid%3D1278943282' type='text/javascript'%3E%3C/script%3E"));</script>
+    </div>
+</body>
+</html>

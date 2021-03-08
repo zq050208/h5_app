@@ -1,0 +1,232 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+    background: rgba(245, 246, 247, 1)
+}
+title{
+    width: 100%;
+    margin: 0 auto
+}
+
+ul,
+li {
+    list-style: none;
+}
+
+.top {
+    width: 100%;
+    background-color: #fff;
+}
+
+.top-msg {
+    padding: 10px 15px;
+    display: flex
+}
+
+.top-left,
+.top-right {
+    flex: 1;
+    display: flex;
+    align-items: center
+}
+
+.top-right {
+    justify-content: flex-end
+}
+
+.scoll-view {
+    display: flex;
+    background-color: #fff;
+
+}
+
+.tab-item {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-content: center
+}
+
+.tab-item span {
+    padding: 13px 0;
+
+}
+
+.tab-item span.active {
+    border-bottom: 2px solid rgba(255, 148, 0, 1);
+    color: rgba(255, 148, 0, 1)
+}
+
+.data-list {
+    padding: 15px;
+    background-color: #fff;
+    margin: 10px 0 0px 0;
+}
+
+.result-name {
+    display: flex
+}
+
+.name-item,
+.team_list {
+    display: flex;
+
+}
+
+.name-item {
+    padding: 10px 0
+}
+
+.team_list {
+    padding: 20px 0;
+
+
+}
+
+.list {
+    border-bottom: 1px solid rgba(237, 238, 240, 1);
+}
+
+.list:last-child {
+    border-bottom: none
+}
+
+
+.name-item:nth-child(1),
+.ranking {
+    flex: 1;
+}
+
+.name-item:nth-child(2),
+.team {
+    flex: 3;
+}
+
+.team {
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+
+.team_name {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+
+.team_logo {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    margin-right: 3px
+}
+
+.name-item:nth-child(3),
+.name-item:nth-child(4),
+.ranking_data,
+.round_point {
+    flex: 2;
+    justify-content: center;
+    align-items: center;
+    display: flex
+}
+
+.round_point {
+    position: relative;
+
+}
+
+.round_point img {
+    width: 12px;
+    height: 12px;
+    position: absolute;
+    right: 10px;
+}
+
+.team_user {
+    display: flex;
+    padding: 15px 20px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: rgba(153, 153, 153, 1);
+    font-size: 12px;
+    border-bottom: 1px solid rgba(237, 238, 240, 1);
+}
+
+.team_user:last-child {
+    border-bottom: none
+}
+
+.game_nickname {
+    flex: 3;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+
+.kill,
+.damageDealt,
+.DBNOs {
+    flex: 2;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+}
+.DBNOs{
+    padding-left: 10px
+}
+.damageDealt{
+   margin-right: 8px
+}
+
+.kill_data,
+.damageDealt_data,
+.DBNOs_data {
+    margin-left: 3px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+
+.team_user_list {
+    display: none
+}
+
+.bottom {
+    width: 100%;
+    padding-top: 25px;
+    padding-bottom: env(safe-area-inset-bottom);
+    display: none
+}
+.bottom_msg{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+
+}
+
+.nolength {
+    text-align: center;
+    padding: 50px 0
+}
+.nosublist{
+    text-align: center;
+    padding: 20px 0;
+    color:rgba(153,153,153,1);;
+    font-size: 12px
+}

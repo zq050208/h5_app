@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="css/bootstrap.min.css?v=Math.random()">
+    <link rel="stylesheet" href="css/index.css?v=Math.random()">
+    <title>大神空投奖励池</title>
+</head>
+<body>
+<div id="page" class="page">
+    <section class="header">
+        <img src="img/icon-paradrop.png" width="100%" />
+    </section>
+    <section class="content">
+        <div>
+            <img src="img/icon-ranking.png" width="30%" style="position: relative;left: -5%" />
+            <img class="rule" src="img/icon-rule.png" width="17.3%" />
+        </div>
+        <div class="steps">
+            <div id="lump2" class="lump">
+                <img width="17" class="flower flower-left" src="img/icon-left-second.png"/>
+                <img id="step2" class="goSearch" src="img/icon-now.png"/>
+                <img width="17" class="flower flower-right" src="img/icon-right-second.png"/>
+                <p>
+                    <img width="14" src="img/icon-crown-second.png"/>
+                    <span class="name">无人上榜</span>
+                </p>
+                <p class="time">累计时长：<span>0</span>小时</p>
+            </div>
+            <div id="lump1" class="lump">
+                <img width="20" class="flower flower-right" src="img/icon-right-first.png"/>
+                <img id="step1" class="goSearch" src="img/icon-now.png"/>
+                <img width="20" class="flower flower-left" src="img/icon-left-first.png"/>
+                <p>
+                    <img width="14" src="img/icon-crown-first.png" />
+                    <span class="name">无人上榜</span>
+                </p>
+                <p class="time">累计时长：<span>0</span>小时</p>
+            </div>
+            <div id="lump3" class="lump">
+                <img width="17" class="flower flower-left" src="img/icon-left-three.png"/>
+                <img id="step3" class="goSearch" src="img/icon-now.png"/>
+                <img width="17" class="flower flower-right" src="img/icon-right-three.png"/>
+                <p>
+                    <img width="14" src="img/icon-crown-three.png"/>
+                    <span class="name">无人上榜</span>
+                </p>
+                <p class="time">累计时长：<span>0</span>小时</p>
+            </div>
+        </div>
+    </section>
+    <section class="ranking-list">
+        <div class="list"></div>
+    </section>
+    <div class="fake"></div>
+
+    <div class="footer">
+        <div class="aaa" style="display: none">
+            <img class="user-avatar" src="img/icon-now.png"  style="float: left"/>
+            <span style="float: left;display: inline-block;max-width: 150px;padding: 0 10px;">
+            <p  class="user-name"></p>
+            <p >累计：<span class="user-time"></span>小时</p>
+        </span>
+            <span class="send-btn">奖励：<span class="sum">0</span>元</span>
+        </div>
+        <div class="bbb" style="display: none; text-align: center">
+            <span class="apply">申请大神</span>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bs-example-modal-sm" id="ruleGroup">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">活动规则</h4>
+            </div>
+            <div class="modal-body">
+                <p>参与人群：TITI大神</p>
+                <p>奖励条件：活动周期内接单三次以上即可领取奖励。</p>
+                <br>
+                <p>活动规则：</p>
+                <p>1.活动期间接单即可获得优厚奖励，奖金无上限。</p>
+                <p>2.活动周期内榜单前三名可获得额外神秘奖励。</p>
+                <br>
+                <p>活动时间：</p>
+                <p>本次活动时间周期为北京时间:7月23日00:00-9月23日00：00，参与活动订单需为活动周期内“已完成”的订单。</p>
+                <br>
+                <p class="ruletext">*奖励申请后1-3日到账，具体金额每周三可在提现时进行查看，以支付宝到账金额为准。</p>
+                <p class="ruletext">*本次榜单计算为活动周期内总接单数量。</p>
+                <p class="ruletext">*可申请领奖时间为每周三0:00-23:59,提现成功后奖励金额将会清零，活动周期内可进行多次提现。</p>
+                <p class="ruletext">*本活动最终解释权归TITI电竞所有，如有问题请联系客服。</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn know-btn relieve" data-dismiss="modal">知道了</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bs-example-modal-sm" id="meetGroup">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <img src="img/icon-wrong.png" />
+                <p class="text"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn know-btn relieve" data-dismiss="modal">知道了</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bs-example-modal-sm" id="alipayGroup">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <img src="img/icon-wrong.png" />
+                <p class="text"></p>
+            </div>
+            <div class="modal-footer">
+                <div style="display:inline-block;width: 49%;text-align: center">
+                    <button type="button" class="btn cancel relieve" data-dismiss="modal">取消</button>
+                </div>
+                <div class="alipay">
+                    <button type="button" class="btn know-btn bindAlipay" data-dismiss="modal">去绑定</button>
+                </div>
+                <div class="card">
+                    <button type="button" class="btn know-btn idCard" data-dismiss="modal">去认证</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/service.js?v=Math.random()"></script>
+    <script src="js/index.js?v=Math.random()"></script>
+</body>
+</html>

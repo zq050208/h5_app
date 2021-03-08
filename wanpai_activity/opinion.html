@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <title>意见收发室</title>
+    <link rel="stylesheet" href="../public/mescroll.min.css">
+    <link rel="stylesheet" href="../public/ydui.css">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: auto;
+            font-size: 14px;
+            font-family: PingFang SC;
+            position: relative;
+            padding-bottom: constant(safe-area-inset-bottom);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .topImg {
+            position: relative;
+            width: 92vw;
+            height: 44.8vw;
+            background: url('image/icon-opinionBanner.png') no-repeat 100%/ 100%;
+            margin: 0 auto;
+            margin-bottom: 10px;
+        }
+
+        .opinionImg {
+            width: 43px;
+            height: 40px;
+            position: absolute;
+            top: 25px;
+            left: 17px;
+        }
+
+        .content {
+            padding: 0 15px;
+            position: relative;
+            height: auto;
+            margin: 0 auto;
+            margin-bottom: 80px;
+        }
+
+        .itemList {
+            height: auto;
+            width: 44vw;
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+            border-radius: 12px;
+            box-sizing: border-box;
+            word-wrap: break-word;
+            margin-bottom: 10px;
+            color: #FFFFFF;
+            font-size: 12px;
+            overflow: hidden;
+            position: absolute;
+
+        }
+
+        .aboutAuthor img {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+
+        .content_msg {
+            border-radius: 12px 12px 10px 12px;
+            padding: 10px;
+            word-wrap: break-word;
+            word-break: break-all;
+        }
+
+        .reply {
+            color: #FFC28D;
+            padding: 6px 10px;
+        }
+
+        .bottom {
+            position: fixed;
+            bottom: 0;
+            background-color: #fff;
+            background: rgba(255, 255, 255, 1);
+            border-top: 1px solid rgba(0, 0, 0, 0.08);
+            width: 100%;
+            z-index: 999;
+            padding-bottom: env(safe-area-inset-bottom)
+
+        }
+
+        .botton {
+            width: 45vw;
+            background: rgba(255, 165, 32, 1);
+            border-radius: 19px;
+            font-size: 18px;
+            font-weight: Bold;
+            color: #fff;
+            text-align: center;
+            padding: 7px;
+            margin: 6px auto;
+        }
+
+        .pup {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            display: none;
+            z-index: 999;
+        }
+
+        .mask {
+            width: 100%;
+            height: 100%;
+            background: rgba(51, 51, 51, .3);
+            z-index: 999999;
+        }
+
+        .pupContent {
+            width: 87%;
+            z-index: 99999;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.24);
+            border-radius: 12px 12px 5px 5px;
+            padding: 10px;
+        }
+
+        .pup_msg {
+            background: rgba(255, 255, 255, 1);
+            border: 1px solid rgba(112, 112, 112, 0.5019607843137255);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        textarea {
+            outline: none;
+            border: 0;
+        }
+
+        .pup_button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 16px;
+        }
+
+        .pup_button span {
+            width: 40.5vw;
+            font-size: 18px;
+            font-family: PingFang SC;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 1);
+            background: rgba(255, 165, 32, 1);
+            border-radius: 22px;
+            text-align: center;
+            padding: 7px 0;
+        }
+
+        .number {
+            font-size: 12px;
+            font-family: PingFang SC;
+            font-weight: 400;
+            color: rgba(51, 51, 51, .5);
+            text-align: right;
+        }
+
+        .itemContent {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 30vw
+        }
+
+        .aboutAuthor {
+            display: flex;
+            align-items: center;
+        }
+
+        .mescroll {
+            height: auto;
+        }
+
+        .mescroll-upwarp {
+            height: auto;
+            margin: 10px 0 50px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <div class="topImg">
+            <img src="image/icon-opinionImg.png" alt="" class="opinionImg">
+        </div>
+        <div class="content">
+            <div id="mescroll" class="mescroll">
+                <div class="contnetList">
+                </div>
+            </div>
+        </div>
+        <div class="bottom">
+            <div class="botton">发表意见</div>
+        </div>
+    </div>
+    <!-- 弹框 -->
+    <div class="pup">
+        <div class="mask"></div>
+        <div class="pupContent">
+            <div class="pup_msg">
+                <textarea id="" cols="30" rows="10" maxlength="800" placeholder="请输入您的意见" oninput="checkTxt()"></textarea>
+                <span class="number">800字</span>
+            </div>
+            <div class="pup_button">
+                <span class="cancle">取消</span>
+                <span class="publishClick">发表意见</span>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/service.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/template-web.js"></script>
+<script src="../public/mescroll.min.js"></script>
+<script src="../public/ydui.js"></script>
+<script type="text/html" id="dataList">
+{{each item v i}}
+    <div class="itemList">
+        <div class="content_msg" style=" background: {{backgroundColor[getRndInteger(0,backgroundColor.length-1)]}}" >
+            <div class="itemContent">{{v.content}}</div>
+            <div class="aboutAuthor" style="margin-top: 6px;"><img src="{{v.avatar}}"
+                    alt=""> <span>{{v.nickname}}</span></div>
+        </div>
+        {{if v.replay_content}}
+        <div class="reply">分子回复 <span style="color: #000000;">： {{v.replay_content}}</span></div>
+        {{/if}}
+    </div>
+{{/each}}
+</script>
+<script>
+    // baseUrl = 'http://192.168.1.241/wanpai_api/public/index.php/'   // 测试
+    // baseUrl = 'https://wanpai.titipa.cn/xhdj/wanpai_api/public/index.php/'   // 预发
+    baseUrl = 'https://fenz.tinytiger.cn/xhdj/wanpai_api/public/index.php/'   // 正式
+    var config = {
+        url: 'PartyOpinion/index',
+        addUrl: 'PartyOpinion/add',
+        data: {
+            page: 1,
+            per_page: 10
+        },
+        addData: {
+            content: ""
+        },
+        type: 'get',
+        addType: 'post',
+        token: Request('token'),
+        mescroll: initMescroll(),
+        up: 'up',
+        flush: 'flush',
+        backgroundColor: ['#feb27a', '#ff9b9b', '#f9c974', '#fd8757']
+    }
+
+    getdataList(config.flush)
+
+
+    // 获取列表数据
+    function getdataList(type) {
+        if (type == "flush") {
+            config.mescroll.optUp.page.num = 1;
+            config.data.page = 1
+        }
+        requsetHttp(config.url, config.type, config.data, null, (res) => {
+            if (res.code == 200) {
+                var works = template('dataList', { item: res.data.data })
+                if (type == config.flush) {
+                    config.mescroll.optUp.page.num = 1;
+                    config.mescroll.setPageNum(config.data.page)
+                    config.mescroll.endByPage(res.data.data.length, res.data.last_page);
+                    $(".contnetList").html(works)
+                } else {
+                    config.mescroll.endByPage(res.data.data.length, res.data.last_page);
+                    $(".contnetList").append(works)
+                }
+                waterfall()
+                config.data.page++;
+            }
+        })
+    }
+
+
+    // 获取输入框事件
+    function checkTxt () {
+        config.addData.content = $('textarea').val()
+    }
+    // 发表意见
+    $(".publishClick").click(function (e) {
+        e.stopPropagation()
+        var content = config.addData.content.trim()
+        if (content.length == 0) {
+            YDUI.dialog.toast('请输入发表内容', 2000) 
+            return
+        }
+        requsetHttp(config.addUrl, config.addType, config.addData, config.token, (res) => {
+            if (res.code == 200) {
+                YDUI.dialog.toast('发表成功', 2000)
+                $(".pup").hide()
+                $("textarea").val('')
+                config.addData.content= ''
+                config.data.page = 1
+                getdataList(config.flush)
+            } else {
+                YDUI.dialog.toast(res.msg, 2000) 
+            }
+        })
+    })
+
+    // 遮罩
+    $(".bottom").click(function () {
+        $(".pup").show()
+    })
+    $(".mask, .cancle").click(function () {
+        $(".pup").hide()
+        $("textarea").val('')
+        config.addData.content= ''
+    })
+
+    function getRndInteger(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    template.defaults.imports.getRndInteger = getRndInteger
+    template.defaults.imports.backgroundColor = config.backgroundColor
+
+    /**
+* mescroll 配置
+*/
+    function initMescroll() {
+        var mescroll = new MeScroll("body", {
+            up: {
+                callback: upCallback,
+                isBounce: true,
+                noMoreSize: 0,
+                auto: false,
+                htmlNodata: '<p class="upwarp-nodata">没有更多了</p>'
+            },
+            down: {
+                auto: false,
+                use: false,
+                callback: downCallback
+            }
+        });
+        return mescroll;
+    }
+
+    /**
+     * 下拉刷新的回调
+     */
+    function downCallback() {
+        getdataList(config.flush);
+    }
+
+    /**
+     * 上拉加载的回调
+     */
+    function upCallback() {
+        getdataList(config.up);
+    }
+    // 瀑布流方法
+    function waterfall() {
+        let oItems = $(".itemList")
+        let oMainIn = $(".content")
+        let mainInWidth = oMainIn.width()
+        let itemWidth = $(".itemList").width()
+        let cols = Math.floor(mainInWidth / itemWidth)
+        let rowHeight = []
+        oItems.each(function (index, elem) {
+            var targetItemTop = oItems.eq(index).height() + 15
+            if (index < cols) {
+                rowHeight[index] = targetItemTop
+                $(elem).css({
+                    "left": index == 0 ? itemWidth * index + 15 : itemWidth * index + 30,
+                    "top": 10,
+                });
+            } else {
+                var mintop = Math.min.apply(null, rowHeight)
+                var minindex = $.inArray(mintop, rowHeight)
+                $(elem).css({
+                    "top": mintop + 10,//设置top为数组中最小值
+                    "left": parseInt(oItems.eq(minindex).css("left")),
+                    "margin-bottom": 80
+                });
+            }
+            rowHeight[minindex] += $(elem).height() + 15;//更新数组
+        })
+
+        let maxHeight = Math.max.apply(null, rowHeight);
+        oMainIn.css({
+            "height": maxHeight
+        })
+
+
+    }
+
+</script>

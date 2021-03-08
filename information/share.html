@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title>h5分享</title>
+    <link rel="stylesheet" href="iconfont/iconfont.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.3.0/video-js.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/share.css?v=Math.random()">
+</head>
+<body>  
+    <div class="header">
+            <div class="title"></div>
+            <span style="color:rgba(153,153,153,1)" class="time"></span>
+    </div>
+    <div class="videoContent"></div>
+    <div class="like">
+        <div class="like-up"><img src="image/icon-nopraise.png" alt=""><span></span></div>
+        <div class="like-down"><img src="image/icon-noselectprasedown.png" alt=""><span></span></div>
+    </div>
+    <div class="line"></div>
+    <div class="comment">
+        <div class="comment-title">热门评论</div>
+        <ul class="commentList"></ul>
+    </div>
+    <!-- 悬浮按钮 -->
+    <div class="suspension"><span>打开</span><span>app</span></div>
+    <!-- 查看更多 -->
+    <div class="look">
+            <div class="lookmore">
+                    <span>查看更多评论</span>
+                    <img src="image/icon-arrowdown.png" alt="">
+                </div>
+    </div>
+    
+</body>
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/service.js"></script>
+<script src="../public/config.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.3.0/video.min.js"></script>
+<script>
+    var config= {
+        url:'NewsController/getNewsInfo',                           // 视频详情地址
+        commentUrl:"NewsController/commentList",                    // 评论列表地址
+        pointUrl:'NewsController/videoPlayStatistica',
+        downloadUrl: 'https://h5.tinytiger.cn/web_app/knapsack/download.html',       // 下载地址
+        type: "post",
+        data: {
+            news_id: Request("news_id")  ,                          // 资讯id
+            category_id: Request("category_id"),                  // 分类id
+        },
+        commentData:{
+            news_id:Request("news_id")  ,
+            page:1,
+            category_id: Request("category_id")
+        },
+        user_info: getUserInfo(),
+    }
+
+    requsetHttp(config.url,config.type,config.data,config.user_info.token || null,(res)=>{
+        $(".title").text(res.data.summary)
+        $(".videoContent").html(`    <video id="example_video_1" class="video-js vjs-default-skin"  preload="none" poster="${res.data.cover_img}"  playsinline webkit-playsinline x5-playsinline x-webkit-airplay>
+         <source src="${res.data.resource_url}" type="video/mp4" > </video>`)
+    // video.js 配置 
+        var player = videojs('example_video_1',{
+        muted: false,
+	    controls : true/false,      
+	    loop : true,
+	// 更多配置.....
+        });
+        $(".like-up span").text(res.data.support)
+        $(".like-down span").text(res.data.dislike)  
+        $(".time").text(subtime(res.data.update_time)) 
+
+
+        // 是否点击踩
+        if(res.data.news_status.is_like == 1){
+            $(".like-up img").attr('src',"image/icon-praise.png")
+        }else{
+            $(".like-up img").attr('src',"image/icon-nopraise.png")
+        }
+        if(res.data.news_status.is_dislike == 1){
+            $(".like-down img").attr('src','image/icon-selectpraisedown.png')
+        }else{
+            $(".like-down img").attr('src','image/icon-noselectprasedown.png')
+        }
+        // 视频点击播放统计
+        player.on("play",function(){
+            if(config.user_info.token){ getpointData() }
+        })
+
+    })
+
+    requsetHttp(config.commentUrl,config.type,config.commentData,config.user_info.token,(res)=>{
+        var list = res.data.list
+        if(!list.length) $(".commentList").html(`<div class="nocomment">暂无评论！</div>`)
+        var str = ""
+        var listLength = res.data.list.length>=3 ? 3 :res.data.list.length
+        for(var i = 0; i <listLength; i++){
+            str+=` <li>
+                <div class="reply-item">
+                    <div class="publish-main">
+                        <div class="publish-header">
+                            <img src="${list[i].avatar}" alt="">
+                            <div class="publish-name">
+                                <span>${list[i].nickname}</span>
+                                <span class="publish-time">${getDateDiff(list[i].create_time)}</span>
+                            </div>
+                        </div>
+                        <div class="publish-like">
+                            <div class="likeSign">
+                                    <img src="${list[i].is_like == 1 ? 'image/icon-praise.png' :'image/icon-nopraise.png'}" alt="">
+                                    <span>${list[i].like_num}</span>
+                            </div>
+                            <img src="image/icon-more.png" alt="" class="like-report">
+                        </div>
+                        
+                    </div>
+                    <div class="publish-msg">
+                        <div class="publish-info">${list[i].content}</div>
+                        <div class="${list[i].sub_comment.list.length == 0? 'reply-nomessage' : 'reply-message'}">
+                            <ul class="totalReply">`
+                                let repay_length = list[i].sub_comment.list.length >= 3 ? 3 : list[i].sub_comment.list.length;
+                                for(var index= 0; index<repay_length; index++){
+                                        str+=` <li>
+                                    <span class="reply-info"> <span class="repla-name">${list[i].sub_comment.list[index].nickname}：</span>${list[i].sub_comment.list[index].content}</span>
+                                </li>`
+
+                                    }
+                           str+=` </ul>
+                            <div class="total-reply">
+                                <span>共${list[i].sub_comment.page.total}条回复<span class="iconfont icon-xiangyoujiantou"></span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </li>`
+        }
+        $(".commentList").append(str)
+        if(res.data.list.length >=3){
+            $(".look").show()
+        }
+    })
+
+    $(".comment , .suspension, .like-up, .like-down, .look").click(function(){
+        window.location.href = config.downloadUrl
+    })
+
+    // 视频要求埋点方法
+    function getpointData(){
+        requsetHttp(config.pointUrl,config.type,config.data,config.user_info.token ,(res)=>{ })
+    }
+
+    // 时间转换
+    function getDateDiff(endTime) {
+        var oldtime = new Date(endTime.replace(/-/g,"/"));
+        var minute = 1000 * 60;
+        var hour = minute * 60;
+        var day = hour * 24;
+        var now = new Date();
+        var diffValue = now.getTime() - oldtime.getTime();
+        if (diffValue < 0) {
+            return;
+        }
+        var dayC = diffValue / day;
+        var hourC = diffValue / hour;
+        var minC = diffValue / minute;
+        if (minC >= 1 && minC <= 60) {
+            result = " " + parseInt(minC) + "分钟前";
+        } else if (hourC >= 1 && hourC <= 24) {
+            result = " " + parseInt(hourC) + "小时前";
+        } else if (dayC >= 1 && dayC <= 3) {
+            result = " " + parseInt(dayC) + "天前";
+        } else if (dayC > 3) {
+            result = endTime.substring(0, 10);
+        } else {
+            result = "刚刚";
+        }
+        return result;
+    }
+
+    //截取时间 
+    function subtime(time){
+        return  time.substring(0,16)
+        
+    }
+
+
+
+
+</script>

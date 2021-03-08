@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="css/ydui.css">
+    <title>霖感&TiTi绝地求生训练营</title>
+</head>
+<body>
+
+<style>
+    html,body{
+        font-family: PingFangSC;
+        background: #000000;
+    }
+    .m-tabbar{
+        background-color: #1A1A1A;
+    }
+    .badge{
+        background-color: unset !important;
+    }
+
+    .icon{
+        width: 30px;
+    }
+    .tabbar-txt{
+        color: #AF895A;
+    }
+    .tab-nav-item{
+        background-color: #0C0C0C!important;
+        color: #ffffff!important;
+        font-family: PingFangSC-Medium;
+    }
+    .tab-nav-item.tab-active{
+        color: #D8A95D !important;
+    }
+    .tab-panel .tab-panel-item{
+      padding: 0!important;
+    }
+    .tab-nav:after,.tab-nav-item:not(:last-child):after,.badge:after,.m-tabbar:after{
+        border: none !important;
+    }
+    .tab-nav-item.tab-active:before{
+        height: 0 !important;
+    }
+    .adorn{
+        height: 0;
+    }
+    .tab-active .adorn{
+        width: 60%;
+        position: absolute;
+        left: 50%;
+        bottom: 0;
+        margin-left: -30%;
+        z-index: 4;
+        height: 3px !important;
+    }
+    .image{
+        position: relative;
+        width: 100%;
+        height: 0px;
+        padding-top: 56%;
+    }
+    .image img{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+    .flex-box{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .flex-2{
+        flex: 0 0 10%;
+    }
+    .flex-2{
+        flex: 0 0 20%;
+    }
+    .flex-3{
+        flex: 0 0 30%;
+    }
+    .flex-33{
+        flex: 0 0 33%;
+    }
+    .flex-4{
+        flex: 0 0 40%;
+    }
+    .schedule{
+        background: #000000;
+        font-family: PingFangSC-Medium;
+    }
+    .schedule .caption,.team .caption{
+        color: #FFBD54;
+        font-size: 16px;
+        padding-top: 30px;
+        margin-bottom: 30px;
+    }
+    .schedule .caption img, .team .caption img{
+        width: 100%;
+    }
+
+    .content{
+        margin: 20px auto;
+    }
+
+    .content-wrap{
+        width: 90%;
+        height: 26vw;
+        flex-wrap: wrap;
+        color: #D8A95D;
+        background: url('img/icon-content-wrap.png') no-repeat;
+        background-size: contain;
+    }
+
+    .game-title{
+        color: #ffffff;
+        font-size: 16px;
+        margin-bottom: 10px
+    }
+
+    .game-time{
+        font-size: 20px;
+    }
+    .game-mechanism{
+        font-size: 14px;
+    }
+    .txt-left{
+        flex-direction: column;
+        flex: 0 0 40%;
+    }
+    .txt-right{
+        flex: 0 0 60%;
+    }
+    .txt-right img{
+        width: 22px;
+        height: 20px;
+        margin-right: 10px;
+    }
+
+    .tab-panel{
+        padding-bottom: 60px;
+        background-color: #000000 !important;
+    }
+
+    .schedule .caption .cat,.team .caption .cat{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+    }
+    .team-wrap{
+        height: 26vw;
+        background: url('img/icon-content.png') no-repeat center/contain;
+        flex-direction: column;
+        color: #FFBD54;
+        margin-bottom: 20px;
+    }
+    .team-name{
+        flex: 1;
+        margin-top: 2px;
+    }
+    .team-icon{
+        flex: 3
+    }
+    .team-icon img{
+        height: 100%;
+        width: 60%;
+    }
+    .team-logo{
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+</style>
+
+<header>
+    <div class="image">
+        <img src="img/icon-live-bg.png" />
+    </div>
+</header>
+
+<div id="J_Tab" class="m-tab">
+    <ul class="tab-nav">
+        <li class="tab-nav-item tab-active"><img class="adorn" src="img/icon-rail.png" /><a href="javascript:;">赛程安排</a></li>
+        <li class="tab-nav-item"><img class="adorn" src="img/icon-rail.png" /><a href="javascript:;">战队介绍</a></li>
+    </ul>
+    <div class="tab-panel">
+        <div class="tab-panel-item tab-active schedule"></div>
+        <div class="tab-panel-item team"></div>
+    </div>
+</div>
+
+<footer class="m-tabbar tabbar-fixed">
+    <a href="cityGame.html" class="tabbar-item">
+        <span style="position: relative">
+            <i><img class="icon" src="img/icon-city.png" /><span class="badge"><img src="img/icon-new.png" width="22px" /></span></i>
+        </span>
+        <span class="tabbar-txt">城市赛</span>
+    </a>
+    <a href="handGame.html" class="tabbar-item">
+        <span style="position: relative">
+            <i><img class="icon" src="img/icon-game.png" /><span class="badge"><img src="img/icon-new.png" width="22px" /></span></i>
+        </span>
+        <span class="tabbar-txt">手游赛</span>
+    </a>
+</footer>
+
+
+<script src="js/jquery.min.js"></script>
+<script src="js/ydui.flexible.js"></script>
+<script src="js/ydui.js"></script>
+<script src="js/services.js"></script>
+<script>
+    var config = {
+        url: 'js/tsconfig.json',
+        type: 'get',
+        liveUrl: 'https://www.douyu.com/room/share/3939156'
+    };
+
+    loginHttp(config.url, config.type, null).then(function (res) {
+        console.log(res);
+        for(var i=0; i< res.data.length; i++){
+            $('.schedule').append('<div class="flex-box caption">\
+                <div class="flex-3 cat"><img src="img/icon-left.png" /></div>\
+                <div class="flex-box flex-4">'+res.data[i].title+'</div>\
+                <div class="flex-3 cat"><img src="img/icon-right.png" /></div>\
+            </div>');
+            var list = res.data[i].list;
+            for(var n=0; n< res.data[i].list.length; n++ ){
+                $('.schedule').append('<div class="flex-box content" >\
+                    <div class="flex-box content-wrap">\
+                        <div class="flex-box txt-left"><span class="game-title">'+list[n].name+'</span><span class="game-mechanism">'+list[n].mechanism+'</span></div>\
+                        <div class="flex-box txt-right"><img src="img/icon-calendar.png"><span class="game-time">'+list[n].date+'</span></div>\
+                    </div>\
+                </div>');
+            }
+        }
+
+        for(var i=0;i< res.team.length; i++){
+            $('.team').append('<div class="flex-box caption">\
+                <div class="flex-4 cat"><img src="img/icon-left.png" /></div>\
+                <div class="flex-box flex-2">'+res.team[i].grouping+'</div>\
+                <div class="flex-4 cat"><img src="img/icon-right.png" /></div>\
+            </div><div id="team'+i+'" class="flex-box team-logo"></div>');
+            var team = res.team[i].list;
+            for(var n=0;n< team.length; n++){
+                $('#team'+i+'').append('\
+                    <div class="flex-33 flex-box team-wrap">\
+                        <div class="flex-box team-name">'+team[n]+'</div>\
+                        <div class="flex-box team-icon"><img src="img/teamlogo-'+(setting(i,n))+'.png"/></div>\
+                    </div>');
+            }
+        }
+
+        var $tab = $('#J_Tab');
+        $tab.tab({
+            nav: '.tab-nav-item',
+            panel: '.tab-panel-item',
+            activeClass: 'tab-active'
+        });
+
+    });
+
+    $('.image').click(function () {
+        location.href = config.liveUrl;
+    });
+
+    function setting(n,y) {
+        var arr = ['A','B','C'];
+        var str = arr[n] + (y+1);
+        return str;
+    };
+
+</script>
+</body>
+</html>

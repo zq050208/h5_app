@@ -1,0 +1,144 @@
+<!DOCTYPE html >
+<html lang="en"><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="Content-Language" content="zh-CN">
+    <script src="../public/jquery.min.js"></script>
+    <script src="../public/config.js"></script>
+    <script src="../public/service.js"></script>
+    <script src="js/superSlide.js"></script>
+    <script src="js/mustache.js"></script>
+
+</head>
+
+<body>
+
+<style type="text/css">
+    /* css 重置 */
+    *{margin:0; padding:0; list-style:none; }
+    body{ font-family: Microsoft Yahei; font-weight:400; background:rgba(40,40,40,1);}
+    /* 本例子css */
+    .picScroll-left{position:relative;  width: 1126px ; margin: auto; }
+    .slideBox{ overflow:hidden; position:relative;    }
+    .picScroll-left .bd{ padding:10px 20px;   }
+    .picScroll-left .bd ul{ overflow:hidden; zoom:1; }
+    .picScroll-left .bd ul li{ margin:23px 6px; float:left; _display:inline; overflow:hidden; text-align:center; width:260px; height:194px; }
+    .picScroll-left .bd ul li .pic{ text-align:center; }
+    .picScroll-left .bd ul li .pic a:hover img{ border-color:#999;  }
+    .picScroll-left .bd ul li .title{ line-height:24px;   }
+    /* 下面是前/后按钮代码，如果不需要删除即可 */
+    .hd .prev,
+    .hd .next{ position:absolute; left:-28px; top:50%; margin-top:-50px; display:block;width:44px; height:110px;  filter:alpha(opacity=50);opacity:0.5;}
+    .hd .prev{ background:url(img/icon-next.png) center no-repeat; background-size: 100% 100%;  }
+    .hd .next{ left:auto; right: -28px; background:url(img/icon-prev.png) center no-repeat; background-size: 100% 100% }
+    .hd .prev:hover,
+    .hd .next:hover{ filter:alpha(opacity=100);opacity:1; }
+    .hd .prevStop{ display:none; }
+    .hd .nextStop{ display:none; }
+    /* 内联样式*/
+    .bd .item { position: relative;height: 100%;padding: 2px;display: flex;flex-direction: column;align-items: center;justify-content: center;background: #14171C;color: #FFFFFF;font-size:20px;}
+    .bd .item .item-tag { position: absolute;right: 0;top: 6px;padding: 2px 5px;background: #A59D92;font-size: 14px; }
+    .bd .item .active { background: #1982F9 !important;}
+    .bd .item .notbegun { background: #F9B519 !important;}
+    .bold { font-family:PingFangSC-Medium;font-weight:500;font-size:32px;cursor: pointer;position: relative; }
+    .orange { color: #F9B519; }
+    .isHide { display: none; }
+    .bottom-10 { margin-bottom: 14px;cursor: pointer; }
+    .top-10 { margin-top: 20px; cursor: pointer; }
+</style>
+
+<div style="width: 1200px; margin:auto ">
+    <div class="picScroll-left">
+        <div class="hd">
+            <a class="prev" href="javascript:void(0)" style="position: absolute;display: block;z-index: 999;"></a>
+            <a class="next" href="javascript:void(0)" style="position: absolute;display: block;z-index: 999;"></a>
+        </div>
+        <div class="slideBox">
+            <div class="bd">
+                <ul class="picList"></ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    // baseUrl = 'http://192.168.1.241:9063/'
+    getGameList();
+
+    /**
+     * 获取赛事列表
+     */
+    function getGameList() {
+        var config = { url: 'YouthTrainController/getMatchScheduleList', type: 'post' }
+        requsetHttp(config.url, config.type, {}, null, (res) => {
+            if (res.code == 200) {
+                var list = res.data.schedule_list;
+                var html = '';
+                var type = 0;
+                for (var i=0; i < list.length; i++) {
+                    html += `<li>
+                        <div class="item">
+                            <span class="item-tag ${ list[i].match_status == "1" ? 'active' : list[i].match_status == "2" ? 'notbegun' : '' }">${ getGameStatus(list[i].match_status) }</span>
+                            <span class="bottom-10">${ list[i].match_starttime.substring(16,5)}</span>
+                            <span class="bold ${ list[i].match_status == "2" ? 'orange' : '' }">${getGameType(list[i].train_match_type)}</span>
+                            <span class="${ list[i].match_status == "2" ? 'orange' : '' } ${ list[i].train_match_type != "2" ? 'isHide' : '' } ">${ getGameWeek(list[i].train_week_match_num)}</span>
+                            <span class="top-10">${list[i].setting_name}</span>
+                        </div>
+                    </li>`
+                    if( list[i].match_status == "3" && list.length - i >= 4) type = Math.ceil(i)
+                }
+                $('.picList').append(html);
+                initSlide(type);
+            } else {
+                console.log(res.msg);
+            }
+        })
+    }
+
+    /**
+     * slide初始化
+     */
+    function initSlide(type){
+        jQuery(".picScroll-left").slide(
+        {
+            titCell:".hd ul",
+            mainCell:".bd ul",
+            autoPage:true,
+            effect:'left',
+            vis: 4,
+            scroll: 1,
+            pageStateCell: false,
+            pnLoop: false,
+            defaultIndex: type
+        });
+    }
+
+    /**
+     * 获取赛事类型
+     * type #赛事类型 2周决赛 3主播赛 4名额赛
+     */
+    function getGameType(type) {
+        var GameType = ['普通赛','训练赛','周决赛','主播赛','名额赛'];
+        return GameType[type]
+    }
+    /**
+     * 获取比赛状态
+     * type #状态 1未开始 2进行中 3已结束
+     */
+    function getGameStatus(type) {
+        var GameStatus = ['','未开始','进行中','已结束'];
+        return GameStatus[type]
+    }
+    /**
+     * 获取比赛状态
+     * type #周次 第一周、第二周...
+     */
+    function getGameWeek(type) {
+        var GameWeek = ['','(第一周)','(第二周)','(第三周)','(第四周)','()第五周','()第六周','(第七周)','(第八周)','(第九周)','(第十周)','(第十一周)','(第十二周)','(第十三周)','(第十四周)','(第十五周)'];
+        return GameWeek[type]
+    }
+</script>
+
+</body>
+</html>
+
+

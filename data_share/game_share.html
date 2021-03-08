@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title></title>
+    <link rel="stylesheet" href="css/game_share.css?v=Math.random()">
+</head>
+<body>
+    <div class="top">
+        <div class="top-msg">
+            <div class="top-left">
+                <img src="image/icon-sharedata-logo.png" alt="" style="width:40px;height:40px;margin-right: 8px">
+                <span style="font-size:18px;color:rgba(37,39,42,1);font-weight:500">小虎电竞</span>
+            </div>
+            <div class="top-right">
+                <div>
+                    <span
+                        style="color:rgba(37,39,42,1);padding: 7px 20px; background:rgba(243,159,24,1);border-radius:17px ;font-weight:500"
+                        class="download">下载app</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="scoll-view "> </div>
+    <!-- 数据 -->
+    <div class="data-list">
+        <div class="result-name">
+            <div class="name-item">排名</div>
+            <div class="name-item">战队</div>
+            <div class="name-item">淘汰</div>
+            <div class="name-item">积分</div>
+        </div>
+        <ul class="match_list"></ul>
+        
+    </div>
+
+    <!-- 底部 -->
+    <div class="bottom">
+        <div class="bottom_msg">
+                <img src="image/icon-sharedata-arrow.png" alt="" style="width:9px;height:8px;">
+                <div style="color:rgba(255,148,0,1);padding: 3px 0 25px 0">打开小虎APP，查看更多精彩数据</div>
+        </div>
+
+    </div>
+</body>
+
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+<script>
+    var config = {
+        downloadUrl: 'https://h5.tinytiger.cn/web_app/knapsack/download.html',  // 下载地址
+        url: 'WarTeamDataController/getMatchResultTeamList',
+        type: 'post',
+        data: {
+            match_id: Request("match_id") ,
+            v: Request("appversion")
+        },
+        user_info: getUserInfo(),
+        match_index_result: [],
+        match_all_result: []
+    }
+
+
+    // 数据
+    requsetHttp(config.url, config.type, config.data, config.user_info.token, (res) => {
+        $("title").text(cutTime(res.data.match_info.start_time)+" 数据排行榜")
+        config.match_index_result = res.data.match_index_result;
+        config.match_all_result = res.data.match_all_result.team_list
+        var str = `<li class="tab-item"><span>总积分</span></li>`
+        for (var i = 0; i < config.match_index_result.length; i++) {
+            if(i == 0){
+                str += `<li class="tab-item"><span>第一场</span></li>`
+            }else if(i == 1){
+                str += `<li class="tab-item"><span>第二场</span></li>`
+            }else if(i == 2){
+                str += `<li class="tab-item"><span>第三场</span></li>`
+            }else if(i == 3){
+                str += `<li class="tab-item"><span>第四场</span></li>`
+            }else if(i == 4){
+                str += `<li class="tab-item"><span>第五场</span></li>`
+            }else if(i == 5){
+                str += `<li class="tab-item"><span>第六场</span></li>`
+            }
+            
+        }
+
+        $(".scoll-view").append(str)
+        $(".tab-item").eq(0).children("span").addClass("active")
+        $(".tab-item").click(function () {
+            $(this).children("span").addClass("active")
+            $(this).siblings().children("span").removeClass("active")
+            getALLdate($(this).index());
+        })
+        getALLdate(0)
+
+    })
+
+    function getALLdate(index) {
+        $(".match_list").empty()
+        var str = ''
+        var list = index == 0 ? config.match_all_result : config.match_index_result[index - 1].team_list;
+          if(list.length == 0) {
+            $(".match_list").html(`<div class="nolength">数据正在上传中</div>`)
+            $(".bottom").hide()
+          }
+            for (var i = 0; i < list.length; i++) {
+                var team_user = list[i].team_user
+                str += `       <div class="list">
+                <li class="team_list">
+                    <span class="ranking">#${list[i].ranking}</span>
+                    <div class="team">
+                        <img src="${list[i].team_logo}" alt="" class="team_logo">
+                        <span class="team_name">${list[i].team_name}</span>
+                    </div>
+                    <div class="ranking_data"><span>${list[i].kills || 0}</span></div>
+                    <div class="round_point"><span>${list[i].integral || 0}</span><img src="image/icon-arrow-up.png" alt="" class="arrow">
+                    </div>
+                </li>
+                <div class="team_user_list">
+                <ul>`
+               if(team_user.length == 0) str+=`<li class="nosublist">数据正在上传中~</li>`
+                for (var k = 0; k < team_user.length; k++) {
+                    str += `  <li class="team_user">
+                            <span class="game_nickname">${team_user[k].game_nickname}</span>
+                            <div class="kill"><span>淘汰</span><span class="kill_data">${team_user[k].kills || 0}</span></div>
+                            <div class="damageDealt"><span>伤害</span><span class="damageDealt_data">${team_user[k].damageDealt || 0}</span></div>
+                            <div class="DBNOs"><span>击倒</span><span class="DBNOs_data">${team_user[k].DBNOs || 0}</span></div>
+                        </li>`}
+                str += `  </ul>
+                </div>
+            </div>`
+            }
+            $(".match_list").append(str)
+            $(".bottom").show()
+
+        $(".team_list").attr("isSelect", true)
+        $(".team_list").click(function () {
+            if ($(this).attr('isSelect') == 'true') {
+                $(this).attr('isSelect', false);
+                $(this).parent().children(".team_user_list").slideDown()
+                $(this).children(".round_point").children(".arrow").attr("src", 'image/icon-arrow-down.png')
+            } else {
+                $(this).attr('isSelect', true);
+                $(this).parent().children(".team_user_list").slideUp()
+                $(this).children(".round_point").children(".arrow").attr("src", 'image/icon-arrow-up.png')
+            }
+        })
+    }
+
+
+    // 跳转下载页面
+    $(".download,.bottom").click(function () {
+        window.location.href = config.downloadUrl
+    })
+
+    function cutTime(time) {
+        return time.substring(5, 10).replace(/-/g, ".")
+    }
+
+
+</script>

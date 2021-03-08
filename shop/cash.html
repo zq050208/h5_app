@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="css/store.css">
+    <meta charset="UTF-8">
+    <title>服务兑换</title>
+</head>
+<body>
+<style>
+    .header{
+        padding-top: 72.8% !important;
+    }
+</style>
+<div class="pages">
+    <div class="header"></div>
+    <div class="content">
+        <div class="content-top"><span class="title"></span></div>
+        <div class="content-rule">
+            <p>兑换规则:</p>
+            <p>1、兑换后会扣减“积分”，一经确认，将不予退回。</p>
+            <p>2、在兑换和使用积分过程中，如果出现违规行为（如作弊领取、恶意兑换等），TiTi电竞将取消您获得积分的资格，并有权收回账号中所得的积分（含 已使用的积分及未使用的积分），必要时将追究法律责任。</p>
+            <p>3、如用户帐号暂停使用，则TiTi电竞将取消该用户帐号内的积分相关使用权益。</p>
+            <p>4、积分不能兑现，不可转让。</p>
+            <p>5、积分兑换活动不断完善中，敬请期待。</p>
+            <p>6、奖励由本公司提供，与苹果官方无关。</p>
+        </div>
+    </div>
+    <div class="block"></div>
+    <footer>
+        <div class="footer-left">消耗：<span class="price"></span>积分</div><div class="footer-right" >联系客服</div>
+    </footer>
+</div>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/service.js"></script>
+<script>
+    var type = Request('type');
+    if(type == 1){
+        $('.header').append('<img src="img/icon-person.jpg" />');
+        $('.title').text('僵尸赛人类位置');
+        $('.price').text(120);
+    }else if(type == 2){
+        $('.header').append('<img src="img/icon-room.jpg" />');
+        $('.title').text('自定义房间特权');
+        $('.price').text(2700);
+    }
+    $('.footer-right').click(function () {
+        callService();
+    })
+</script>
+</body>
+</html>

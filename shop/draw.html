@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="css/store.css">
+    <meta charset="UTF-8">
+    <title>积分抽奖</title>
+</head>
+<body>
+    <div class="pages">
+        <div class="header"></div>
+        <div class="content">
+            <div class="content-top"><span class="title"></span><span class="num">目前剩余：<span class="stock"></span>张</span></div>
+            <div class="content-rule"><p>活动规则:</p></div>
+        </div>
+        <div class="block"></div>
+        <footer>
+            <div class="footer-left">消耗：<span class="price"></span>积分</div><div class="footer-right" >抽奖</div>
+        </footer>
+    </div>
+    <div class="modal" style="text-align: center">
+        <img width="80%" src="img/icon-success.png"/>
+        <div class="mask"></div>
+    </div>
+
+    <div class="toast"><span></span></div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/service.js?v=Math.random()"></script>
+    <script>
+        $('#dddd').click(function () {
+
+        });
+
+        var load = {
+          getGoodsInfo: function (url,type,data) {
+              requsetHttp(url,type,data,(res)=>{
+                  console.log(res);
+                  var data = res.data.goods_info;
+                  $('.title').text(data.goods_name);
+                  $('.stock').text(data.goods_stock);
+                  $('.price').text(data.goods_price);
+                  $('.header').append('<img src='+data.goods_image+' />');
+                  var rule_desc = data.rule_desc.replace(/[\r\n]/g, ",").split(",");
+                  for(var i=0;i<rule_desc.length;i++){
+                      $('.content-rule').append('<p>'+rule_desc[i]+'</p>')
+                  }
+                  $('.footer-right').click(function () {
+                      load.lottery(config.lotteryUrl,config.type,{goods_id:config.goods_id,user_id:config.user_id});
+                  });
+                  $('.modal').click(function () {
+                      $('.modal').hide();
+                  });
+              })
+          },
+          lottery: function (url,type,data) {
+              requsetHttp(url,type,data,(res)=>{
+                  console.log(res)
+                  if(res.status){
+                      if(res.code == 'SUCCESS'){
+                          if(res.data.is_prize){
+                              //中奖
+                              $('.modal').show().find('img').attr('src','img/icon-success.png');
+                              requsetHttp(config.goodsInfoUrl,config.type,{goods_id:config.goods_id},(res)=>{
+                                  $('.stock').text(res.data.goods_info.goods_stock);
+                              });
+                          }else{
+                              //未中奖
+                              $('.modal').show().find('img').attr('src','img/icon-fail.png');
+                          }
+                      }
+                  }else{
+                      $('.toast span').text(res.msg);
+                      $('.toast').addClass('isShow');
+                      setTimeout(function () {
+                          $('.toast').removeClass('isShow');
+                      },2000);
+                  }
+
+              })
+          }
+        };
+        var config = {
+            goodsInfoUrl: baseUrl + '/Lottery/GoodsInfo',
+            lotteryUrl: baseUrl + '/Lottery/DoLottery',
+            goods_id: Request('id'),
+            user_id: getUserInfo().user_id,
+            type: 'post',
+        };
+
+        load.getGoodsInfo(config.goodsInfoUrl,config.type,{goods_id:config.goods_id});
+    </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+/* fonts */
+
+div.jqcloud {
+  font-family: "微软雅黑", "微软雅黑", sans-serif;
+  /*font-size: 10px;*/
+  line-height: normal;
+}
+
+div.jqcloud a {
+  font-size: inherit;
+  text-decoration: none;
+}
+
+    /*div.jqcloud span.w10 {
+        font-size: 100%;
+    }
+    div.jqcloud span.w9 {
+        font-size: 100%;
+    }
+    div.jqcloud span.w8 {
+        font-size: 100%;
+    }
+    div.jqcloud span.w7 {
+        font-size: 100%;
+    }
+    div.jqcloud span.w6 {
+        font-size: 100%;
+    }
+    div.jqcloud span.w5 {
+        font-size: 100%;
+    }
+    div.jqcloud span.w4 {
+        font-size: 100%;
+    }
+    div.jqcloud span.w3 {
+        font-size: 100%;
+    }
+    div.jqcloud span.w2 {
+        font-size: 100%;
+    }
+    div.jqcloud span.w1 {
+        font-size: 100%;
+    }*/
+
+/* colors */
+
+div.jqcloud { color: #09f; }
+div.jqcloud a { color: inherit; }
+/*div.jqcloud span:hover { color: red; font-size: 40px; font-weight: bold;}*/
+    div.jqcloud span.w10 {
+        color: #5DDD6F;
+        padding: 5px 17px;
+     
+    }
+    div.jqcloud span.w9 {
+        color: #D7AB00;
+        padding :7px 11px;
+    }
+    div.jqcloud span.w8 {
+        color: #FF556E;
+        padding: 13px 7px;
+    }
+    div.jqcloud span.w7 {
+        color: #5DDD6F;
+        padding: 7px 6px;
+    }
+    div.jqcloud span.w6 {
+        color: #D7AB00;
+        padding: 4px 3px;
+    }
+    div.jqcloud span.w5 {
+        color: #FF556E;
+        padding: 7px 6px;
+    }
+    div.jqcloud span.w4 {
+        color: #5DDD6F;
+        padding: 7px 6px;
+    }
+    div.jqcloud span.w3 {
+        color: #D7AB00;
+        padding: 4px 5px;
+    }
+    div.jqcloud span.w2 {
+        color: #FF556E;
+        padding: 6px 4px;
+    }
+    div.jqcloud span.w1 {
+        color: #5DDD6F;
+        padding: 5px 5px ;
+    }
+
+/* layout */
+
+
+div.jqcloud {
+    overflow: hidden;
+    position: relative;
+}
+
+div.jqcloud span { padding: 0; }

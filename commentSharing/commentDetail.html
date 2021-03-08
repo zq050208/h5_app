@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width,viewport-fit=cover, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <title>评论详情</title>
+    <link rel="stylesheet" href="../public/mescroll.min.css">
+    <link rel="stylesheet" href="css/gameDetails.css">
+    <style>
+        html,
+        body {
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        }
+
+        .selectbox,
+        .noselectbox {
+            margin: 0;
+        }
+
+        .mescroll {
+            position: fixed;
+            width: 100vw;
+            top: 0;
+            bottom: 0;
+            height: auto;
+            /*如设置bottom:50px,则需height:auto才能生效*/
+            background: #FBF8FB;
+        }
+
+        .commentinfo {
+            background: #FBF9F9;
+            min-height: 210px;
+        }
+
+        .retext {
+            margin: 0;
+            padding: 0 12px;
+        }
+
+        .numbeccount {
+            font-size: 14px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #2A2A28;
+            line-height: 12px;
+        }
+
+        .userIcon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .detailsTopback {
+            height: 160px
+        }
+
+        .detailsTopbackbotton {
+            width: 100%;
+            height: 32px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .topbacktxt {
+            font-size: 15px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 1);
+            line-height: 21px;
+        }
+
+        .whiteright {
+            width: 7px;
+            height: 12px;
+        }
+
+        .icon-dianzan {
+            width: 11px;
+            height: 10px;
+            margin-left: 7px;
+            margin-right: 2px;
+        }
+
+        /*标签*/
+        .label {
+            padding: 0 15px;
+            background: #ffffff;
+        }
+
+        .labelitem {
+            margin-right: 10px;
+            margin-bottom: 10px;
+            padding: 10px 10px 9px 10px;
+            background: rgba(248, 241, 241, 1);
+            border-radius: 15px;
+        }
+
+        .labelitemfont {
+            font-size: 12px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            line-height: 12px;
+        }
+
+        /*点评*/
+        .comment {
+            padding: 15px 15px;
+        }
+
+        .commentdiv {
+            position: relative;
+            width: 100%;
+            padding-bottom: 20px;
+            word-wrap: break-word;
+        }
+
+        /*点评输入栏*/
+        .commentinput {
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            background: rgba(255, 255, 255, 1);
+            padding: 6px 0;
+        }
+
+        .inputbox {
+            padding-left: 4vw;
+            width: 51.5vw;
+            height: 40px;
+            background: rgba(247, 247, 247, 1);
+            border-radius: 20px;
+            font-size: 14px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: rgba(119, 119, 119, 1);
+            line-height: 20px;
+        }
+
+        .inputicon {
+            width: 22px;
+            height: 22px;
+        }
+
+        .userattentionbtn {
+            width: 69px;
+            height: 31px;
+            background: linear-gradient(126deg, rgba(255, 232, 7, 1) 0%, rgba(255, 204, 3, 1) 100%);
+            border-radius: 16px;
+            font-size: 14px;
+            font-family: PingFangSC-Semibold, PingFang SC;
+            font-weight: 600;
+            color: rgba(51, 51, 51, 1);
+            line-height: 15px;
+        }
+
+        .timeago {
+            font-size: 11px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: rgba(153, 153, 153, 1);
+            line-height: 11px;
+        }
+
+        .nickname {
+            font-size: 15px;
+            font-family: PingFangSC-Semibold, PingFang SC;
+            font-weight: 600;
+            color: rgba(51, 51, 51, 1);
+            line-height: 15px;
+        }
+
+        .labeltitle {
+            width: 100%;
+            /* padding-left: 15px; */
+            padding-bottom: 15px;
+            font-size: 12px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: rgba(170, 170, 170, 1);
+            line-height: 12px;
+        }
+
+        .commentdiv img {
+            width: 100%;
+            margin-top: 15px;
+            margin-bottom: 15px;
+            object-fit: cover;
+        }
+
+        .commentdiv p {
+            font-size: 15px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #333333;
+            ;
+            line-height: 22px;
+        }
+
+        .commenttitlefont {
+            font-size: 16px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: rgba(81, 70, 23, 1);
+            line-height: 16px;
+        }
+
+        .centercentercolumn {
+            height: 40px;
+            line-height: 40px;
+            padding: 5px 8px;
+            position: relative;
+            color: #AAAAAA;
+        }
+
+        .centercentercolumn:before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 15px;
+            width: 1px;
+            height: 20px;
+            background-color: #E6E6E6;
+        }
+
+        .centercentercolumn.actived {
+            color: #FFE407;
+        }
+
+        /* .centercentercolumn.actived:after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 10px;
+            width: 20px;
+            height: 3px;
+            border-radius: 30%;
+            background-color: #FFE407;
+        } */
+
+        .newestnav,
+        .hotnav {
+            font-size: 16px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            line-height: 36px;
+        }
+
+        .okImage {
+            width: 60px;
+            height: 60px;
+        }
+
+        .line {
+            display: none;
+            margin-top: 10px;
+
+        }
+
+        .isline {
+            display: block;
+            margin-top: 10px;
+        }
+        .yourDiv {
+            height: 100%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            display:flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            width: 100%;
+        }
+        .yourDiv img { 
+            width: 40px;
+            /* margin-left: 40%; */
+        }
+        .comment_video {
+            background-color: black;
+            width: 100%;
+            height: 194px;
+            position: relative;
+        }
+        .answer_post{
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .answer_post .circle_name{
+            color: #D7AB00;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="mescroll" class="mescroll">
+        <div>
+            <!--顶部展示栏*小虎Hoo图标+名称+slogan+打开app按钮-->
+            <div class="sharetop" style="padding:8px 15px 8px 15px;">
+                <!-- 左 * 小虎Hoo图标+名称+slogan、-->
+                <div class="startstart">
+                    <!--小虎Hoo图标-->
+                    <div class="iconhoo">
+                        <img src="https://cdn.tinytiger.cn/b55e2898efbe44673559b1a287a9960.png" />
+                    </div>
+                    <!--名称+slogan-->
+                    <div>
+                        <!--名称-->
+                        <p>小虎Hoo</p>
+                        <!--slogan-->
+                        <p class="slogan">玩“好”游戏</p>
+                    </div>
+                </div>
+                <!-- 右 * 打开app-->
+                <div>
+                    <div class="openapp appname centercenterrow" onclick="clickgoapp()">打开APP</div>
+                </div>
+            </div>
+
+            <!--详情页顶部-->
+            <!-- <div class="detailsTopbackbox">
+
+            </div> -->
+
+            <!--用户信息-->
+            <div style="background: #ffffff;">
+                <!--顶部信息*用户信息-->
+                <div class="startbetween usercommentinfoitemTop" style='padding: 22px 15px 18px 15px;'>
+
+                </div>
+            </div>
+
+            <!--标签-->
+            <!-- <div class="labeltitle" style="background: #ffffff;"><p style="margin-left: 15px;">轻点标签表示赞同</p></div> -->
+            <div class="startwrap label">
+
+            </div>
+
+            <!--点评-->
+            <div class="comment" style="padding-top: 10px;">
+                <div class="commenttitle"></div>
+                <div class="commentdiv" style="color: #2A2A28;font-size:14px;">
+
+                </div>
+                <div class="comment_like" style='padding-bottom: 15px;'>
+
+                </div>
+                <div class="comment_imgs" style="display: inline-block;">
+
+                </div>
+                <div class="comment_video" style="display: none;">
+                    <video width="100%" height="194" controls="controls" id="commentVideo"> </video>
+                    <div class="yourDiv">
+                        <img src="./image/play.png" onclick="play()">
+                    </div>
+                </div>
+                <div class="answer_post">
+                    <div class="circle_name" id="circleName"></div>
+                    <div class="answer_line">
+                        <span class="answer_num" style="color:#333;font-size:14px;">已有<span id="answerNum"></span>人参与问答</span>
+                        <span class="answer_btn"  onclick="clickgoapp()" style="display: inline-block;padding: 4px 8px;line-height:16px;color:#19BE6B;font-size: 12px;border:1px solid #19BE6B;border-radius:5px;">邀请问答</span>
+                    </div>
+                </div>
+                <!-- 当是问答帖子的时候展示这里 -->
+                <div class="QA_post" style='margin-top: 15px;'>
+
+                </div>
+            </div>
+            <div style="width: 100%;height:10px;background:#F9F9F9;"></div>
+            <!--评论-->
+            <div class="reviewInformation" style="padding-bottom: 10px;">
+                <div class="reviewInformation-top centerbetween"
+                    style="padding:0 15px;border-bottom:1px solid #E6E6E6;">
+                    <!-- <div class="startstart">
+                        <div class="centercentercolumn" onclick="newestClick()" style="margin-right: 35px;">
+                            <div class="selectnav newestnav">最新</div>
+                            <div class="selectbox newestbox"></div>
+
+                        </div>
+                        <div class="centercentercolumn" onclick="hotClick()">
+                            <div class="noselectnav hotnav">最热</div>
+                            <div class="noselectbox hotbox"></div>
+                        </div>
+                    </div> -->
+                    <div>
+                        <div class="comment_num numbeccount"></div>
+                    </div>
+                    <div class="startstart" style="display: flex;justify-content: space-between;align-items: center;">
+                        <div class="centercentercolumn actived"> 最新</div>
+                        <div class="centercentercolumn">最早</div>
+                        <div class="centercentercolumn">最热</div>
+                    </div>
+                </div>
+
+                <!--评论消息数据集-->
+                <div class="commentinfo" style="margin:10px 15px;border-radius:10px;background: #ffffff;">
+
+                </div>
+                <div class="centercenterrow gamefooter" style=" padding: 35px 0 0px 0;">
+
+                </div>
+            </div>
+
+            <!--输入框-->
+            <div class="commentinput sharetop">
+                <div class="inputbox startcentercolumn" onclick="clickgoapp()" style="margin-left:15px;">悄咪咪的说几句…</div>
+                <div style="margin:0 4vw;width: 32.5vw;" class="centerbetween">
+                    <img class="inputicon" onclick="clickgoapp()" src="https://cdn.tinytiger.cn/icon-dianzan1.png" />
+
+                    <img class="inputicon" onclick="clickgoapp()" src="https://cdn.tinytiger.cn/icon-pinglun1.png" />
+
+                    <img class="inputicon" onclick="clickgoapp()" src="https://cdn.tinytiger.cn/icon-fenxiang1.png" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="msgdialog"></div>
+    <div class="shareModal">
+        <img src="../new_information/image/icon-guidance.png" alt="">
+    </div>
+    <div id='mast' style="width: 100%;height: 100%;">
+
+    </div>
+    <script src="../public/template-web.js"></script>
+    <script src="../public/tool.js"></script>
+    <script src="../public/jquery.min.js"></script>
+    <script src="../public/mescroll.min.js"></script>
+    <script src="../public/module/msgDialog.js"></script>
+    <script src="../public/config.js"></script>
+    <script src="../public/service.js"></script>
+
+    <!--详情页顶部-->
+    <script type="text/html" id="detailsTopbackdiv">
+        <div class="detailsTopback endbetween" style="background:url({{item.img}});background-repeat:no-repeat;background-size:100% 100%;">
+            <div class="detailsTopbackbotton sharetop">
+                <div class="topbacktxt" style="margin-left:15px;">{{item.name}}</div>
+                <div class="topbacktxt" style="margin-right:15px;" onclick="clickgoapp()">
+                    {{item.count}}条安利
+                    <img class="whiteright" src="https://cdn.tinytiger.cn/icon-whiteright.png" />
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <!--用户信息-->
+    <script type="text/html" id="usercommentinfoitemTop">
+
+        {{each item v i}}
+        <!-- 左 -->
+        <div class="startcenter">
+            <!--头像-->
+            <div class="startstart" style="margin-right:10px;"><img class="userIcon" src="{{v.user_info.avatar}}" /></div>
+            <!--昵称及星数-->
+            <div class="startcentercolumn">
+                <!--昵称+关注按钮-->
+                <div class="startstart">
+                  <div class="nickname" >{{v.user_info.nickname}}</div>
+                </div>
+                <div style="font-size: 12px;color:#999999;">{{v.create_time}}</div>
+                <!--星数-->
+                <!-- <div class="startcenter">
+                    <% for(var i = 0;i < v.score;i++){ %>
+                    <img class="staritem" src=" https://cdn.tinytiger.cn/icon-starselect.png" style='margin-right:3px;'/>
+                    <% } %>
+                    <% for(var i = 0;i < 5-v.score;i++){ %>
+                    <img class="staritem" src="https://cdn.tinytiger.cn/icon-starnoselect.png" style='margin-right:3px;'/>
+                    <% } %>
+                </div> -->
+            </div>
+        </div>
+        <!--右-->
+        <div>
+            <div class="userattentionbtn centercenterrowwrap" onclick='clickgoapp()'>+ <span style='margin-left:2px;'>关注</span></div>
+        </div>
+        {{/each}}
+    </script>
+
+    <!--评论消息-->
+    <script type="text/html" id="commentinfoDataList">
+        {{each item v i}}
+        <!-- style="border-bottom: 1px solid #eee;" -->
+        <div class="commentinfoitem" style="background:#ffffff;border-bottom: 1px solid #eee;">
+            <!--顶部信息*用户信息-->
+            <div class="commentinfoitemTop startbetween">
+                <!-- 左 -->
+                <div class="startcenter">
+                    <!--头像-->
+                    <div class="startstart" style="margin-right:10px;"><img class="userIcon" style='width:36px;height:36px' src="{{v.avatar}}" /></div>
+                    <!--昵称及星数-->
+                    <div class="startcentercolumn">
+                        <!--昵称+关注按钮-->
+                        <div class="startstart">
+                            <div style="margin-right:10px;line-height:14px;font-size:15px" class='nickname'>{{v.nickname}}</div>
+                        </div>
+                    </div>
+                </div>
+                <!--右-->
+                <!-- <div style='padding-top5px;'>
+                    <div class="centerend"><img class="morenews" src="https://cdn.tinytiger.cn/icon-morenews.png" /></div>
+                </div> -->
+            </div>
+            <!--评论内容-->
+            <div class= "{{ v.content.length > 60 ? 'fewer' : 'retext' }}" style="margin-left:38px;font-size:14px;color:#333333"><span>{{v.content}}</span></div>
+            <span style='color:#FF556E;font-size:15px;margin-left:49px' onclick="clickgoapp()">{{v.content.length>60?"全文":null}}</span>
+            <!--图片信息-->
+            <div class="sharetop" style=" padding :0 12px;">
+                {{each v.photos sub i}}
+                {{if i<3}}
+                <img class="usercommentimg" src="{{sub}}" alt="" style="margin-top:15px">
+                {{/if}}
+                {{/each}}
+            </div>
+
+            <!--操作类型-->
+            <div class="actionType sharetop" >
+                <div style="margin-left:12px;" class="timeago">{{v.create_time}}</div>
+                <div class="startend">
+                    <div class="centerend" onclick="clickgoapp()">
+                        <img class="icondianzan" src="https://cdn.tinytiger.cn/icon-dianzan1.png" />
+                        <div>{{v.like_num}}</div>
+                    </div>
+                    <div class="centerend" style="margin-right:12px;margin-left:36px;" onclick="clickgoapp()">
+                        <img class="icondianzan" src="https://cdn.tinytiger.cn/icon-pinglun1.png" />
+                        <div>{{v.comment_num}}</div>
+                    </div>
+                </div>
+            </div>
+            <!-- 子评论 -->
+            {{each v.reply_list subc i}}
+            <div style="width: 85%;margin: 10px auto;padding:5px 5px 10px 5px;background:#F7F7F7;border-radius: 10px;margin-left:44px;">
+              <div  style="display:flex;">
+                <!--头像-->
+                <div class="startstart" style="margin-right:10px;"><img class="userIcon" style='width:24px;height:24px' src="{{subc.avatar}}" /></div>
+                <!--昵称及星数-->
+                <div class="startcentercolumn">
+                    <!--昵称+关注按钮-->
+                    <div class="startstart">
+                        <div class='lve' style="margin-right:10px;line-height:14px;color:#282828;font-size: 13px;" class='nickname'>{{subc.nickname}}</div>
+                        <!-- <div class='lve' style="margin-right:10px;line-height:14px;color:#999;font-size: 13px;">{{subc.reply_nickname&&"回复了"}}</div>
+                        <div class='lve' style="margin-right:10px;line-height:14px;color:#282828;font-size: 13px;">{{subc.reply_nickname}}</div> -->
+                    </div>
+                </div>
+              </div>
+              <div style="margin-right:10px;margin-left:33px">
+                <div style="margin-right:10px;line-height:14px;color:#999;font-size: 13px;display:block;margin-bottom:5px;">
+                    {{subc.reply_nickname&&"回复了"}}
+                    <span style='line-height:14px;color:#282828;font-size: 13px;'>{{subc.reply_nickname}}</span>
+                </div>
+              </div>
+              <div class='fewer retext' style="margin-top: 5px;font-size:13px;margin-left: 21px;color:color:#666666;">{{subc.content}}</div>
+              <div style="margin-left:33px;margin-top:10px" class="timeago">{{subc.create_time}}</div>
+            </div>
+            {{/each}}
+            <div style='margin-bottom:10px'>
+                <span style='font-size: 12px; color: #FFCC03;margin-left:78px' onclick="clickgoapp()">
+                    {{v.reply_count>=3?`共有${v.reply_count}条评论 >`:''}}
+                </span>
+            </div>
+        </div>
+        <!-- <div class={{v.reply_list.length>0?"isline":'line'}}>
+            <div style="width:95%;border-bottom:1px solid #F2F2F2"></div>
+        </div> -->
+        {{/each}}
+        <!--<div class="msg">人家是一只有底线的小脑斧</div>-->
+    </script>
+
+
+    <!--问答贴显示-->
+    <script type="text/html" id="QA_post">
+        {{each item v i}}
+        <div class="commentinfoitem" style="background:#ffffff;border-bottom: 1px solid #eee;">
+            <!--顶部信息*用户信息-->
+            <div class="commentinfoitemTop startbetween" style='display: flex;justify-content: space-between;align-items: center;'>
+                <!-- 左 -->
+                <div class="startcenter">
+                    <!--头像-->
+                    <div class="startstart" style="margin-right:10px;"><img class="userIcon" style='width:36px;height:36px' src="{{v.answer_info.avatar}}" /></div>
+                    <!--昵称及星数-->
+                    <div class="startcentercolumn">
+                        <!--昵称+关注按钮-->
+                        <div class="startstart">
+                            <div style="margin-right:10px;line-height:14px" class='nickname'>{{v.answer_info.nickname}}</div>
+                        </div>
+                    </div>
+                </div>
+                <!--右-->
+                <!-- <div style='padding-top5px;'>
+                    <div class="centerend"><img class="morenews" src="https://cdn.tinytiger.cn/icon-morenews.png" /></div>
+                </div> -->
+                <div class="isAdopt">
+
+                </div>
+            </div>
+            <!--评论内容-->
+            <!-- <div class='fewer retext' style=" padding :0 12px;margin-left: 38px;">{{v.answer_info.content}}</div> -->
+            <div class={{v.answer_info.content.length>60?'fewer':'retext'}} style='margin-left:38px;font-size:14px'><span>{{v.answer_info.content}}</span></div>
+            <span style='color:#FF556E;font-size:15px;margin-left:49px' onclick="clickgoapp()">{{v.answer_info.content.length>60?"全文":null}}</span>
+            <!--图片信息-->
+            <div class="sharetop" style=" padding :0 12px;">
+                {{each v.answer_info.photos sub i}}
+                {{if i<3}}
+                <img class="usercommentimg" src="{{sub}}" alt="" style="margin-top:15px">
+                {{/if}}
+                {{/each}}
+            </div>
+
+            <!--操作类型-->
+            <div class="actionType sharetop" >
+                <div style="margin-left:12px;" class="timeago">{{v.create_time}}</div>
+                <div class="startend">
+                    <div class="centerend" onclick="clickgoapp()">
+                        <img class="icondianzan" src="https://cdn.tinytiger.cn/icon-dianzan1.png" />
+                        <div>{{v.answer_info.like_num}}</div>
+                    </div>
+                    <div class="centerend" style="margin-right:12px;margin-left:36px;" onclick="clickgoapp()">
+                        <img class="icondianzan" src="https://cdn.tinytiger.cn/icon-pinglun1.png" />
+                        <div>{{v.answer_info.comment_num}}</div>
+                    </div>
+                </div>
+            </div>
+            <!-- 子评论 -->
+            {{each v.answer_info.reply_list subc i}}
+            <div style="width: 85%;margin: 10px auto;padding:5px 5px 10px 5px;background:#F7F7F7;border-radius: 10px;margin-left:44px;">
+              <div  style="display:flex;">
+                <!--头像-->
+                <div class="startstart" style="margin-right:10px;"><img class="userIcon" style='width:30px;height:30px' src="{{subc.avatar}}" /></div>
+                <!--昵称及星数-->
+                <div class="startcentercolumn">
+                    <!--昵称+关注按钮-->
+                    <div class="startstart">
+                        <div class='lve' style="margin-right:10px;line-height:14px;color:#282828;font-size: 13px;" class='nickname'>{{subc.nickname}}</div>
+                    </div>
+                    
+                </div>
+              </div>
+              <div style="margin-right:10px;margin-left:33px">
+                <div style="margin-right:10px;line-height:14px;color:#999;font-size: 13px;display:block;margin-bottom:5px;padding-left: 6px;">
+                    {{subc.reply_nickname&&"回复了"}}
+                    <span style='line-height:14px;color:#282828;font-size: 13px;'>{{subc.reply_nickname}}</span>
+                </div>
+              </div>
+              <div class='fewer retext' style="margin-top: 5px;font-size:12px;margin-left: 27px;">{{subc.content}}</div>
+              <div style="margin-left:38px;margin-top:10px" class="timeago">{{subc.create_time}}</div>
+            </div>
+            {{/each}}
+            <div style='margin-bottom:10px'>
+                <span style='font-size: 12px; color: #FFCC03;margin-left:78px' onclick="clickgoapp()">
+                    {{v.answer_info.comment_num>=3?`共有${v.answer_info.comment_num}条评论 >`:''}}
+                </span>
+            </div>
+        </div>
+        {{/each}}
+        <!--<div class="msg">人家是一只有底线的小脑斧</div>-->
+    </script>
+
+    <script type="text/html" id="comment_imgs">
+            {{each item v i}}
+                <img id='comment_imgs_click'  style='width:105px;height:105px' src="{{v}}" />
+            {{/each}}
+        <!-- </div> -->
+    </script>
+    <!-- 点击放大图片 -->
+    <script>
+        $('.comment_imgs').click(function (e) {
+            e.preventDefault();
+            $('#mast').show()
+            if (!e.toElement.src) {
+                $('#mast').hide()
+                return false
+
+            }
+            var imgUtl = e.toElement.src
+            var mast = `<div  
+                            style="
+                                width: 100%;
+                                height: 100%;
+                                background-color: 
+                                rgba(0, 0, 0, 0.8);
+                                position: absolute;
+                                z-index: 100;
+                                display: flex;
+                                justify-content:center;
+                                align-items: center;
+                        ">
+                            <div class='close' style='width:20px;heigth:20px;position: absolute;right:15px;top:15px;color:#fff; z-index: 300;'>X</div>
+                            <img style='width:100%;' src="${imgUtl}" />
+                        </div>`
+            $("#mast").html(mast)
+        })
+        $('#mast').click(() => {
+            $('#mast').hide()
+        })
+    </script>
+<!-- 请求数据 -->
+    <script>
+        // 当前页
+        var currentPage = 0
+        // 总页数
+        var last_page = 1
+        // 类型标识 0: 最新 1:最热
+        var type = 2
+        //评价id
+        // var assess_id = 0
+        var mescroll = new MeScroll("mescroll", { //第一个参数"mescroll"对应上面布局结构div的id
+            //如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考第一个基础案例
+            //解析: down.callback默认调用mescroll.resetUpScroll(),而resetUpScroll会将page.num=1,再触发up.callback
+            down: {
+                auto: false,
+                callback: downCallback //下拉刷新的回调,别写成downCallback(),多了括号就自动执行方法了
+            },
+            up: {
+                use: true,
+                isBounce: false,
+                callback: upCallback //上拉加载的回调
+            }
+        });
+
+        window.onload = function () {
+            getGameInfo();
+            $(".shareModal").click(function () {
+                $(".shareModal").hide()
+            })
+        }
+        var commentVideo = $("#commentVideo")
+        // 前去app
+        function clickgoapp() {
+            // , Request('circle_name')
+            goApp(8, Request('post_id'))
+        }
+    //     commentVideo.click(function(){
+    //         var video = document.getElementById('commentVideo');
+    //         if(video.paused){ //如果已暂停则播放
+    //             video.play(); //播放控制
+    //             $(".yourDiv").css('display', 'none')
+    //         }else{ // 已播放点击则暂停
+    //             video.pause(); //暂停控制
+    //             $(".yourDiv").css('display', 'flex')
+    //         }
+    //     })
+        var audio = document.getElementById("commentVideo"); 
+        audio.loop = false
+        audio.addEventListener("ended",function(){
+            $(".yourDiv").css('display', 'flex')
+        })
+        function play(){
+            var video = document.getElementById('commentVideo');
+            video.play()
+            $(".yourDiv").css('display', 'none')
+        }
+        // 获取评价详情
+        function getGameInfo() {
+            var config = {
+                // gameInfoUrl: 'GameAssess/getAssessInfo',
+                gameInfoUrl: 'Post/getPostInfo',
+                type: 'get',
+                token: Request('token'),// '3242e967170efb88b776787ab8bfa91f',
+                data: {
+                    // game_id: Request('game_id'),
+                    // assess_id: Request('assess_id'),
+                    // page: currentPage,
+                    post_id: Request('post_id')
+                }
+            };
+            RequsetHttp(config.gameInfoUrl, config.type, config.token, config.data, function (res) {
+                if (res.code == 200) {
+                    // document.title =  `《${res.data.name}》的评价`;  
+
+                    // console.log('获取',res.data)
+                    // console.log(res.data.img_url[0])
+                    var a = res.data.img_url[0]
+                    //详情页顶部
+                    var detailsTopbacklist = { img: `${a}`, name: res.data.name, count: res.data.content }
+                    var detailsTopbackitem = template('detailsTopbackdiv', { item: detailsTopbacklist })
+                    // $(".detailsTopbackbox").html(detailsTopbackitem)
+                    //用户信息
+                    var usercommentinfoitemToplist = { useritem: res.data }
+                    var usercommentinfoitemTopitem = template('usercommentinfoitemTop', { item: usercommentinfoitemToplist })
+                    $(".usercommentinfoitemTop").html(usercommentinfoitemTopitem)
+
+                    //标签
+                    // var labellist = res.data.assess_tag
+                    // var html = ""
+                    // for (var i = 0; i < labellist.length; i++) {
+                    //     var count = parseInt(Math.random() * 3, 3) + 1
+                    //     html += `<div class="startwrap labelitem" onclick='clickgoapp()'>
+                    //                                         <div class="labelitemfont color`+ count + `" >
+                    //                                            `+ labellist[i].name + `
+                    //                                             <img class="icon-dianzan" src="https://cdn.tinytiger.cn/icon-dianzan.png" />`+ labellist[i].like_num + `
+                    //                                         </div>
+                    //                                     </div>`
+                    // }
+                    // $(".label").html(html)
+
+                    // 标题
+                    // var commenttitlestr = `<div class='commenttitlefont' style='padding-bottom: 15px;'>` + res.data.title + `</div>`
+                    // $(".commenttitle").html(commenttitlestr)
+
+                    // 内容
+                    var commentdiv = res.data.content.replace(/\n/g,"<br/>")
+                    
+                    var commentTitle = `<p style="color: #514617;font-size:16px;font-family:PingFangSC-Medium,PingFang SC;">${res.data.title}</p>`
+                    $(".commenttitle").html(commentTitle)
+                    var circlePostHtml = ''
+                    var circlePostData = res.data.circle_post
+                    let circleName = res.data.circle_name
+                    for(let a=0; a < circlePostData.length; a++){
+                        if(circlePostData[a].name === circleName){
+                            circlePostData.splice(a,1)
+                        }
+                        circlePostHtml += `<span style="color: #FF556E;"><img src="image/post_icon.png" style="width:17px;height:11px;margin:0;"/>${circlePostData[a].name}</span>`
+                    }
+                    $(".commentdiv").html(circlePostHtml + commentdiv)
+                    var comment_imgs = res.data.img_url
+                    var comment_imgsArry = template('comment_imgs', { item: comment_imgs })
+                    $(".comment_imgs").html(comment_imgsArry)
+                    if(res.data.video_url){
+                        $(".comment_video").css('display', 'block')
+                        $(".yourDiv").css('background-image', 'url(' + res.data.cover_url + ')' )
+                        $(".yourDiv").css('background-size', '100%', '100%')
+                        commentVideo.attr("src", res.data.video_url)
+                        commentVideo.attr("poster", res.data.cover_url)
+                    }
+                    if(res.data.modular_name){
+                        $("#circleName").html('<img src="image/location_icon.png" alt="" style="width:12px;position:relative;top:2px;margin-right:2px;">' + res.data.circle_name + '-' + res.data.modular_name)
+                    }else{
+                        $("#circleName").html('<img src="image/location_icon.png" alt="" style="width:12px;position:relative;top:2px;margin-right:2px;">' + res.data.circle_name)
+                    }
+                    if(!res.data.modular_name && !res.data.circle_name){
+                        $("#circleName").html('')
+                    }
+                    if(+res.data.answer_id === 0){
+                        $(".answer_btn").show().siblings().hide()
+                    }else if(+res.data.answer_id > 0){
+                        $(".answer_num").show().siblings().hide()
+                        $("#answerNum").html(res.data.participate_num)
+                    }else{
+                        $(".answer_line").hide()
+                    }
+                    // var comment_like = `<span style='font-size:12px;color:rgba(130,130,130,1);' >` + res.data.view_num + `浏览量` + `</span>`
+                    // $(".comment_like").html(comment_like)
+
+
+                    // 只有问答贴的时候这里展示
+                    if (res.data.answer_id > 0) {
+                        // 不拉黑的时候显示
+                        if (res.data.answer_info.is_black == -1) {
+                            var QA_post = { useritem: res.data }
+                            var QA_postList = template('QA_post', { item: QA_post })
+                            $(".QA_post").html(QA_postList)
+                            var isAdoptHtml = `${res.data.answer_id > 0 ? `<img class="okImage" src="./image/ok@2x.png" />` : "未采纳"}`
+                            $(".isAdopt").html(isAdoptHtml)
+
+                        } else {
+                            var QA_postList = `<div class="commentinfoitemTop startbetween" style='display: flex;justify-content: space-between;align-items: center;'>
+                                <!-- 左 -->
+                                <div class="startcenter">
+                                    <!--头像-->
+                                    <div class="startstart" style="margin-right:10px;"><img class="userIcon" style='width:30px;height:30px' src="${res.data.answer_info.avatar}" /></div>
+                                    <!--昵称及星数-->
+                                    <div class="startcentercolumn">
+                                        <!--昵称+关注按钮-->
+                                        <div class="startstart">
+                                            <div style="margin-right:10px;line-height:14px" class='nickname'>${res.data.answer_info.nickname}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--右-->
+                                <div style=''>
+                                    <div class="centerend"><span style='color:#9F9FA5;font-size:14px;'>${res.data.answer_id > 0 ? `<img class="okImage" src="./image/ok@2x.png" />` : "未采纳"}</span></div>
+                                </div>
+                            </div>
+                            <div style='width:100%;display: flex;justify-content: center;'>
+                            <span style='color:#7F7F7F;font-size: 15px;font-family: PingFangSC-Semibold, PingFang SC;'>该用户已被您拉黑，解除拉黑后可查看回答内容</span></div>`
+                            $(".QA_post").html(QA_postList)
+                        }
+                        // <img class="morenews" src="https://cdn.tinytiger.cn/icon-morenews.png" />
+                    }
+                }
+            })
+        }
+
+        // 评价下的评论列表
+        function indexComment(refresh) {
+            var config = {
+                gameInfoUrl: 'PostComment/allComments',
+                type: 'get',
+                token: Request('token'),//'3242e967170efb88b776787ab8bfa91f'
+                data: {
+                    // game_id: Request('game_id'),
+                    post_id: Request('post_id'),
+                    // post_id:post_id,
+                    page: currentPage,
+                    per_page: 20,
+                    comment_type: type
+                }
+            };
+            RequsetHttp(config.gameInfoUrl, config.type, config.token, config.data, function (res) {
+                if (res.code == 200) {
+                    last_page = res.data.last_page
+                    var commentinfoDataList = res.data.data
+                    for (var i = 0; i < commentinfoDataList.length; i++) {
+                        commentinfoDataList[i].create_time = timeago((new Date(commentinfoDataList[i].create_time.replace(/\-/g, "/"))).getTime());
+                        var str = commentinfoDataList[i].content
+                        if (str) {
+                            commentinfoDataList[i].photos = getSimpleImgList(str)
+                        }
+                        commentinfoDataList[i].content = getSimpleText(commentinfoDataList[i].content)
+                    }
+                    var all_comment_num = `<div style='color:#2A2A28;font-size:18px;font-weight:600;'>
+                                            全部回答(${res.data.all_comment_num})
+                                        </div>`
+                    $(".comment_num").html(all_comment_num)
+                    // 共10条回复>
+
+                    if (refresh) {
+                        var commentinfoList = template('commentinfoDataList', { item: commentinfoDataList })
+                        $(".commentinfo").append(commentinfoList)
+                    } else {
+                        var commentinfoList = template('commentinfoDataList', { item: commentinfoDataList })
+                        $(".commentinfo").html(commentinfoList)
+                    }
+                    if (last_page <= currentPage) {
+                        var footerhtml = `  <div class="gamefooter-left"></div>
+                                          <div class="gamefooter-msg" style="padding: 0 10px;">人家是一只有底线的小脑斧</div>
+                                          <div class="gamefooter-right"></div>`
+                        $(".gamefooter").html(footerhtml)
+                    }
+                } else {
+                    mescroll.endErr();
+                }
+            })
+        }
+        // 点击最新 最早 最热
+        $(".centercentercolumn").click(function () {
+            $(this).addClass('actived').siblings().removeClass('actived')
+            var tempIndex = $(this).index()
+            if (tempIndex === 0) {
+                type = 2
+            } else if (tempIndex === 1) {
+                type = 3
+            } else {
+                type = 1
+            }
+            currentPage = 1
+            indexComment(false)
+        })
+        // 点击最新
+        // function newestClick(e) {
+        //     replaceClass("hotbox", "selectbox", "noselectbox")
+        //     replaceClass("newestbox", "noselectbox", "selectbox")
+        //     replaceClass("hotnav", "selectnav", "noselectnav")
+        //     replaceClass("newestnav", "noselectnav", "selectnav")
+
+        //     currentPage = 2
+        //     type = 0
+        //     indexComment(false)
+        // }
+
+        // // 点击最热
+        // function hotClick(e) {
+        //     replaceClass("newestbox", "selectbox", "noselectbox")
+        //     replaceClass("hotbox", "noselectbox", "selectbox")
+        //     replaceClass("newestnav", "selectnav", "noselectnav")
+        //     replaceClass("hotnav", "noselectnav", "selectnav")
+
+        //     currentPage = 1
+        //     type = 1
+        //     indexComment(false)
+        // }
+
+        //下拉刷新的回调
+        function downCallback() {
+            currentPage = 1;
+            console.log('下拉刷新的回调')
+            getGameInfo()
+            indexComment(false)
+            mescroll.endErr();
+        }
+
+        //上拉加载的回调 page = {num:1, size:10}; num:当前页 默认从1开始, size:每页数据条数,默认10
+        function upCallback(page) {
+            console.log('上拉加载的回调')
+            if (last_page >= currentPage) {
+                currentPage++
+                indexComment(true)
+            }
+            mescroll.endErr();
+        }
+    </script>
+    <div style="display: none;">
+        <script type="text/javascript">document.write(unescape("%3Cspan id='cnzz_stat_icon_1278943282'%3E%3C/span%3E%3Cscript src='https://v1.cnzz.com/z_stat.php%3Fid%3D1278943282' type='text/javascript'%3E%3C/script%3E"));</script>
+    </div>
+</body>
+
+</html>

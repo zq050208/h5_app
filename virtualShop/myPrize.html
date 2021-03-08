@@ -1,0 +1,419 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,viewport-fit=cover, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
+    <title>我的奖品</title>
+    <link rel="stylesheet" href="../public/mescroll.min.css">
+    <link rel="stylesheet" href="../public/module/dialog.css">
+
+    <style>
+        body {
+            height: 100%;
+            padding-left: 4vw;
+            padding-right: 4vw;
+            padding-bottom: constant(safe-area-inset-bottom);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        p {
+            margin: 0px;
+        }
+
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .main {
+        }
+
+        .item {
+            margin-top: 4vw;
+            width: 92vw;
+            box-shadow: 0px 1px 0px 0px rgba(221,221,221,1);
+        }
+
+        .itemtop {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            flex-direction: row;
+        }
+
+        .itemtopimg {
+            width: 26.6vw;
+            height: 18.9vw;
+            background: rgba(245,246,247,1);
+            border: 1px solid rgba(245,246,247,1);
+        }
+
+            .itemtopimg img {
+                width: 26.6vw;
+                height: 18.9vw;
+            }
+
+        .itemtoptitle {
+            width: 62vw;
+        }
+
+            .itemtoptitle > p {
+                font-size: 14px;
+                font-family: PingFangSC-Medium;
+                font-weight: 500;
+                color: rgba(37,39,42,1);
+                line-height: 16px;
+            }
+
+        .pricenum {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            flex-direction: row;
+        }
+
+        .font {
+            font-size: 12px;
+            font-family: PingFangSC-Regular;
+            font-weight: 400;
+            color: rgba(153,153,153,1);
+            line-height: 16px;
+            margin: 5px 0;
+        }
+
+        .price {
+            margin-left: 5px;
+            font-size: 14px;
+            font-family: PingFangSC-Medium;
+            font-weight: 500;
+            color: rgba(242,79,79,1);
+        }
+
+        .redeemcode {
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            flex-direction: row;
+            font-size: 14px;
+            font-family: PingFangSC-Regular;
+            color: #25272A;
+        }
+
+        .memo {
+            font-size: 14px;
+            font-family: PingFangSC-Regular;
+            font-weight: 400;
+            color: rgba(153,153,153,1);
+            line-height: 21px;
+            padding-bottom: 15px;
+        }
+
+        .copy {
+            color: #006BBB;
+            margin-right: 15px;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        .mescroll {
+            position: fixed;
+            width: 92vw;
+            top: 24px;
+            bottom: 0;
+            height: auto; /*如设置bottom:50px,则需height:auto才能生效*/
+        }
+
+        .downwarp-tip, upwarp-tip {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="mescroll" class="mescroll">
+        <div>
+            <div class="main">
+            </div>
+        </div>
+    </div>
+
+    <script src="../public/module/msgDialog.js"></script>
+    <script src="../public/jquery.min.js"></script>
+    <script src="../public/config.js"></script>
+    <script src="../public/service.js"></script>
+    <script src="../public/mescroll.min.js"></script>
+
+    <script>
+
+        var token = Request('token');
+        var shopping_type = '';
+        var currentPage = 1;
+        var list = null;
+        var mescroll = new MeScroll("mescroll", { //第一个参数"mescroll"对应上面布局结构div的id
+            //如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考第一个基础案例
+            //解析: down.callback默认调用mescroll.resetUpScroll(),而resetUpScroll会将page.num=1,再触发up.callback
+            down: {
+                auto: false,
+                callback: downCallback //下拉刷新的回调,别写成downCallback(),多了括号就自动执行方法了
+            },
+            up: {
+                isBounce: false,
+                callback: upCallback //上拉加载的回调
+            }
+        });
+        exchangeList()
+
+        function exchangeList() {
+            var config = {
+                gameInfoUrl: 'VirtualMallController/exchangeList',
+                type: 'post',
+                token: Request('token'),
+                data: {
+                    page: currentPage,
+                    is_send: 1,
+                }
+            };
+            RequsetHttp(config.gameInfoUrl, config.type, config.token, config.data, function (res) {
+                if (res.code == 200) {
+                    var prizecount = res.data.list.length;
+                    var html = '';
+                    var codehtml = '';
+                    var codestr = "";
+                    list = res.data.list;
+                    for (var i = 0; i < prizecount; i++) {
+                        if (res.data.list[i].code) {
+                            codehtml = '';
+                            if (res.data.list[i].code.indexOf('/')) {
+                                var code = res.data.list[i].code.split('/');
+                                console.log(code)
+                                for (var j = 0; j < code.length; j++) {
+
+                                    var codes = code[j].split('|');
+                                    if (codes.length > 0) {
+                                        codestr = `<p>` + codes[0] + `</p>`
+                                        if (codes.length == 2) {
+                                            codestr += `<p>` + codes[1] + `</p>`
+                                        }
+                                    }
+                                    codehtml += `
+                                                                                      <div class="redeemcode">
+                                                                                        <div class="memo">兑奖码</div>
+                                                                                        <div style="margin-left: 5px; width:70%;word-wrap : break-word ;">`+ codestr + `</div>
+                                                                                        <div class="copy" onclick="copy(`+ i + `,` + j + `)">复制</div>
+                                                                                      </div>`
+
+                                }
+                                codehtml += `<div class="memo">说明：` + res.data.list[i].goods_info + `</div>`;
+                            }
+                        }
+
+                        html += ` <div class="item">
+                                                                            <div class="itemtop">
+                                                                                <div class="itemtopimg"><img src='`+ res.data.list[i].cover_map + `' /></div>
+                                                                                <div class="itemtoptitle">
+                                                                                    <p>`+ res.data.list[i].goods_name + `</p>
+                                                                                    <div class="pricenum font">
+                                                                                        <div>价格</div> <div class="price">`+ parseInt(res.data.list[i].amount) + `铜钱</div>  <div style="margin-left:20px;">数量</div> <div style="margin-left:5px;">` + res.data.list[i].pay_number + `</div>
+                                                                                    </div>
+                                                                                    <div class="font">发放时间：`+ res.data.list[i].update_time + `</div>
+                                                                                    <div class="font">截止时间：`+ res.data.list[i].end_time + `</div>
+                                                                                </div>
+
+                                                                            </div>`;
+                        html += codehtml;
+                        html += `
+                                                                        </div>`
+                    }
+                    mescroll.endByPage(res.data.list.length, res.data.page.totalPage);
+
+                    $('.main').html(html);
+                } else {
+                    mescroll.endErr();
+
+                }
+            })
+        }
+
+
+
+        //下拉刷新的回调
+        function downCallback() {
+
+            console.log('下拉刷新的回调');
+            currentPage = 1;
+            var config = {
+                gameInfoUrl: 'VirtualMallController/exchangeList',
+                type: 'post',
+                token: token,
+                data: {
+                    page: currentPage,
+                    is_send: 1,
+                }
+            };
+            RequsetHttp(config.gameInfoUrl, config.type, config.token, config.data, function (res) {
+                if (res.code == 200) {
+                    var prizecount = res.data.list.length;
+                    var html = '';
+                    var codehtml = '';
+                    list = res.data.list;
+                    for (var i = 0; i < prizecount; i++) {
+
+                        if (res.data.list[i].code) {
+                            codehtml = '';
+                            if (res.data.list[i].code.indexOf('/')) {
+                                var code = res.data.list[i].code.split('/');
+                                console.log(code)
+                                for (var j = 0; j < code.length; j++) {
+
+                                    var codes = code[j].split('|');
+                                    if (codes.length > 0) {
+                                        codestr = `<p>` + codes[0] + `</p>`
+                                        if (codes.length == 2) {
+                                            codestr += `<p>` + codes[1] + `</p>`
+                                        }
+                                    }
+                                    codehtml += `
+                                                                                      <div class="redeemcode">
+                                                                                        <div class="memo">兑奖码</div>
+                                                                                        <div style="margin-left: 5px; width:70%;word-wrap : break-word ;">`+ codestr + `</div>
+                                                                                        <div class="copy" onclick="copy(`+ i + `,` + j + `)">复制</div>
+                                                                                      </div>`
+
+                                }
+                                codehtml += `<div class="memo">说明：` + res.data.list[i].goods_info + `</div>`;
+                            }
+                        }
+
+                        html += ` <div class="item">
+                                                                            <div class="itemtop">
+                                                                                <div class="itemtopimg"><img src='`+ res.data.list[i].cover_map + `' /></div>
+                                                                                <div class="itemtoptitle">
+                                                                                    <p>`+ res.data.list[i].goods_name + `</p>
+                                                                                    <div class="pricenum font">
+                                                                                        <div>价格</div> <div class="price">`+ parseInt(res.data.list[i].amount) + `铜钱</div>  <div style="margin-left:20px;">数量</div> <div style="margin-left:5px;">` + res.data.list[i].pay_number + `</div>
+                                                                                    </div>
+                                                                                    <div class="font">发放时间：`+ res.data.list[i].update_time + `</div>
+                                                                                    <div class="font">截止时间：`+ res.data.list[i].end_time + `</div>
+                                                                                </div>
+
+                                                                            </div>`;
+                        html += codehtml;
+                        html += `
+                                                                        </div>`
+                    }
+                    mescroll.endSuccess(); //无参
+                    mescroll.optUp.page.num = 1;
+                    mescroll.endByPage(res.data.list.length, res.data.page.totalPage);
+
+                    $('.main').html(html);
+                } else {
+                    mescroll.endErr();
+                }
+            });
+        }
+
+        //上拉加载的回调 page = {num:1, size:10}; num:当前页 默认从1开始, size:每页数据条数,默认10
+        function upCallback(page) {
+            console.log('上拉加载的回调')
+            if (page.num > currentPage) {
+                var config = {
+                    gameInfoUrl: 'VirtualMallController/exchangeList',
+                    type: 'post',
+                    token: token,
+                    data: {
+                        page: page.num,
+                        is_send: 1,
+                    }
+                };
+                RequsetHttp(config.gameInfoUrl, config.type, config.token, config.data, function (res) {
+                    if (res.code == 200) {
+
+                        console.log(res.data.list.length)
+                        var prizecount = res.data.list.length;
+                        var html = '';
+                        var codehtml = '';
+                        currentPage = res.data.page.page;
+                        if (res.data.list.length > 0) {
+                            list += list.concat(res.data.list);
+                        }
+
+                        for (var i = 0; i < prizecount; i++) {
+                            if (res.data.list[i].code) {
+                                codehtml = '';
+                                if (res.data.list[i].code.indexOf('/')) {
+                                    var code = res.data.list[i].code.split('/');
+                                    console.log(code)
+                                    for (var j = 0; j < code.length; j++) {
+                                
+                                        var codes = code[j].split('|');
+                                        if (codes.length > 0) {
+                                            codestr = `<p>` + codes[0] + `</p>`
+                                            if (codes.length == 2) {
+                                                codestr += `<p>` + codes[1] + `</p>`
+                                            }
+                                        }
+                                        codehtml += `
+                                                                                    <div class="redeemcode">
+                                                                                    <div class="memo">兑奖码</div>
+                                                                                    <div style="margin-left: 5px; width:70%;word-wrap : break-word ;">`+ codestr + `</div>
+                                                                                    <div class="copy" onclick="copy(`+ i + `,` + j + `)">复制</div>
+                                                                                    </div>`
+                                    }
+
+                                    codehtml += `<div class="memo">说明：` + res.data.list[i].goods_info + `</div>`;
+                                }
+                            }
+                            html += ` <div class="item">
+                                                                        <div class="itemtop">
+                                                                            <div class="itemtopimg"><img src='`+ res.data.list[i].cover_map + `' /></div>
+                                                                            <div class="itemtoptitle">
+                                                                                <p>`+ res.data.list[i].goods_name + `</p>
+                                                                                <div class="pricenum font">
+                                                                                    <div>价格</div> <div class="price">`+ parseInt(res.data.list[i].amount) + `铜钱</div>  <div style="margin-left:20px;">数量</div> <div style="margin-left:5px;">` + res.data.list[i].pay_number + `</div>
+                                                                                </div>
+                                                                                <div class="font">发放时间：`+ res.data.list[i].update_time + `</div>
+                                                                                <div class="font">截止时间：`+ res.data.list[i].end_time + `</div>
+                                                                            </div>
+
+                                                                        </div>`;
+                            html += codehtml;
+                            html += `
+                                                                    </div>`
+                        }
+                        mescroll.endByPage(res.data.list.length, res.data.page.totalPage);
+                        $('.main').append(html);
+                    } else {
+                        mescroll.endErr();
+                    }
+                });
+            }
+        }
+        function copy(val, index) {
+            var code = "";
+            var copycode = '';
+            if (list[val].code.indexOf('/')) {
+                code = list[val].code.split('/');
+                if (code) {
+                    copycode = code[index];
+                } else {
+                    copycode = list[val].code;
+                }
+            } else {
+                code = list[val].code;
+                if (code) {
+                    copycode = code[index];
+                } else {
+                    copycode = list[val].code;
+                }
+            }
+            textCopy(copycode);
+
+        }
+    </script>
+</body>
+</html>

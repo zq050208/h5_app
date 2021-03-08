@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title>竞猜成功</title>
+    <link rel="stylesheet" href="css/guessingSuccess.css?v=Math.random()">
+</head>
+<body>
+    <div class='guessingSuccessTop'>
+        <div class='guessingSuccessView'>
+        <img class='successimg' src='image/icon-guessingSussess.png' />
+        </div>
+        <div class='guessingSuccessText'><span>竞猜成功</span></div>
+        <div class='guessingtext'><span>请在我的竞猜中查看比赛进程及结果</span></div>
+        <div id="success" class='success'><span>完成</span></div>
+    </div>
+</body>
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+<script>
+    document.getElementById('success').onclick = function () {
+        var token = Request('token');
+        location.href = 'guessing.html?token=' + token ;
+    }
+</script>
+
+</html>

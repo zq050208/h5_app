@@ -1,0 +1,78 @@
+﻿body,html {
+    font-family:PingFangSC-Regular;
+    background: rgba(255,255,255,1);
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+}
+.award {
+    padding: 0 15px;
+}
+table {
+    width: 100%;
+}
+p{
+    margin:0px ;
+    padding:0px;
+}
+tr {
+    font-size: 16px;
+    font-family: PingFangSC-Medium;
+    font-weight: 500;
+    color: rgba(12,34,129,1);
+    line-height: 30px;
+}
+.guessAward {
+    padding-top: 14px;
+    padding-bottom: 8px;
+    text-align: left;
+    border-bottom: 1px solid #EEEEEE;
+}
+.guessAwardContent {
+    font-size: 16px;
+    font-family: PingFangSC-Medium;
+    font-weight: 500;
+    color: rgba(12,34,129,1);
+    line-height: 30px;
+}
+.awardTime {
+    font-size: 14px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(102,102,102,1);
+    line-height: 30px;
+}
+.guessAwardMoney {
+    text-align: right;
+    font-size: 16px;
+    font-family: PingFangSC-Medium;
+    font-weight: 500;
+    color: rgba(12,34,129,1);
+    line-height: 30px;
+    border-bottom: 1px solid #EEEEEE;
+}
+
+.noList{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    background: #ffffff;
+}
+
+.noList img{
+    width: 150px;
+    margin: 20px 0;
+}
+
+.noList p{
+    color: #0C2281;
+    font-size:16px;
+    font-family:PingFangSC-Medium;
+    margin-bottom: 20px;
+}
+
+.noList span{
+    color: #0C2281;
+    font-size:12px;
+}

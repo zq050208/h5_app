@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>战报</title>
+</head>
+<body>
+    <style>
+        html,body{
+            padding: 0;
+            margin: 0;
+            background: #001334;
+            font-family: PingFangSC;
+            font-size: 14px;
+        }
+        p{
+            margin: 0;
+        }
+        .page{
+            width: 100%;
+            min-height: 100%;
+            position: absolute;
+            display: block;
+            background: url('img/score-bg.jpg')no-repeat;
+            background-size: 100% auto;
+        }
+        header img{
+            width: 33%;
+            margin: 10px 0 10px 5%;
+        }
+        .theme{
+            width:90%;
+            background: rgba(221,221,221,0.2);
+            font-size: 12px;
+            padding:5px 0;
+            border-radius: 50px;
+            text-align: center;
+        }
+        .flex-box{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .white{
+            color: #FFFFFF;
+        }
+        .yellow{
+            color: #FFCB1D;
+        }
+        .flex-1{
+            flex: 1;
+        }
+        .maxw{
+            width: 100%;
+        }
+        .column{
+            flex-direction: column;
+        }
+        .tans{
+            color: #CBA66E;
+            font-size: 30px;
+        }
+        .head-wrap{
+            width: 50%;
+            height: 33vw;
+            margin: 10px auto;
+            background: url('img/score-frame.png') no-repeat;
+            background-size: contain;
+        }
+        .head-wrap img{
+            width: 47%;
+            border: 2px solid #FFFFFF;
+            border-radius: 100%;
+        }
+        .txt{
+            font-size: 16px;
+            margin: 15px auto;
+        }
+        .standings{
+            width: 90%;
+            height: 39vw;
+            flex-wrap: wrap;
+            background: url('img/score-content.png') no-repeat;
+            background-size: contain;
+            font-family: PingFangSC-Medium;
+        }
+        .size-16{
+            font-size: 16px;
+        }
+        .skyblue{
+            color: #7AA8E6;
+            font-size: 10px;
+        }
+        .pale{
+            color: #DFF3F7;
+            margin:-10px 0 10px 0;
+        }
+        .pale-1{
+            color: #869CAE;
+        }
+        .container{
+            width: 90%;
+            height: 27vw;
+            flex-wrap: wrap;
+            background: url('img/score-teammate.png') no-repeat;
+            background-size: contain;
+        }
+        .flex-27{
+            flex: 0 0 27%;
+        }
+        .flex-19{
+            flex: 0 0 19%;
+        }
+        .pubg{
+            width: 100%;
+            font-size: 10px;
+            text-align: center;
+            overflow: hidden;
+            background: url('img/score-pubg.png')no-repeat;
+            background-size: 100% 100%;
+        }
+        .btn{
+            width: 90%;
+            height: 15vw;
+            margin: 20px auto 30px auto;
+            color: #282012;
+            font-size: 20px;
+            font-family: PingFangSC-Medium;
+            background: url('img/score-btn.png') no-repeat;
+            background-size: 100% 100%;
+            letter-spacing:5px;
+        }
+        .box{
+            width:50%;
+            height:0;
+            padding-top:50%;
+            position:relative;
+        }
+        .box img{
+            width:100%;
+            height:100%;
+            position:absolute;
+            border-radius:0 15px 0 15px;
+            top:0;
+            left:0;
+        }
+    </style>
+    <div class="page">
+        <header>
+            <img src="img/remind-logo.png" />
+        </header>
+
+        <div class="white flex-box maxw">
+            <span class="theme">新用户报名参赛即可获得<span class="yellow">现金红包</span>和<span class="yellow">优惠券大礼包</span></span>
+        </div>
+
+        <div class="head flex-box maxw">
+            <div class="flex-box head-wrap"><img class="avatar" src="img/icon-head.jpg"/></div>
+        </div>
+
+        <div class="pale-1 flex-box column txt">
+            <p><span class="nickname"></span>在TITI电竞比赛</p>
+            <p>赚了<span class="yellow count_gold">72</span>元！</p>
+            <p>快来看<span class="nickname"></span>的本场战绩！</p>
+        </div>
+
+        <div class="flex-box my-kill">
+            <div class="flex-box white standings">
+                <div class="flex-1 ">
+                    <div class="flex-box tans ranking"></div>
+                    <div class="flex-box size-16">排名</div>
+                </div>
+                <div  class="flex-1 ">
+                    <div class="flex-box tans kill"></div>
+                    <div class="flex-box size-16">击杀</div>
+                </div>
+                <div class="flex-1">
+                    <div class="flex-box tans reward_num"></div>
+                    <div class="flex-box size-16">获得金币</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-box"  style="margin: 15px auto;">
+            <div class="flex-box" style="width: 70%; flex-wrap: wrap;">
+                <div class="flex-1" ><img class="maxw" src="img/score-right.png"/></div>
+                <div class="flex-1 flex-box" style="color:#2E82EF ">战绩排名</div>
+                <div class="flex-1" ><img class="maxw"  src="img/score-left.png"/></div>
+            </div>
+        </div>
+
+        <div class="flex-box column maxw list-container"></div>
+
+        <div class="maxw flex-box">
+            <div class="flex-box btn">报名</div>
+        </div>
+    </div>
+
+    <script src="../public/jquery.min.js"></script>
+    <script src="../public/config.js"></script>
+    <script src="../public/service.js"></script>
+    <script>
+
+        var config = {
+            happyGameUrl: 'GameController/getHappyGameResult',
+            myGameUrl: 'GameController/getMyGameResult',
+            downloadUrl: 'https://h5.tinytiger.cn/web_app/knapsack/download.html',
+            type: 'post',
+            game_id: Request('game_id'),
+            user_id:  Request('user_id'),
+        };
+        requsetHttp(config.happyGameUrl, config.type, {game_id: config.game_id, page:1,},null,(res)=>{
+            var list = res.data.list;
+            for(var i=0; i<list.length; i++){
+                if(i < 5){
+                    $('.list-container').append('\
+                        <div class="flex-box white container">\
+                            <div class="flex-box column flex-27">\
+                                <div class="box"><img src='+list[i].avatar+' /></div>\
+                                <div class="skyblue">'+list[i].nickname+'</div>\
+                                <div class="pubg"><span>PUBG：</span><span>'+list[i].pubg_nickname.substring(0,8)+'</span></div>\
+                            </div>\
+                            <div class="flex-box column flex-19"><span class="pale">'+(i+1)+'</span><span class="pale-1">排行</span></div>\
+                            <div class="flex-box column flex-27"><span class="pale">'+list[i].kill+'</span><span class="pale-1">击杀</span></div>\
+                            <div class="flex-box column flex-27"><span class="pale">'+( list[i].reward_type == 4 ? list[i].reward_num : 0 )+'</span><span class="pale-1">获得金币</span></div>\
+                        </div>');
+                }
+            }
+        });
+        requsetHttp(config.myGameUrl, config.type, {game_id: config.game_id, user_id:config.user_id,},null,(res)=>{
+            $('.count_gold').text(res.data.count_gold);
+            $('.nickname').text(res.data.user_info.nickname);
+            $('.avatar').attr( 'src' ,res.data.user_info.avatar);
+            if(res.data.my_result.length){
+                $('.kill').text(res.data.my_result.kill);
+                $('.ranking').text(res.data.my_result.ranking);
+                $('.reward_num').text(res.data.my_result.reward_num);
+            }else{
+                $('.my-kill').css('display','none');
+            }
+        });
+        $('.btn').click(function () {
+           location.href = config.downloadUrl;
+        });
+    </script>
+</body>
+</html>

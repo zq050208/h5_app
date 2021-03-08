@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title>绝地求生</title>
+    <link rel="stylesheet" href="css/iconfont.css">
+    <link rel="stylesheet" href="css/ydui.css">
+    <link rel="stylesheet" href="css/index.css?v=Math.random()">
+    
+</head>
+<body>
+    <!-- userinfo-->
+    <div class="userinfo">
+        <div class="userinfo-msg">
+            <img src="" alt=""><span> </span>
+        </div>
+        <div class="dan">亚服</div>
+    </div>
+
+    <div id="J_Tab" class="m-tab">
+        <ul class="tab-nav">
+            <li class="tab-nav-item tab-active"><a href="javascript:;">FPP</a></li>
+            <li class="tab-nav-item"><a href="javascript:;">TPP</a></li>
+        </ul>
+        <div id="mescroll" class="mescroll">
+            <div class="mescroll-content">
+                <ul class="table-view">
+                    <div class="tab-panel">
+                        <div class="tab-panel-item tab-active gameFPP">
+                            <!-- 击杀数据 -->
+                            <div class="kill-content">
+                                <div class="killdata">
+                                    <div class="killbox">
+                                        <div class="totalkill">
+                                            <span class="num">0</span>
+                                            <div class="killsflex"><img src="image/icon-person.png" alt=""><span >总击杀</span></div>
+                                        </div>
+                                        <div class="totalharm">
+                                            <span class="num">0</span>
+                                            <div class="harmflex"><img src="image/icon-mark.png" alt=""><span>场均伤害</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="killcircle">
+                                            <div class="circle">
+                                                <div class="circle-msg">
+                                                    <div class="kill-d">K/D RATIO</div>
+                                                    <span class="circle-num"></span>
+                                                </div>
+                                            </div> 
+                                    </div>
+                                </div>
+                                <!-- 数据 -->
+                                <ul class="aboutData">
+                                    <li class="data">
+                                        <div class="dataNum gamestotal">0</div>
+                                        <div class="dataTxt ">对局总数</div>
+                                    </li>
+                                    <li class="data">
+                                        <div class="dataNum chicken">0%</div>
+                                        <div class="dataTxt ">吃鸡率</div>
+                                    </li>
+                                    <li class="data">
+                                        <div class="dataNum gamechicken">0</div>
+                                        <div class="dataTxt ">赛季吃鸡数</div>
+                                    </li>
+                                    <li class="data">
+                                        <div class="dataNum gamefront">0</div>
+                                        <div class="dataTxt ">赛季前10数</div>
+                                    </li>
+                                    <li class="data">
+                                        <div class="dataNum averagelive">0</div>
+                                        <div class="dataTxt ">场均生存时长</div>
+                                    </li>
+                                    <li class="data">
+                                        <div class="dataNum tallestNum">0%</div>
+                                        <div class="dataTxt ">前十率</div>
+                                    </li>
+                                    <li class="data">
+                                        <div class="dataNum average_kills">0</div>
+                                        <div class="dataTxt ">场均击杀</div>
+                                    </li>
+                                    <li class="data">
+                                        <div class="dataNum probability_headshotKills">0%</div>
+                                        <div class="dataTxt ">爆头率</div>
+                                    </li>
+                                    <li class="data">
+                                        <div class="dataNum max_rankPoints">0</div>
+                                        <div class="dataTxt ">最高天梯分</div>
+                                    </li>
+                                    <li class="data">
+                                        <div class="dataNum solo_rankPoints">0</div>
+                                        <div class="dataTxt ">单排天梯分</div>
+                                    </li>
+                                    <li class="data">
+                                        <div class="dataNum duo_rankPoints">0</div>
+                                        <div class="dataTxt ">双排天梯分</div>
+                                    </li>
+                                    <li class="data">
+                                        <div class="dataNum squad_rankPoints">0</div>
+                                        <div class="dataTxt ">四排天梯分</div>
+                                    </li>
+                                </ul>
+                                <!-- 最近比赛 -->
+                                <div class="nearGame">
+                                    <div class="gameTitle">最近比赛</div>
+                                    <div class="gameList">
+                                        <ul>
+                                 
+                                        </ul>
+                                        <span class="bottom_txt">所有数据均是小虎电竞提供</span>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-panel-item gameTPP">
+                           <!-- 击杀数据 -->
+                           <div class="kill-content">
+                                <div class="killdata">
+                                    <div class="killbox">
+                                        <div class="totalkill">
+                                            <span class="num">0</span>
+                                            <div class="totalkills-msg"><img src="image/icon-person.png" alt=""><span >总击杀</span></div>
+                                        </div>
+                                        <div class="totalharm">
+                                            <span class="num">0</span>
+                                            <div class="totalhurts-msg"><img src="image/icon-mark.png" alt=""><span>场均伤害</span></div>
+                                        </div>
+                                    </div>
+                                    <div class="killcircle">
+                                            <div class="circle">
+                                                <div class="circle-msg">
+                                                    <div class="kill-d">K/D RATIO</div>
+                                                    <span class="circle-num"></span>
+                                                </div>
+                                            </div>
+                                        
+                                    </div> 
+                                </div>
+                              
+                                <ul class="aboutData">
+                                    <li class="data">
+                                        <div class="dataNum gamestotal">0</div>
+                                        <div class="dataTxt ">对局总数</div>
+                                    </li>
+                                    <li class="data">
+                                        <div class="dataNum chicken">0%</div>
+                                        <div class="dataTxt ">吃鸡率</div>
+                                    </li>
+                                    <li class="data">
+                                        <div class="dataNum gamechicken">0</div>
+                                        <div class="dataTxt ">赛季吃鸡数</div>
+                                    </li>
+                                    <li class="data">
+                                        <div class="dataNum gamefront">0</div>
+                                        <div class="dataTxt ">赛季前10数</div>
+                                    </li>
+                                    <li class="data">
+                                        <div class="dataNum averagelive">0</div>
+                                        <div class="dataTxt ">场均生存时长</div>
+                                    </li>
+                                    <li class="data">
+                                        <div class="dataNum tallestNum">0%</div>
+                                        <div class="dataTxt ">前十率</div>
+                                    </li>
+                                    <li class="data">
+                                        <div class="dataNum average_kills">0</div>
+                                        <div class="dataTxt ">场均击杀</div>
+                                    </li>
+                                    <li class="data">
+                                        <div class="dataNum probability_headshotKills">0%</div>
+                                        <div class="dataTxt ">爆头率</div>
+                                    </li>
+                                    <li class="data">
+                                        <div class="dataNum max_rankPoints">0</div>
+                                        <div class="dataTxt ">最高天梯分</div>
+                                    </li>
+                                    <li class="data">
+                                        <div class="dataNum solo_rankPoints">0</div>
+                                        <div class="dataTxt ">单排天梯分</div>
+                                    </li>
+                                    <li class="data">
+                                        <div class="dataNum duo_rankPoints">0</div>
+                                        <div class="dataTxt ">双排天梯分</div>
+                                    </li>
+                                    <li class="data">
+                                        <div class="dataNum squad_rankPoints">0</div>
+                                        <div class="dataTxt ">四排天梯分</div>
+                                    </li>
+                                </ul>
+                            
+                                <div class="nearGame">
+                                    <div class="gameTitle">最近比赛</div>
+                                    <div class="gameList">
+                                        <ul>
+                                            <!-- 文本 -->
+                                        </ul>
+                                        <span class="bottom_txt">所有数据均是小虎电竞提供</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<style>
+
+</style>
+
+<script src="../public/jquery.min.js"></script>
+<script src="../public/ydui.js"></script>
+<script src="js/iconfont.js"></script>
+<script src="js/circle-progress.min.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+
+<script>
+    var $tab = $('#J_Tab');
+    $tab.tab({
+        nav: '.tab-nav-item',
+        panel: '.tab-panel-item',
+        activeClass: 'tab-active'
+    });
+
+    var config = {
+        getGameRoleDetailUrl: 'UserGameRoleController/getGameRoleDetail',
+        type: 'post',
+        token: Request('token'),
+        data: { 
+            game_mode: 1,                                           // 游戏模块 1=FPP 2=TPP
+            role_id: Request('role_id')                                 // 游戏角色id 
+         }
+    };
+    data()
+    function data(){
+        RequsetHttp(config.getGameRoleDetailUrl,config.type,config.token,config.data,function(res){
+        console.log(res)
+        var season_info = res.data.season_info;
+        $('.userinfo-msg img').attr('src', res.data.user_info.avatar);
+        $('.userinfo-msg span').text(res.data.user_info.game_nickname);
+        // 个人数据
+        $(".totalkill .num").text(season_info.kills);
+        $(".totalharm .num").text(season_info.average_damageDealt);
+        $(".data .gamestotal").text(season_info.roundsPlayed);
+        $(".data .chicken").text(season_info.probability_wins +'%');
+        $(".data .gamechicken").text(season_info.wins);
+        $(".data .gamefront").text(season_info.top10s);
+        $(".data .averagelive").text(secondToDate(season_info.average_timeSurvived));
+        $(".data .tallestNum").text(season_info.probability_top10s +'%');
+        $(".data .average_kills").text(season_info.average_kills);
+        $(".data .average_kills").text(season_info.average_kills);
+        $(".data .probability_headshotKills").text(season_info.probability_headshotKills +'%');
+        $(".data .max_rankPoints").text(season_info.max_rankPoints);
+        $(".data .solo_rankPoints").text(season_info.solo_rankPoints);
+        $(".data .duo_rankPoints").text(season_info.duo_rankPoints);
+        $(".data .squad_rankPoints").text(season_info.squad_rankPoints);
+        // 进度条
+        $(".circle-num").text(season_info.KD || '0')
+        $('.circle').circleProgress({
+        value: season_info.KD/100,
+       size: 90,
+       fill: {
+         color: "#CE9A40"
+       }
+     });
+
+        // 最近比赛
+        var match_list = res.data.match_list;
+        var list = '';
+
+        for(var i = 0 ; i < match_list.length; i++){
+            var createdAt = match_list[i].createdAt.substring(4, 11).replace(/-/g, "月").replace(/\s/g, "日 ").substr(1);
+            list +=` <li class="game_msg" data-matchId ="`+match_list[i].matchId+`" data-playerId ="`+match_list[i].playerId+`">
+                       <div class="game_ranking">
+                           <div class="ranking_res">
+                               <div class="ranking_num"># `+match_list[i].rank+`</div>
+                               <div class="ranking_time">`+createdAt+`</div>
+                           </div>
+                           <div class="ranking_txt">`+match_list[i].gameMode+`</div>
+                       </div>
+                       <div class="game_score">
+                           <div class="kill">
+                               <div class="kill_num">`+match_list[i].kills+`</div>
+                               <div class="kill_txt">击杀</div>
+                           </div>`
+                           if(match_list[i].winPoints > 0){
+                               list += ` <div class="score">
+                               <div class="score_num">+`+match_list[i].winPoints+`</div>
+                               <div class="score_txt">天梯分</div>
+                           </div>
+                           <i class="iconfont">&#xe662</i>
+                       </div>
+                   </li>`
+                           }else if(match_list[i].winPoints<0 || match_list[i].winPoints==0){
+                            list += ` <div class="score">
+                               <div class="score_num">`+match_list[i].winPoints+`</div>
+                               <div class="score_txt">天梯分</div>
+                           </div>
+                           <i class="iconfont">&#xe662</i>
+                       </div>
+                   </li>`
+                           }
+                          
+        }
+        $(".gameList ul").html(list);
+        $("li.game_msg").click(function(){
+            var obj = {
+                 matchId: $("li.game_msg").attr("data-matchId"),
+                 playerId:$("li.game_msg").attr("data-playerId") 
+                }
+               
+                var data =  $(this).find('.ranking_time').text();  
+                var categryText = $(this).find('.ranking_txt').text();
+                var categry;
+                if(categryText.match('单排')){
+                    categry = 100;
+                }else if(categryText.match('双排')){
+                    categry = 50;
+                }else if(categryText.match('四排')){
+                    categry = 25;
+                }else{
+                    return;
+                }
+               var ranking_num = $(this).find('.ranking_num').text();
+               ranking_num = ranking_num.replace(/[^0-9]/g,"");
+                
+                var nextObj = {
+                    'data': data,//日期
+                    'categry': categry,
+                    'ranking_num':ranking_num,
+                    'ranking_txt':categryText
+                }
+                console.log(nextObj.data);
+                window.localStorage.setItem("data",JSON.stringify(nextObj));
+                window.location.href= 'aboutdata.html?matchId=' + obj.matchId +"&"+"playerId="+obj.playerId+"&"+"token="+config.token+"&appversion=3.3.0"+"&role_id="+config.data.role_id;
+        })        
+    })
+
+    }
+   
+    $tab.find('.tab-nav-item').on('open.ydui.tab',function(e){
+    // console.log(e)
+    var index = e.index;
+    if(index == 0){
+    config.data.game_mode = 1;
+    data()
+    }
+    else if(index == 1){
+    config.data.game_mode = 2;
+    data()
+    }
+    console.log(config.data)
+    })
+
+     // 时间换算
+     function secondToDate(result) {
+    var h = Math.floor(result / 3600) < 10 ? '0'+Math.floor(result / 3600) : Math.floor(result / 3600);
+    var m = Math.floor((result / 60 % 60)) < 10 ? '0' + Math.floor((result / 60 % 60)) : Math.floor((result / 60 % 60));
+    var s = Math.floor((result % 60)) < 10 ? '0' + Math.floor((result % 60)) : Math.floor((result % 60));
+    return result = h + ":" + m + ":" + s;
+    }
+
+  
+
+   
+  
+
+ 
+    
+   
+    
+
+
+    
+
+</script>

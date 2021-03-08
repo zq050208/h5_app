@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title></title>
+    <link rel="stylesheet" href="css/iconfont.css">
+    <link rel="stylesheet" href="css/ydui.css">
+    <link rel="stylesheet" href="css/aboutdata.css?v=Math.random()">
+</head>
+<body>
+      <!-- userinfo-->
+    <div class="body-navi">
+        <div class="userinfo">
+            <div class="userinfo-msg">
+                <img src="" alt="" class="userinfo-icon">
+                <div class="user_msg">
+                    <span class="user_name"> </span>
+                    <div class="user_details">
+                       <div>
+                       <div class="four_row">
+                           <img src="image/icon-head.png" alt="">
+                           <img src="image/icon-head.png" alt="">
+                           <img src="image/icon-head.png" alt="">
+                           <img src="image/icon-head.png" alt="">
+                       </div>
+                       <div class="two_row">
+                        <img src="image/icon-head.png" alt="">
+                        <img src="image/icon-head.png" alt="">
+                    </div>
+                    <div class="one_row">
+                        <img src="image/icon-head.png" alt="">
+                    </div>
+
+                       </div>
+                        <span class="user_txt"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="dan">
+                    <div class="dan_num" ># <span class="colornum">0</span><span class="peopleNum">0</span></div>
+                <div class="dan_time"></div>
+            </div>
+        </div>
+    </div>
+    <div class="bodyContent">
+        <!-- tab -->
+        <div id="J_Tab" class="m-tab">
+            <ul class="tab-nav">
+                <li class="tab-nav-item tab-active"><a href="javascript:;">我的数据</a></li>
+                <li class="tab-nav-item"><a href="javascript:;">团队数据</a></li>
+                <li class="tab-nav-item"><a href="javascript:;">前十排名</a></li>
+            </ul>
+            <div id="mescroll" class="mescroll">
+                <div class="mescroll-content">
+                    <ul class="table-view">
+                        <div class="tab-panel">
+                            <div class="tab-panel-item tab-active">
+                                <div class="about_mine">
+                                    <ul class="mine_data">
+                                        <li>
+                                            <div class="data_num mykills"></div>
+                                            <div class="data_txt">我的击杀</div>
+                                        </li>
+                                        <li>
+                                            <div class="data_num damageDealt"></div>
+                                            <div class="data_txt">我的伤害</div>
+                                        </li>
+                                        <li>
+                                            <div class="data_num headshotKills"></div>
+                                            <div class="data_txt">我的爆头击杀</div>
+                                        </li>
+                                        <li>
+                                            <div class="data_num winPointsDelta"></div>
+                                            <div class="data_txt">我的天梯分变化</div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="mine_msg">
+                                    <ul class="msg_data">
+                                        <li>
+                                            <div class="msg_num assists">0</div>
+                                            <div class="msg_txt">助攻</div>
+                                        </li>
+                                        <li>
+                                            <div class="msg_num DBNOs">0</div>
+                                            <div class="msg_txt">击倒</div>
+                                        </li>
+                                        <li>
+                                            <div class="msg_num revives">0</div>
+                                            <div class="msg_txt">救起</div>
+                                        </li>
+                                        <li>
+                                            <div class="msg_num ">0</div>
+                                            <div class="msg_txt">生活圈数</div>
+                                        </li>
+                                        <li>
+                                            <div class="msg_num Distance">0</div>
+                                            <div class="msg_txt">移动距离</div>
+                                        </li>
+
+                                        <li>
+                                            <div class="msg_num walkDistance">0</div>
+                                            <div class="msg_txt">徒步距离</div>
+                                        </li>
+                                        <li>
+                                            <div class="msg_num rideDistance">0</div>
+                                            <div class="msg_txt">骑行距离</div>
+                                        </li>
+                                        <li>
+                                            <div class="msg_num boosts">0</div>
+                                            <div class="msg_txt">饮料激活</div>
+                                        </li>
+                                        <li>
+                                            <div class="msg_num heals">0</div>
+                                            <div class="msg_txt ">治疗次数</div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="tab-panel-item">
+                                <div class="about_mine">
+                                    <ul class="mine_data">
+                                        <li>
+                                            <div class="data_num teamkills">0</div>
+                                            <div class="data_txt">队伍击杀</div>
+                                        </li>
+                                        <li>
+                                            <div class="data_num teamdamageDealt">0</div>
+                                            <div class="data_txt">队伍伤害</div>
+                                        </li>
+                                        <li>
+                                            <div class="data_num teamaverage_Distance">0km</div>
+                                            <div class="data_txt">平均移动距离</div>
+                                        </li>
+                                        <li>
+                                            <div class="data_num teamtimeSurvived">00:00:00</div>
+                                            <div class="data_txt">生存时间</div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="team_data">
+                                    <ul class="person_data">
+                                       
+                                    </ul>
+                                </div>
+                                <!-- 进度条 -->
+                                <div class="progress_bar">输出占比</div>
+                                <ul id="eleprogress">
+                            
+                                </ul>
+                            </div>
+                            <div class="tab-panel-item">
+                                    <div class="ranking ranking-team">
+                                            <div class="ranking_num">
+                                                <span class="num_first team-first"># 0</span>
+                                                <div class="ranking_name ranking-teamMine-name">
+                                                  
+                                                </div>
+                                            </div>
+                                            <div class="ranking_txt">
+                                                <div class="ranking_kill">
+                                                    <span class="ranking-teamMine-kill">0</span>
+                                                    <span class="killTst ">队伍击杀</span>
+                                                </div>
+                                                <div class="ranking_hurt">
+                                                    <span  class="ranking-teamMine-damageDealt">0</span>
+                                                    <span class="killTst">队伍总伤害</span>
+                                                </div>
+                                                <div class="ranking_dis">
+                                                    <span class="ranking-teamMine-Distance">0</span>
+                                                    <span class="killTst">平均移动</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                <ul class="front_ranking">
+
+                                </ul>
+                            </div>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+</html>
+
+
+<script src="../public/jquery.min.js"></script>
+<script src="../public/ydui.js"></script>
+<script src="js/iconfont.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+
+<script>
+    var $tab = $('#J_Tab');
+    $tab.tab({
+        nav: '.tab-nav-item',
+        panel: '.tab-panel-item',
+        activeClass: 'tab-active'
+    });
+
+     var config = {
+        getGameMatchDetailUrl: 'UserGameRoleController/getGameMatchDetail',
+        type: 'post',
+        token: Request('token'),
+        data: { 
+            match_id: Request("matchId") ,                                           // 比赛id
+            playerId: Request("playerId"),                                           // 玩家id
+            role_id: Request("role_id")                                              // 角色id
+         }
+    };
+    RequsetHttp(config.getGameMatchDetailUrl,config.type,config.token,config.data,function(res){
+        // 用户信息
+        $(".userinfo-icon").attr('src',res.data.$user_info.avatar);
+        $(".user_name").text(res.data.$user_info.game_nickname);
+
+        // 用户数据
+        $(".mine_data .mykills").text(res.data.my_match_detail.kills);
+        $(".mine_data .damageDealt").text(res.data.my_match_detail.damageDealt);
+        $(".mine_data .headshotKills").text(res.data.my_match_detail.headshotKills);
+        $(".mine_data .winPointsDelta").text(res.data.my_match_detail.winPointsDelta) ;
+        $(".mine_msg .assists").text(res.data.my_match_detail.assists);
+        $(".mine_msg .DBNOs").text(res.data.my_match_detail.DBNOs);
+        $(".mine_msg .revives").text(res.data.my_match_detail.revives);
+        $(".mine_msg .Distance").text(distanceStr(res.data.my_match_detail.Distance));
+        $(".mine_msg .walkDistance").text(distanceStr(res.data.my_match_detail.walkDistance));
+        $(".mine_msg .rideDistance").text(distanceStr(res.data.my_match_detail.rideDistance)); 
+        $(".mine_msg .boosts").text(res.data.my_match_detail.boosts);
+        $(".mine_msg .heals").text(res.data.my_match_detail.heals);
+
+        // 团队数据
+        var my_team_match_detail = res.data.my_team_match_detail;
+        $(".mine_data .teamkills").text(my_team_match_detail.kills);
+        $(".mine_data .teamdamageDealt").text(my_team_match_detail.damageDealt);
+        $(".mine_data .teamaverage_Distance").text(distanceStr(my_team_match_detail.average_Distance));
+        $(".mine_data .teamtimeSurvived").text(secondToDate(my_team_match_detail.timeSurvived));
+
+        // 团队成员战绩
+        var team_user = res.data.my_team_match_detail.team_user;
+        var barList = '';
+        var list = '';
+        for(var i = 0 ; i < team_user.length; i++){
+            list += ` <li>
+                       <div class="personName">`+team_user[i].name+`</div>
+                       <div class="personDatas">
+                           <div class="personDataTop">
+                               <div class="person_kill">
+                                   <span class="kill_num">`+team_user[i].kills+`</span>
+                                   <span class="kill_txt">击杀</span>
+                               </div>
+                               <div class="person_kill">
+                                   <span class="kill_num">`+team_user[i].damageDealt+`</span>
+                                   <span class="kill_txt">伤害</span>
+                               </div>
+                               <div class="person_distance">
+                                   <div class="distance">
+                                       <span class="kill_num">`+distanceStr(team_user[i].Distance)+`</span>
+                                       <span class="kill_txt">移动距离</span>
+                                   </div>
+                                   <i class="iconfont downward">&#xe65d</i>
+                               </div>
+                           </div>
+                           <div class="personDataBottom">
+                               <div class="person_kill">
+                                   <span class="kill_num">`+team_user[i].assists+`</span>
+                                   <span class="kill_txt">助攻</span>
+                               </div>
+                               <div class="person_kill">
+                                   <span class="kill_num">`+team_user[i].DBNOs+`</span>
+                                   <span class="kill_txt">击倒</span>
+                               </div>
+                               <div class="person_kill">
+                                   <span class="kill_num">`+secondToDate(team_user[i].timeSurvived)+`</span>
+                                   <span class="kill_txt">生存时间</span>
+                               </div>
+                           </div>
+                       </div>
+                   </li>`
+ 
+            // 进度条
+            var width = toPercent(team_user[i].damageDealt/my_team_match_detail.damageDealt) ;
+            barList += ` <li class="progress_msg">
+                                    <div class="progress_txt">`+team_user[i].name+`</div>
+                                    <div class="progress_about">
+                                        <div class="containt">
+                                            <div class="processcontainer">
+                                                <div class="processbar" style="width:`+width+`;"></div>
+                                            </div>
+                                            <span class="num">`+width+`</span>
+                                        </div>
+                                    </div>
+                                </li>`
+        }
+        $(".person_data").append(list);
+        $('#eleprogress').append(barList);
+
+        // 角标点击事件
+        $(".personDataBottom").slideUp();
+        $(".personDataTop i").attr('isSelect',true);
+        $(".personDataTop i").click(function () {
+        if($(this).attr('isSelect') == 'true'){
+            $(this).attr('isSelect',false);
+            $(this).parent().parent().next().slideDown();
+            $(this).html('&#xe65e');
+        }else {
+            $(this).attr('isSelect',true);
+            $(this).parent().parent().next().slideUp();
+            $(this).html('&#xe65d');
+            
+        }
+    })
+
+    // 前十排名
+    // 团队数据
+    var teamList = res.data.my_team_match_detail;
+    var str = '';
+    for(var i = 0; i <teamList.team_user.length; i++){
+        str+=` <span class="ranking-teamMine-one">`+teamList.team_user[i].name+`</span>`
+    }
+    $(".ranking-teamMine-name").append(str);
+
+    $(".ranking-teamMine-kill").text(teamList.kills);
+    $(".ranking-teamMine-damageDealt").text(teamList.damageDealt);
+    $(".ranking-teamMine-Distance").text(distanceStr(teamList.average_Distance));
+
+    // 排名
+     var team_userList= res.data.top10_list;
+    var str = '';
+    for(var i = 0; i < team_userList.length; i++){
+        var user_nameList = team_userList[i].team_user;
+        var res = '';
+        for(var j = 0 ; j < user_nameList.length; j ++){
+            res += `<span>`+user_nameList[j].name+`</span>`
+        }
+        $(".ranking_nameList").append(res);
+        str+=`<li class="ranking">
+                    <div class="ranking_num">
+                        <span class="num_first"># `+(i+1)+`</span>
+                        <div class="ranking_name ranking_nameList">`
+                                str+=res
+                    str+=  `  </div>
+                    </div>
+                    <div class="ranking_txt">
+                        <div class="ranking_kill">
+                            <span>`+team_userList[i].kills+`</span>
+                            <span class="killTst">队伍击杀</span>
+                        </div>
+                        <div class="ranking_hurt">
+                            <span>`+team_userList[i].damageDealt+`</span>
+                            <span class="killTst">队伍总伤害</span>
+                        </div>
+                        <div class="ranking_dis">
+                            <span>`+distanceStr(team_userList[i].Distance)+`</span>
+                            <span class="killTst">平均移动</span>
+                        </div>
+                    </div>
+                </li>`    
+    }
+    $(".front_ranking").append(str);
+    })
+
+    // 通过id传过来的信息
+     var res = JSON.parse(window.localStorage.getItem("data"));
+     $(".dan_time").text(res['data']);
+     $('.peopleNum').text('/' + res['categry']);
+     $('.colornum').text(res['ranking_num']);
+     $(".team-first").text("#"+res['ranking_num'])
+     $('.user_msg .user_txt').text(res['ranking_txt']);
+
+     if(res.categry == 25){
+         $(".four_row").css("display","flex");
+     }else if(res.categry == 50){
+        $(".two_row").css("display","flex");
+     }else if(res.categry == 100){
+        $(".one_row").css("display","flex");
+     }
+     
+     // 距离换算
+    function distanceStr(distance) {
+    var dis = '';
+    if (distance > 999) {
+    dis = (distance / 1000).toFixed(2) + 'km'
+    } else {
+    dis = distance + 'm'
+    }
+    return dis;
+    }
+
+    // 百分比换算
+    function toPercent(point){
+    var str=Number(point*100).toFixed(2);
+    str+="%";
+    return str;
+    }
+
+    // 时间换算
+    function secondToDate(result) {
+    var h = Math.floor(result / 3600) < 10 ? '0'+Math.floor(result / 3600) : Math.floor(result / 3600);
+    var m = Math.floor((result / 60 % 60)) < 10 ? '0' + Math.floor((result / 60 % 60)) : Math.floor((result / 60 % 60));
+    var s = Math.floor((result % 60)) < 10 ? '0' + Math.floor((result % 60)) : Math.floor((result % 60));
+    return result = h + ":" + m + ":" + s;
+    }
+
+</script>

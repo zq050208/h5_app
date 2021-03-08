@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <title>瞎聊什么</title>
+    <link rel="stylesheet" href="../public/mescroll.min.css">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            font-size: 14px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            background:rgba(255,255,255,1);
+        }
+
+        .main {
+            padding: 0 15px
+        }
+        .contentList{
+            width: 100%;
+        }
+
+        .listItem {
+            display: flex;
+            border-bottom: 1px solid #F3F3F3;
+            padding: 15px 0;
+        }
+
+        .item_left {
+            display: flex;
+            align-items: center;
+            flex: 9;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .item_right{
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        .item_right img {
+            width: 8px; 
+            height: 14px;
+            
+        }
+        .contentMsg{
+            padding-left: 10px;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            
+        }
+        .conetnt{
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .comment_num{
+            width: 16px;
+            height: 14px;
+            vertical-align: middle;
+        }
+        .nolength{
+            width: 100%;
+            text-align: center;
+            padding-top: 100px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <div class="content">
+            <div id="mescroll" class="mescroll">
+                <div class="contentList"></div>
+                <div class="nolength">暂无数据</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/service.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/template-web.js"></script>
+<script src="../public/mescroll.min.js"></script>
+<script type="text/html" id="dataList">
+    {{each item v i}}
+    <div class="listItem" onclick="goDetail({{v}})">
+        <div class="item_left">
+            <img src="image/icon-chatImg.png" style="width: 50px;height:50px; flex-shrink: 0;">
+            <div class="contentMsg" >
+                <div class="conetnt">{{v.content}}</div>
+                <div style="margin-top: 8px"><img src="image/icon-message.png" class="comment_num"> {{v.comment_num}}</div>
+            </div>
+        </div>
+        <div  class="item_right"><img src="image/icon-arrowRight.png" style=""></div>
+    </div>
+    {{/each}}
+
+</script>
+<script>
+    // baseUrl = 'http://192.168.1.241/wanpai_api/public/index.php/'   // 测试
+    // baseUrl = 'https://wanpai.titipa.cn/xhdj/wanpai_api/public/index.php/'   // 预发
+    baseUrl = 'https://fenz.tinytiger.cn/xhdj/wanpai_api/public/index.php/'   // 正式
+    var config = {
+        url: 'Topic/index',
+        type: 'get',
+        passData: {
+            type: 1,
+            page: 1,
+            per_page: 20
+        },
+        mescroll: initMescroll(),
+        up: 'up',
+        flush: 'flush',
+        token: Request('token')
+    }
+    passDataList()
+    // 获取话题数据
+    function passDataList(type) {
+        if (type == "flush") {
+            config.mescroll.optUp.page.num = 1;
+            config.passData.page = 1
+        }
+        requsetHttp(config.url, config.type, config.passData, null, (res) => {
+            if (res.code == 200) {
+                if (res.data.data.length == 0) $(".nolength").show()
+                var passList = template('dataList', { item: res.data.data })
+                if (type == config.flush) {
+                    config.mescroll.optUp.page.num = 1;
+                    config.mescroll.setPageNum(config.passData.page)
+                    config.mescroll.endByPage(res.data.data.length, res.data.last_page);
+                    $(".contentList").html(passList)
+                } else {
+                    config.mescroll.endByPage(res.data.data.length, res.data.last_page);
+                    $(".contentList").append(passList)
+                }
+                config.passData.page++;
+            }
+        })
+    }
+    // 跳转到往期话题详情
+    function goDetail(item) {
+        window.location.href = 'chat.html?topic_id='+item.id+'&token='+config.token+"&diftype=1"
+    }
+    /**
+  * mescroll 配置
+  */
+    function initMescroll() {
+        var mescroll = new MeScroll("body", {
+            up: {
+                callback: upCallback,
+                isBounce: true,
+                noMoreSize: 0,
+                auto: false,
+                htmlNodata: '<p class="upwarp-nodata">没有更多了</p>'
+            },
+            down: {
+                auto: false,
+                use: false,
+                callback: downCallback
+            }
+        });
+        return mescroll;
+    }
+
+    /**
+     * 下拉刷新的回调
+     */
+    function downCallback() {
+        passDataList(config.flush);
+    }
+
+    /**
+     * 上拉加载的回调
+     */
+    function upCallback() {
+        passDataList(config.up);
+    }
+</script>

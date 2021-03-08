@@ -1,0 +1,264 @@
+* {
+    padding: 0;
+    margin: 0
+}
+
+html,
+body {
+    font-family: PingFangSC-Regular;
+    width: 100%;
+    height: 100%;
+background: rgba(12, 10, 9, 1) url('../image/icon-bg.jpg') no-repeat 100%/100%;
+font-size: 14px;
+
+}
+.userinfo{
+    padding: 25px 15px 0px 15px;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.userinfo-msg img{
+    width: 45px;
+    height: 45px;
+    margin-right: 20px;
+    border-radius: 50%;
+
+}
+.userinfo-msg span{
+    margin-top: -5px
+}
+.userinfo-msg{
+    display: flex;
+    align-items: flex-start;
+    font-size: 14px
+}
+.dan{
+    font-size: 12px;
+    padding: 0 8px; 
+    background-color: #CE9A40;
+    color: #131413;
+    line-height: 20px
+}
+
+.kill-d{
+    color: rgba(252,210,109,1);
+    opacity:0.5;
+    font-size:10px !important;
+}
+
+/* TAB */
+.tab-nav {
+    width: 25%;
+    top: -20px;
+    left: 70px
+    
+}
+.tab-nav .tab-nav-item:first-child{
+    margin-right: 15px
+}
+
+.tab-nav .tab-nav-item {
+    font-size: 12px;
+   background:#616160;
+    color: #131413;
+    border-radius:2px;
+    padding: 4px 0
+}
+
+.tab-nav .tab-active {
+    font-family: PingFangSC-Medium !important;
+    color: rgba(60, 44, 19, 1) !important;
+    background: rgba(206, 154, 64, 1) !important;
+}
+
+.tab-nav-item.tab-active:before {
+    background: none;
+}
+
+.tab-nav:after,
+.tab-nav-item:after {
+    width: 0 !important;
+    height: 0 !important;
+}
+
+.tab-panel .tab-panel-item.tab-active {
+    background-color: none;
+
+}
+
+/* 击杀数据 */
+.killdata{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #3D3628
+   
+}
+.kill-content{
+    padding: 0px 15px 0px 15px
+}
+.killbox{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    background-color: #CE9A40;
+    padding: 25px 15px;
+}
+.totalkill{
+    padding-right: 45px
+}
+.killsflex,
+.harmflex{
+    display: flex;
+    align-items: center;
+}
+
+.totalkill,
+.totalharm {
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+.totalkill .num,
+.totalharm .num{
+    font-size: 26px
+}
+.totalkill img,
+.totalharm img{
+    width: 13px;
+    height: 5px
+
+}
+
+.el-progress-circle__path{
+    background-color: rgba(61,54,40,1)
+}
+
+.aboutData{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #3D3628 
+}
+.data{
+    display: flex;
+    flex: 0 21%;
+    margin-bottom: 10px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 0;
+    background-color:rgba(0,0,0,1);
+    border-radius:2px;
+}
+.data .dataNum{
+    color: #fff;
+    font-size: 18px;
+}
+.dataTxt{
+ color:rgba(138,122,91,1);
+ font-size: 10px
+}
+.nearGame,
+.gameList{
+    margin-top: 25px
+}
+.gameTitle{
+    font-size: 14px;
+    color: #Fff
+}
+.game_msg{
+    display: flex;
+    color: #fff;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #3D3628;
+    margin-bottom: 20px
+}
+.game_ranking,
+.game_score{
+    flex: 1;
+}
+.game_ranking{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start
+    
+}
+.ranking_res{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-right: 10px
+}
+
+.game_score{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    /* padding-left: 90px */
+}
+.score{
+    margin: 0 25px
+}
+.kill,
+.score{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column
+}
+.kill_txt,
+.score_txt,
+.ranking_time{
+    color:rgba(153,153,153,1);
+    font-size: 10px
+  
+}
+.iconfont{
+    color: #d4a449;
+    font-size: 10px;
+    font-weight: bold
+}
+.bottom_txt{
+    color:rgba(153,153,153,1);
+    font-size: 8px !important;
+    display: flex;
+    justify-content:center;
+    margin-bottom: 10px
+  
+}
+.circle-num{
+    color:rgba(206,154,64,1);
+    font-size: 25px;
+}
+
+.totalkills-msg,
+.totalhurts-msg{
+    display: flex;
+    align-items: center
+}
+.circle-msg{
+    text-align: center;
+    /* margin-top: -63px */
+    /* position: absolute; */
+    /* top: 27%;
+    left: 23%; */
+    position: relative;
+    margin-top: -65px
+
+}
+.circle{
+    position: relative;
+
+}
+
+
+

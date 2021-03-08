@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    <title>门面选拔</title>
+    <!-- <link rel="stylesheet" href="../public/ydui.css"> -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
+    <link rel="stylesheet" href="../public/mescroll.min.css">
+    <style>
+        * {
+            padding: 0;
+            margin: 0
+        }
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            font-size: 14px;
+            position: relative;
+        }
+        .header {
+            width: 100%;
+            height: 430px;
+        }
+        .topimg {
+            width: 100%;
+            height: 430px;
+        }
+        .middle {
+            width: 100%;
+            background: url("image/icon-bot.png") no-repeat 100% / 100% scroll;
+            padding-top: 34px;
+            padding-bottom: 30px;
+        }
+        .middle-content {
+            position: relative;
+            width: 87.4vw;
+            margin: 0 auto;
+            border: 4px solid black;
+            background-color: #fff;
+        }
+        .middle-heart {
+            position: absolute;
+            top: 0
+        }
+        .middle-search {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .searchCotent {
+            margin: 10px;
+            display: flex;
+            justify-content: flex-end;
+        }
+        .search {
+            width: 100%;
+            height: 32px;
+            border-radius: 6px;
+            border:1px solid rgba(1, 1, 1,1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 13px 0 10px 0;
+        }
+        .search input {
+            width: 100%;
+            height: 32px;
+            background: none;
+            outline: none;
+            border: 0;
+            color: rgba(1, 1, 1, 1);
+        }
+        .searchButton {
+            width: 24px;
+            height: 24px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .search-icon {
+            position: relative;
+            width: 32px;
+            height: 32px;
+            background-color: rgba(255,25,0,1);
+            border-radius: 0 6px 6px 0;
+            border: none;
+        }
+        .middle-content-bot {
+            padding: 0 16px;
+        }
+        .middle-date {
+            width: 100%;
+            height: 93px;
+            border-radius: 6px;
+            border: 1px solid rgba(12,11,11,1);
+            margin: 10px 0 17px;
+            padding: 6px 9px 0;
+            box-sizing: border-box;
+        }
+        .middle-date p {
+            font-size: 14px;
+            font-family: AlibabaPuHuiTi-Bold,AlibabaPuHuiTi;
+            font-weight: bold;
+            color: rgba(0,0,0,1);
+            line-height: 20px;
+        }
+        .middle-data-num {
+            display: flex;
+            justify-content: space-around;
+            margin: 22px 0 36px;
+            font-size: 16px;
+            font-family: AlibabaPuHuiTi-Medium,AlibabaPuHuiTi;
+            font-weight: 500;
+            color: rgba(249,56,11,1);
+            line-height: 22px;
+        }
+        .middle-btn {
+            position: absolute;
+            width: 154px;
+            height: 50px;
+            left: 25%;
+            bottom: -25px;
+        }
+        .rank-img {
+            height: 30px;
+            width: 30px;
+        }
+        .xuanba_desc {
+            width: 87.4vw;
+            height: 336px;
+            margin-top: 21px;
+        }
+         /* 未开始 */
+        .list-nocontent {
+            width: 100%;
+            height: 100%;
+            font-size: 20px;
+            font-family: PangMenZhengDao;
+            color: rgba(185, 46, 2, 1);
+        }
+        .xuanba-end{
+            z-index: 999;
+            width: 100%;
+            height: 100%;
+            background: rgba(8,8,8,0.9);
+            border-radius: 12px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+            /* z-index: 999;
+            width: 154px;
+            height: 154px;
+            border: 1px rgba(0, 0, 0, 0.6) solid;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none; */
+        }
+        .circle-text {
+            position: absolute;
+            text-align: center;
+            word-break: keep-all;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+
+            font-size:16px;
+            font-family:PingFangSC-Medium,PingFang SC;
+            font-weight:500;
+            color:rgba(255,255,255,1);
+            line-height:22px;
+        }
+        /* 已开始 */
+        .startContent,
+        .nolength {
+            min-height: 280px;
+        }
+        .startContent{
+            /* height: 64vw; */
+            /* overflow-y: scroll; */
+            padding: 3px 0;
+        }
+        .nolength {
+            width: 100%;
+            text-align: center;
+            line-height: 70vw;
+        }
+        /* 未开始 */
+        .list-nocontent {
+            width: 100%;
+            height: 100%;
+            font-size: 20px;
+            font-family: PangMenZhengDao;
+            color: rgba(185, 46, 2, 1);
+        }
+        .startItem {
+            display: flex;
+            background:rgba(255,243,243,1);
+            border-radius:12px;
+            margin-bottom: 27px;
+            height: 30px;
+            padding-right: 1px;
+        }
+        .item_ranking {
+            width: 35px;
+            height: 37px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 7px;
+            flex-shrink: 0;
+        }
+        .ranking {
+            font-size: 20px;
+            font-weight: bold;
+            font-family: SFNSDisplay;
+            color: rgba(0,0,0,1);
+            line-height: 20px;
+        }
+        .itemLeft {
+            flex: 5;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .item_name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 16px;
+            font-family: AlibabaPuHuiTi-Bold,AlibabaPuHuiTi;
+            font-weight: bold;
+            color: rgba(0,0,0,1);
+            line-height: 30px;
+        }
+        .itemRight {
+            flex: 5;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        .item-num {
+            font-size: 18px;
+            font-family: DINPro-Bold,DINPro;
+            font-weight: bold;
+            color: rgba(0,0,0,1);
+            line-height: 30px;
+        }
+        .item-num span {
+            font-size:16px;
+            font-family:AlibabaPuHuiTi-Bold,AlibabaPuHuiTi;
+            font-weight:bold;
+        }
+        /* 圆点 */
+        .date-pagination {
+            width: 100%;
+            position: relative;
+            text-align: center;
+        }
+        .date-pagination-bullet {
+            width: 6px !important;
+            height: 6px !important;
+            margin-right: 12px;
+        }
+        .date-pagination-bullet-active {
+            background: rgba(0, 0, 0, 1) !important;
+        }
+        .dateContent {
+            display: flex;
+            justify-content: space-between;
+        }
+        .dateItem {
+            display: inline-block;
+            background: rgba(255,236,236,1);
+            border-radius: 4px;
+            text-align: center;
+            padding: 0 1.5px 2px;
+        }
+        .date-day {
+            height: 26px;
+            font-size: 20px;
+            font-family: DINPro-Bold,DINPro;
+            font-weight: bold;
+            color: rgba(0,0,0,1);
+            line-height: 26px;
+        }
+        .date-time {
+            height: 14px;
+            font-size: 10px;
+            font-family: AlibabaPuHuiTi-Regular,AlibabaPuHuiTi;
+            font-weight: 400;
+            color: rgba(143,140,140,1);
+            line-height: 14px;
+        }
+        /* 弹框 */
+        .vote-modal {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            z-index: 999;
+            display: none;
+        }
+        /* 无票 */
+        .noTicket,
+        .vote-ticketContent {
+            display: none;
+        }
+        .vote-mask {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: rgba(0, 0, 0, .1);
+        }
+        .vote-modal-content {
+            width: 69.3vw;
+            background: rgba(0, 0, 0, .7);
+            z-index: 9999;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 8px;
+        }
+        .voteName {
+            font-size: 20px;
+            color: rgba(255, 218, 0, 1);
+            padding-bottom: 5px;
+        }
+        .ticketNum {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 1);
+        }
+        .voteButton {
+            width: 119px;
+            height: 38px;
+            background: rgba(255, 218, 0, 1);
+            border-radius: 8px;
+            text-align: center;
+            line-height: 38px;
+            font-size: 16px;
+            font-family: PingFang-SC-Bold, PingFang-SC;
+            font-weight: bold;
+            color: rgba(0, 0, 0, 1);
+            margin-bottom: 15px;
+        }
+        input {
+            border: 1px solid rgba(255, 255, 255, 1);
+            outline: none;
+            background: none;
+            padding: 8px;
+            width: 47.5vw;
+            color: rgba(255, 255, 255, 1);
+            margin: 25px 0;
+        }
+        .vote-about {
+            position: relative;
+            padding: 7px;
+
+        }
+        .vote-modal-close {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        .vote-column{
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #modal-bg {
+            z-index: 999;
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 1);
+            opacity: 0.6;
+            display: none;
+        }
+
+        #modal {
+            z-index: 999;
+            position: fixed;
+            top: 23.54%;
+            width: 74.13%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+        }
+
+        .modal-top {
+            z-index: 999;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+
+        .modal-top img {
+            width: 100%;
+            height: 137px;
+        }
+
+        .modal-desc {
+            z-index: 999;
+            position: fixed;
+            width: 100%;
+            top: 8.1%;
+            text-align: center;
+            display: none;
+        }
+
+        .modal-tip {
+            margin-top: 16px;
+            height: 39px;
+            font-size: 13px;
+            font-family: PingFang-SC-Bold, PingFang-SC;
+            font-weight: bold;
+            color: rgba(255, 255, 255, 1);
+            line-height: 13px;
+        }
+
+        .my-card {
+            height: 20px;
+            font-size: 20px;
+            font-family: PangMenZhengDao;
+            color: rgba(255, 220, 134, 1);
+            line-height: 23px;
+        }
+
+        .my-card-bot {
+            width: 27px;
+            height: 3px;
+            background: rgba(255, 220, 134, 1);
+            margin: 2px auto 0;
+        }
+
+        .modal-content {
+            position: relative;
+            width: 74.13vw;
+            height: 107.73vw;
+            border: 1px solid transparent;
+            margin: 0 auto;
+        }
+
+        .copyImage{
+            width: 74.13vw;
+            height: 107.73vw;
+            position: absolute;
+            top:0;
+            left:0;
+            z-index: 10002;
+            opacity:0;
+        }
+
+        .ticketText {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-family: PingFang-SC-Bold, PingFang-SC;
+            font-weight: bold;
+            color: rgba(255, 218, 0, 1);
+        }
+
+        .modal-content-bg {
+            position: absolute;
+            height: 100%;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .modal-content-bg img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .ticket_no {
+            font-size: 10px;
+            margin-bottom: 6px;
+        }
+
+        .modal-text {
+            text-align: center;
+            margin-top: 21vw;
+            font-family: HYXiaoBoZheZhiTiJ;
+            color: rgba(89, 89, 89, 1);
+        }
+
+        @media screen and (min-width: 414px) {
+            .modal-text {
+                margin-top: 25vw;
+            }
+        }
+
+        .modal-image-content {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-image {
+            width: 187px;
+            height: 130px;
+            margin: 6px 0 0 25px;
+        }
+
+        .modal-tips {
+            background: rgba(0, 0, 0, .5);
+            border-radius: 2px;
+            width: 60.2vw;
+            margin: 0 auto;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .modal-tips .tips {
+            font-size: 12px;
+            font-family: HYXiaoBoZheZhiTiJ;
+            color: rgba(255, 220, 134, 1);
+            padding: 4px 10px;
+        }
+
+        .modal-time {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            font-family: HYXiaoBoZheZhiTiJ;
+            color: rgba(75, 75, 75, 1);
+            padding: 0 30px;
+            margin-top: 6px;
+        }
+
+        .modal-content-bot {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 30px;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .middle-content-top {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .active {
+            background:rgba(255,25,0,1);
+            border-radius:4px;
+        }
+        .active .date-time {
+            color: #fff;
+        }
+        .mescroll {
+            position: relative;
+            height: 70vw;
+        }
+
+        .mescroll-upwarp {
+            height: auto;
+            padding: 0
+        }
+        .red {
+            color: #DA0000
+        }
+        .modal-bottom{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family:PingFang-SC-Medium,PingFang-SC;
+            font-weight:500;
+            color:rgba(255,255,255,1);
+            margin-top: 16px;
+        }
+        .modal-bottom img {
+            width: 210px;
+            height: 64px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="store mescroll-touch">
+        <div class="header">
+            <img src="image/icon-top.png" alt="" class="topimg">
+        </div>
+
+        <div class="middle">
+            <div class="middle-content">
+                <div class="middle-content-top">
+                    <img src="image/icon-heart.png" alt="" style="width: 100%; height: 20px;" class="middle-heart">
+                    <img src="image/icon-menmian.png" alt="" style="width: 277px; height: 81px; margin-top: 10px">
+                </div>
+                <div class="middle-content-bot">
+                    <div class="middle-search">
+                        <div class="search">
+                            <input type="text" class="searchInput">
+                            <div class="search-icon">
+                                <img src="image/icon-search.png" class="searchButton">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="middle-date">
+                        <p class="activity-date"></p>
+                        <div id="date-swiper" class="swiper-container" style="margin-top: 8px;">
+                            <div class="swiper-wrapper date-swiper-wrapper">
+        
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="middle-data">
+                        <div id="mescroll" class="mescroll">
+                            <!-- <div id="data-swiper" class="contnetList"> -->
+                                <div class="startContent"></div>
+                                <!-- 活动结束时显示 -->
+                                <div class="xuanba-end">
+                                    <div class="circle-text">
+                                        <div class="xuanba-end-text" style="margin-bottom: 10px;"></div>
+                                        <div></div>
+                                    </div>
+                                </div>
+                            <!-- </div> -->
+                        </div>
+                        <div class="middle-data-num">
+                            <div class="vote-num">已投出：<span></span></div>
+                            <div class="left-num">余票：<span></span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="middle-btn"><img src="image/icon-piaoka.png" alt="" style="width: 100%; height: 100%"></div>
+            </div>
+
+            <div style="width: 93.87%; height: 194px; margin: -140px auto 0;">
+                <img src="image/icon-dark.png" alt="" style="width: 100%; height: 100%;">
+            </div>
+            <div style="display: flex; justify-content: center; align-items: center;"><img src="image/icon-rule.png" class="xuanba_desc"></div>
+        </div>
+    </div>
+    <!-- 弹框 -->
+    <div class="vote-modal">
+        <div class="vote-mask"></div>
+        <div class="vote-modal-content">
+            <div class="vote-about">
+                <div class="vote-modal-close"><img src="image/icon-close.png" class="close"></div>
+                <!-- 票 -->
+                <div class="vote-ticketContent">
+                    <div class="vote-column">
+                        <span class="voteName"></span>
+                        <span class="ticketNum residueNum">剩余0票</span>
+                        <input type="number" placeholder="请输入票数" class="voteTicket">
+                        <div class="voteButton" onclick="handleVote()">投票</div>
+                    </div>
+                </div>
+                <!-- 无票 -->
+                <div class="noTicket">
+                    <div class="vote-column">
+                        <span class="ticketNum" style="padding-bottom: 18px">没有票了！</span>
+                        <div class="voteButton" onclick="handleEarn()">去赚票</div>
+                    </div>
+                </div>
+                <div class="noEnough">
+                    <div class="ticketText"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-bg"></div>
+    <div class="modal-top">
+        <img src="image/icon-modal-top.png">
+    </div>
+    <div class="modal-desc">
+        <div class="my-card">我的票卡</div>
+        <div class="my-card-bot"></div>
+        <div class="modal-tip">
+           <div> “将票卡分享至外部平台，每日票卡支持100人微信扫描” </div><br />
+            扫描登录后，双方均可获得2票
+        </div>
+    </div>
+
+    <div id="modal">
+        <div>
+            <div class="modal-content" id="modal-content">
+                <img src="" class="copyImage" crossOrigin="anonymous">
+                <div class="modal-content-bg">
+                    <img src="https://cdn.tinytiger.cn/FvV7_uYUnx5T1_RoL9OcDYwEHcyV" crossOrigin="anonymous">
+                </div>
+                <div class="modal-text">
+                    <div class="ticket_no">NO.<span id="ticket_no"></span></div>
+                    <div class="modal-image-content"><img src="https://cdn.tinytiger.cn/FgwokV5MvQpQrkacakFamljAUvqf" style="width: 76px; height: 16px;"></div>
+                    <div class="modal-image-content">
+                        <img src="https://cdn.tinytiger.cn/Fr4BGq3IoJPjNmzzuPup5Z8Yt7Ab" alt="" class="modal-image" crossOrigin="anonymous">
+                        <div class="modal-tips">
+                            <div class="tips">分子派对每日最美门面由你决定</div>
+                        </div>
+                    </div>
+                    <div class="modal-time">
+                        <div>DATE: <span class="red" id="card-date"></span></div>
+                        <div>票卡次数: <span class="red">100</span></div>
+                    </div>
+                    <div class="modal-content-bot">
+                        <div class="flexLeft">
+                            <img src="https://cdn.tinytiger.cn/Fp1cV2uwbC35FhDAsPtTnDMC6aLY" style="width: 155px; height: 16px" crossOrigin="anonymous">
+                            <div class="descript">扫描登录后,双方均可获得2票,送喜欢的人登新年门面资源位</div>
+                        </div>
+                        <div class="flexRight">
+                            <img src="" crossOrigin="anonymous"
+                                style="width: 63px; height: 64px;" id="qrcode">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-bottom">
+                <div>（长按图片可保存、分享）</div>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
+
+<script src="https://unpkg.com/swiper/js/swiper.min.js"> </script>
+<script src="../public/html2canvas.min.js"></script>
+<script src="../public/jweixin-1.3.2.js"></script>
+<script src="../public/template-web.js"></script>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/service.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/mescroll.min.js"></script>
+<!-- <script src="../public/ydui.js"></script> -->
+
+<script type="text/html" id="voteList">
+    {{each item.data v i}}
+        <div class="startItem">
+            <div class="itemLeft">
+                {{if i+(item.current_page-1)*10 == 0}}
+                    <div class="item_ranking"><span class="ranking"><img src="image/icon-1.png" alt="" class="rank-img"></span></div>
+                {{else if i+(item.current_page-1)*10 == 1}}
+                    <div class="item_ranking"><span class="ranking"><img src="image/icon-2.png" alt="" class="rank-img"></span></div>
+                {{else if i+(item.current_page-1)*10 == 2}}
+                    <div class="item_ranking"><span class="ranking"><img src="image/icon-3.png" alt="" class="rank-img"></span></div>
+                {{else}}
+                    <div class="item_ranking"><span class="ranking">{{i+1+(item.current_page-1)*10}}</span></div>
+                {{/if}}
+                    <div class="item_name">{{v.name}}</div>
+            </div>
+            <div class="itemRight">
+                <div class="item-num">{{v.vote_num || 0}} <span>票&nbsp;</span></div>
+                {{if $imports.topData.is_start === 1}}
+                    <span class="vote" onclick="voteClick({{v}})" style="line-height: 0"><img src="image/icon-vote.png" alt="" style="width: 58px; height: 28px"></span>
+                {{else}}
+                    <span class="vote" onclick="voteClick({{v}})" style="line-height: 0"><img src="image/icon-vote.png" alt="" style="width: 58px; height: 28px"></span>
+                {{/if}}
+            </div>
+
+        </div>
+        {{/each}}
+</script>
+
+<script type="text/html" id="dateList">
+    {{each item v i}}
+        <div class="swiper-slide">
+            <div class="dateContent">
+                    <div class="dateItem dateItem{{i}}" onclick="handleChangeDate({{v}})">
+                        <div class="date-day">{{v.day}}</div>
+                        <div class="date-time">{{v.second}}</div>
+                    </div>
+            </div>
+        </div>
+    {{/each}}
+</script>
+
+<script>
+    // baseUrl = 'http://192.168.1.241/wanpai_api/public/index.php/'   // 测试
+    // baseUrl = 'https://wanpai.titipa.cn/xhdj/wanpai_api/public/index.php/'   // 预发
+    baseUrl = 'https://fenz.tinytiger.cn/xhdj/wanpai_api/public/index.php/'   // 正式
+    var dates = [{day: 20, time: '18:00', active: true}, {day: 20, time: '18:00'}, {day: 20, time: '18:00'}, {day: 20, time: '18:00'}, {day: 20, time: '18:00'}, {day: 20, time: '18:00'}]
+    var config = {
+        url: 'NewyearFacade/getNominationList',
+        nominationUrl: 'NewyearFacade/launchNomination',
+        rankUrl: 'PartyNewyearFacadeMember/getSelectedRankList',
+        ticketUrl: 'PartyNewyearFacadeMember/getOtherTicket',
+        userVoteUrl: 'PartyNewyearFacadeMember/userVote',
+        getFacadeTicket: 'NewyearFacadeTicket/getFacadeTicket',
+        getDefaultViewId: 'PartyNewyearFacadeMember/getView',
+        getTopOne: 'PartyNewyearFacadeMember/getViewInfo',
+        dateUrl: 'PartyNewyearFacadeMember/getDateInfo',
+        type: 'get',
+        token: Request('token'),
+        status: false,
+        data: {
+            name: ''
+        },
+        rankData: {
+            view_id: 1,
+            name: '',
+            page:1,
+            per_page: 10
+        },
+        ticketData: {
+            view_id: 1
+        },
+        userVoteData: {
+            view_id: 1,
+            party_id: null,
+            num: null
+        },
+        ticketNum: 0,
+        number: null,
+        mescroll: initMescroll(),
+        up: 'up',
+        flush: 'flush'
+    }
+    var topData = {
+      name: '',
+      is_start: '',
+      topName: ''
+    }
+    template.defaults.imports.topData = topData
+
+    function handleChangeDate(data) {
+        $('.activity-date').html(data.month)
+
+        config.rankData.view_id = data.id
+        config.ticketData.view_id = data.id
+        config.userVoteData.view_id = data.id
+        config.rankData.page = 1
+        $(".searchInput").val(null)
+        config.rankData.name = null
+        getTicket(data.id)
+        getTopOne().then(() => {
+            getSelectedRankList(config.flush)
+        })
+    }
+
+    // swiper方法封装
+    var dateSwiper
+    function dateSwiper(initialSlide) {
+        mySwiper = new Swiper('#date-swiper', {
+            slidesPerView : 7,
+            initialSlide: initialSlide || 0
+        })
+    }
+    getDataList()
+    // 获取提名数据
+    function getDataList() {
+        requsetHttp(config.url, config.type, {}, null, (res) => {
+            if (res.code == 200) {
+                var list = template('dataList', { item: res.data })
+                $(".startContent").html(list)
+                $(".nocontent").hide()
+            } else if (res.code == 6000) {
+                $(".nocontent").show()
+            } else if (res.code == 6001) {
+                $(".store1").hide()
+                $(".store2").show()
+                getDefaultViewId().then(res => {
+                    getTopOne().then(() => {
+                        getSelectedRankList()
+                        getTicket()
+                        getFacadeTicket()
+                    }).catch(err => {
+                        console.log(err)
+                    })
+                }).catch(err => {
+                    console.log(err)
+                })
+            }
+        })
+    }
+    getDate()
+    // 获取日期
+    function getDate() {
+        requsetHttp(config.dateUrl, config.type, {}, null, (res) => {
+            if (res.code == 200) {
+                var list = template('dateList', { item: res.data })
+                config.dates = [...res.data]
+                $(".date-swiper-wrapper").html(list)
+                res.data.forEach((item, index) => {
+                    if(item.is_start === 1) {
+                        $('.dateItem' + index).addClass('active')
+
+                        $('.activity-date').html(item.month)
+
+                        dateSwiper(index)
+                    }
+                })
+                $('.dateItem').on('click', function() {
+                    $('.dateItem').removeClass('active');
+                    $(this).addClass('active')
+                })
+            }
+        })
+    }
+     //获取用户票卡
+     function getFacadeTicket(index) {
+        requsetHttp(config.getFacadeTicket, config.type, {}, config.token, (res) => {
+            if (res.code == 200) {
+                if (res.data) {
+                    $('#qrcode').attr('src', res.data.card_qrcode_url)
+                    $('#scan-times').html(res.data.scan_num)
+                    $('#card-date').html(res.data.ticket_date)
+                    $('#ticket_no').html(res.data.ticket_no)
+                }
+            }
+        })
+    }
+    // 获取列表数据
+    function getSelectedRankList(type) {
+        if (type == "flush") {
+            config.mescroll.optUp.page.num = 1
+            config.rankData.page = 1
+        }
+        if(topData.is_start === 2) {
+            config.rankData.history = 1
+        } else {
+            delete config.rankData.history
+        }
+        requsetHttp(config.rankUrl, config.type, config.rankData, config.token, (res) => {
+            if (res.code == 200) {
+                if (res.data.data.length == 0) {
+                    var list = `<div class="list-nocontent">
+                                    <div style="display: flex;flex-direction: column;justify-content: center; align-items: center;padding-top: 85px;">
+                                        <span>无搜索结果</span>
+                                    </div>
+                                </div>`
+                    $(".startContent").html(list)
+                } else if(res.data) {
+                    config.rankData.page ++
+                    $(".startContent").children('.list-nocontent').remove()
+
+                    var list = template('voteList', { item: res.data })
+                    if (type == config.flush) {
+                        config.mescroll.optUp.page.num = 1
+                        config.mescroll.setPageNum(config.rankData.page)
+                        config.mescroll.endByPage(res.data.data.length, res.data.last_page)
+                        $(".startContent").html(list)
+                    } else {
+                        config.mescroll.endByPage(res.data.data.length, res.data.last_page)
+                        $(".startContent").append(list)
+                    }
+                }
+            }
+        })
+    }
+    // 获取余票
+    function getTicket() {
+        requsetHttp(config.ticketUrl, config.type, config.ticketData, config.token, (res) => {
+            if (res.code == 200) {
+                config.ticketNum = res.data.num
+                // 已投票数显示
+                $(".vote-num span").text(res.data.total_num)
+                // 剩余票数显示
+                $(".left-num span").text(res.data.num)
+                // 投票弹出框显示
+                $(".residueNum").text('剩余 ' + config.ticketNum + ' 票')
+            }
+        })
+    }
+    // 获取默认页面
+    function getDefaultViewId() {
+        return new Promise((resolve, reject) => {
+            requsetHttp(config.getDefaultViewId, config.type, {}, config.token, (res) => {
+                if(res.code === 200) {
+                    config.rankData.view_id = res.data.id
+                    config.ticketData.view_id = res.data.id
+                    config.userVoteData.view_id = res.data.id
+                    resolve(res)
+                }
+            })
+        })
+    }
+    // 查看当前活动是否结束
+    function getTopOne() {
+        return new Promise((resolve, reject) => {
+            requsetHttp(config.getTopOne, config.type, config.ticketData, config.token, (res) => {
+                if (res.code == 200) {
+                    topData.is_start = res.data.is_start
+                    topData.name = res.data.name
+                    topData.topName = res.data.topName
+                    if(res.data.is_start === 2) {
+                        mescroll.scrollTo(0, 0)
+                        $('.mescroll').css("overflow","hidden")
+                        $(".xuanba-end").show()
+                        $(".circle-text div:nth-child(1)").html(`${topData.name}选拔已结束`)
+                        $(".circle-text div:nth-child(2)").html('TOP1' + topData.topName)
+                    } else if(res.data.is_start === 0) {
+                        $(".xuanba-end").hide()
+                        mescroll.scrollTo(0, 0)
+                        $('.mescroll').css("overflow","hidden")
+                        var list = `<div class="list-nocontent">
+                                            <div style="display: flex;flex-direction: column;justify-content: center; align-items: center;padding-top:85px;">
+                                                <span>活动还未开始哦~ </span>
+                                            </div>
+                                        </div>`
+                        $(".startContent").html(list)
+                    } else {
+                        $('.mescroll').css("overflow","auto")
+                        $(".xuanba-end").hide()
+                    }
+                    resolve()
+                } else {
+                    reject()
+                }
+            })
+        })
+    }
+    // 投票点击事件
+    function voteClick(value) {
+        $(".vote-modal").show()
+        if (Number(config.ticketNum) <= 0) {
+            $(".vote-ticketContent").hide()
+            $(".noTicket").show()
+        } else {
+            $(".vote-ticketContent").show()
+            $(".noTicket").hide()
+        }
+        $(".voteName").text('投票给' + value.name)
+        $(".residueNum").text('剩余 ' + config.ticketNum + ' 票')
+        config.userVoteData.party_id = value.id
+    }
+    // 去赚票
+    function handleEarn() {
+        $(".vote-modal").hide()
+        $(".voteTicket").val('')
+        config.userVoteData.num = null
+        $("#modal").show()
+        $("#modal-bg").show()
+        $(".modal-desc").show()
+        $(".modal-top").show()
+        takeScreenshot();
+        document.documentElement.style.position = 'fixed';
+        document.body.style.overflow = 'hidden'; //隐藏滚动条
+    }
+    // 投票输入框
+    $(".voteTicket").keyup(function () {
+        config.userVoteData.num = Number($(this).val())
+    })
+    // 投票请求事件
+    function handleVote() {
+        if(config.status) return
+        config.status = true
+        requsetHttp(config.userVoteUrl, config.type, config.userVoteData, config.token, (res) => {
+            if (res.code == 200) {
+                $(".noEnough").show()
+                setTimeout(() => {
+                    $(".noEnough").hide()
+                }, 1000)
+                $(".ticketText").text('投票成功')
+                $(".voteTicket").val('')
+                config.userVoteData.num = null
+                setTimeout(() => {
+                    $(".vote-modal").hide()
+                }, 500);
+                //定时器关闭弹窗
+                $(".voteTicket").val('')
+                getSelectedRankList(config.flush)
+                config.userVoteData.num = null
+                getTicket()
+            } else {
+                $(".noEnough").show()
+                setTimeout(() => {
+                    $(".noEnough").hide()
+                }, 1000)
+                $(".ticketText").text(res.msg)
+            }
+            config.status = false
+        })
+    }
+    var IMAGE_URL;
+    function takeScreenshot() {
+        var shareContent = document.getElementById('modal-content');//需要截图的包裹的（原生的）DOM 对象
+        var width = shareContent.offsetWidth; //获取dom 宽度
+        var height = shareContent.offsetHeight; //获取dom 高度
+        var canvas = document.createElement("canvas"); //创建一个canvas节点
+
+        var scale = 2; //定义任意放大倍数 支持小数
+        canvas.width = width * scale; //定义canvas 宽度 * 缩放
+        canvas.height = height * scale; //定义canvas高度 *缩放
+        canvas.getContext("2d").scale(scale, scale); //获取context,设置scale
+
+        // var rect = shareContent.getBoundingClientRect();//获取元素相对于视察的偏移量
+        // canvas.getContext("2d").translate(-rect.left,-rect.top);//设置context位置，值为相对于视窗的偏移量负值，让图片复位
+        var opts = {
+            scale: scale, // 添加的scale 参数
+            canvas: canvas, //自定义 canvas
+            logging: false, //日志开关
+            width: width, //dom 原始宽度
+            height: height, //dom 原始高度
+            backgroundColor: 'transparent',
+            useCORS: true
+        };
+        html2canvas(shareContent, opts).then(function (canvas) {
+            IMAGE_URL = canvas.toDataURL("image/png");
+            $('.copyImage').attr('src',IMAGE_URL);
+        })
+    }
+    $(".middle-btn").click(function () {
+        $("#modal").show()
+        $("#modal-bg").show()
+        $(".modal-desc").show()
+        $(".modal-top").show()
+        takeScreenshot();
+        document.documentElement.style.position = 'fixed';
+        document.body.style.overflow = 'hidden'; //隐藏滚动条
+    })
+    $("#modal-bg").click(function (e) {
+        $("#modal").hide()
+        $("#modal-bg").hide()
+        $(".modal-desc").hide()
+        $(".modal-top").hide()
+        document.documentElement.style.position = 'static';
+        document.body.style.overflow = '';
+    })
+    // $(".searchInput").keyup(function () {
+    //     var search = $(this).val().trim()
+    //     config.rankData.name = search
+    // })
+    $(".search-icon").on('click', function() {
+        config.rankData.name = $(".searchInput").val()
+        // config.rankData.name = $(this).val()
+        config.rankData.page = 1
+        if(topData.is_start !== 1) {
+            $(".xuanba-end").hide()
+            $('.dateItem').removeClass('active');
+            topData.is_start = 1
+            config.dates.forEach((item, index) => {
+                if(item.is_start === 1) {
+                    config.rankData.view_id = item.id
+                    config.ticketData.view_id = item.id
+                    config.userVoteData.view_id = item.id
+                    $('.dateItem' + index).addClass('active')
+                    $('.mescroll').css("overflow","auto")
+                    dateSwiper(index)
+                }
+            })
+        }
+        getSelectedRankList(config.flush)
+    })
+    $(".vote-mask, .close").click(function () {
+        $(".vote-modal").hide()
+        $(".voteTicket").val('')
+        config.userVoteData.num = null
+        $(".noEnough").hide()
+        $(".ticketText").text('')
+    })
+
+    /**
+    * mescroll 配置
+    */
+    function initMescroll() {
+        var mescroll = new MeScroll("mescroll", {
+            up: {
+                callback: upCallback,
+                isBounce: false,
+                auto: false,
+                // noMoreSize: 0,
+                // htmlNodata: '<p class="upwarp-nodata">没有更多了</p>'
+                htmlNodata: '',
+            },
+            // down: {
+            //     // auto: false,
+            //     // use: false,
+            //     callback: downCallback
+            // }
+        });
+        return mescroll;
+    }
+
+    /**
+     * 下拉刷新的回调
+     */
+    function downCallback() {
+        getSelectedRankList(config.flush);
+    }
+
+    /**
+     * 上拉加载的回调
+     */
+    function upCallback() {
+        getSelectedRankList(config.up);
+    }
+  </script>

@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title>看直播抽奖</title>
+    <link rel="stylesheet" href="css/iconfont.css">
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0
+    }
+    .main{
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+    html,body{
+        font-size: 14px;
+        width: 100%;
+        height: 100%;
+        background: url('image/watchVideo-bg.png') repeat ;
+        background-size: 100%
+    }
+    .watchVideo-title,
+    .watchVideo-msg,
+    .mask-msg{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center
+    }
+    .title-main,
+    .title-sub{
+        color: #fff;
+    }
+    .title-main{
+        font-size: 30px;
+        margin-top: 72px
+    }
+    .title-sub{
+        font-size: 16px;
+        margin-top: 20px
+    }
+    .title-sub span{
+        color: #f6e312
+    }
+    .title-img{
+        width:42vw;
+        height: 59vw;
+        margin-top: 10px
+    }
+
+    input{
+        width: 60%;
+        padding: 16px 20px;
+        background-color: #fff;
+        border-radius: 7px;
+        outline: medium;
+        border: none;
+        margin-bottom: 16px
+    }
+    .button{
+        width: 63%;
+        font-size: 18px;
+        background: url('image/watchVideo-button.png') no-repeat 100%/100% ;
+        background-size: 100%;
+        text-align: center;
+        padding: 16px 20px;
+        margin-top: 20px
+    }
+    .watchVideo-msg{
+        margin-top: 42px
+    }
+    .watchVideo-msg span{
+        color: #fff;
+        font-size: 12px;
+        display: none
+    }
+    .pop-up{
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: none
+
+    }
+    .mask{
+        width: 100%;
+        height: 100%;
+        top: 0;
+        z-index: 1;
+        background-color:#3c4247; 
+        opacity: 0.6;
+        position: absolute
+        
+    }
+    .mask-txt{
+        z-index: 999;
+        position: absolute;
+        left: 13%;
+        top: 25%
+        
+
+    }
+    .pop-up .mask-msg{
+        width: 75vw;
+        height: 57vw;
+        background:rgba(114,39,190,1);
+        border-radius:13px;
+        color: #fff;
+
+
+    }
+    .mask input{
+        width: 70%;
+        padding: 16px 20px;
+        background-color: #fff;
+        border-radius: 7px;
+        outline: medium;
+        margin-top: 10px;
+    }
+    .confirm{
+        width: 85%;
+        padding: 20px 0;
+        border-radius: 7px;
+        background: url('image/watchVideo-button.png') no-repeat 100%/100% ;
+        background-size: 100%;
+        text-align: center;
+        margin-top: 10px;
+    }
+    .verification-code{
+        color: #fff;
+        font-size: 12px;
+        display: none
+    }
+    .msk-title{
+        margin-bottom: 21px
+    }
+    .close{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        margin-top: 16px
+    }
+    .iconfont{
+        font-size: 35px;
+    }
+    .mask-msg input::-ms-input-placeholder{text-align: center;}
+    .mask-msg input::-webkit-input-placeholder{text-align: center;}
+</style>
+
+<body>
+    <div class="main">
+        <div class="watchVideo-title">
+            <span class="title-main">看直播 抢红包</span>
+            <div class="title-sub">注册立得10金币, 可抽<span>iPhoneXS Masx</span>等大礼</div>
+            <img src="image/watchVideo-packet.png" alt="" class="title-img">
+        </div>
+        <div class="watchVideo-msg">
+            <input type="number" placeholder="请输入手机号注册" maxlength="11">
+            <span class="checkout">请输入正确手机号</span>
+            <div class="button">立即领取现金</div>
+        </div>
+    </div>
+    <!-- 弹框 -->
+    <div class="pop-up">
+            <div class="mask"></div>
+            <div class="mask-txt">
+                    <div class="mask-msg">
+                            <span class="msk-title">填写验证码马上领取</span>
+                            <input type="number" placeholder="输入验证码" class="getCode">
+                            <span class="verification-code">验证码输入错误</span>
+                            <div class="confirm">确定</div>
+                        </div>
+                        <div class="close"><i class="iconfont icon-dankuangguanbianniu"></i></div>
+            </div>
+    </div>
+</body>
+ 
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/service.js"></script>
+<script src="../public/config.js"></script>
+<script src="js/iconfont.js"></script>
+<script>
+        var config = {
+        loginUrl:"LoginController/phoneLogin",
+        codeUrl: 'LoginController/sendVerificationCode',
+        type:'post',
+        txt1: '请输入正确手机号',
+        txt2: '验证码输入错误',
+    }
+
+    $(".iconfont").click(function () {
+        $(".pop-up").hide();
+    })
+    $(".button").click(function(){
+        var mobile = $(".watchVideo-msg input").val();
+        var data = { phone: mobile};
+        if(checkmobile(mobile)){
+            requsetHttp(config.codeUrl,config.type,data,null,(res)=>{
+                if(res.status){
+                    $(".pop-up").show();
+                }else{
+                    $(".checkout").text(res.msg).show();
+                }
+            })
+        }else{
+            $(".checkout").text(config.txt1).show();
+        }
+    })
+
+    $(".confirm").click(function(){
+        var user_id =Request('user_id');
+        var data = { phone: $('.watchVideo-msg input').val(), verification_code:  $('.getCode').val()};
+        if(user_id){
+            data.invite_user_id = user_id;
+            data.pagekey = 'live_lottery'
+        }
+        if(data.verification_code){
+            requsetHttp(config.loginUrl, config.type, data ,null,(res)=>{
+                if(res.status== 1){
+                     location.href = 'https://h5.lsjdj.cn/web_app/knapsack/download.html';
+                }else{
+                    $(".verification-code").text(res.msg).show();
+                }
+            })
+        }else{
+            $(".verification-code").text(config.txt2).show();
+        }
+    })
+
+    //input焦点隐藏提示信息
+    $(".watchVideo-msg input").focus(function(){
+        $(".checkout").text(config.txt1).hide();
+    })
+    $(".getCode").focus(function(){
+        $(".verification-code").text(config.txt2).hide();
+    })
+
+
+
+
+
+</script>

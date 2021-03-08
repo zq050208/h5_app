@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport"
+		content="width=device-width,viewport-fit=cover, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+	<title></title>
+	<link rel="stylesheet" href="./css/transmiCircle.css">
+	<link rel="stylesheet" href="./css/swiper-4.3.3.min.css">
+	<script src='./js/jquery.min.js'></script>
+	<script src="../public/config.js"></script>
+	<script src="../public/template-web.js"></script>
+	<script src="../public/tool.js"></script>
+	<script src="../public/service.js"></script>
+	<script src='./js/swiper-4.3.3.min.js'></script>
+	<script src='./js/vue.js'></script>
+</head>
+
+<body>
+	<div id='app' v-cloak>
+		<!-- <div class="header-wrap">
+			<div class="header-wrap-content">
+				<div class="header-left">
+					<img src="./img/mipmap-hdpi/x.png" alt="">
+					<span>用户昵称</span>
+				</div>
+				<div class="header-right">
+					<img src="./img/mipmap-hdpi/icn-more.png" alt="">
+				</div>
+			</div>
+		</div> -->
+		<div class="header-content" v-bind:style="{backgroundImage:'url(' + background + ')'}">
+			<div>
+				<div class="header-logo">
+					<div class="header-logo-left">
+						<img src="./img/mipmap-hdpi/bianzu.png" onclick="clickgoapp()" alt="" v-if='logo'>
+						<div class="header-logo-tips">
+							<span>小虎Hoo</span><br>
+							<span style="font-size: 12px;">玩“好”游戏</span>
+						</div>
+					</div>
+					<div class="header-logo-right" onclick="clickgoapp()">
+						<div class="go-app">
+							打开APP
+						</div>
+					</div>
+				</div>
+				<div class="user-logo-wrap">
+					<img :src="logo" alt="">
+					<div class="user-logo-tips">
+						<span class="user-logo-title">{{name}}</span><br>
+						<div class="introduce-content">
+							<span style="font-size: 14px;">{{one_introduce}}</span>
+						</div>
+					</div>
+				</div>
+				<div class="join-wrap">
+					<div class="join-content">
+						<div class="join-read"><span>{{add_circle_num}}人已读</span> | <span>共{{circle_post_num}}条内容</span></div>
+						<div class="circle-content">
+							<div class="circle-user">圈主：</div>
+							<div class="circle-user-img">
+								<div class="circle-user-img-content">
+									<ul>
+										<li v-for='item in circle_admin_list'><img :src="item.avatar" alt=""></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="join-btn" style="color: black;font-size: 14px;" onclick="clickgoapp()">
+						加入
+					</div>
+				</div>
+			</div>
+			<!-- 轮播图 -->
+			<div class="swiper-container" v-if='bannerFalg && banner.length'>
+				<div class="swiper-wrapper" onclick="clickgoapp()" v-if='banner.length'>
+					<div class="swiper-slide" v-for='item in banner'>
+						<img :src="item.image" mode="aspectFill" />
+					</div>
+				</div>
+				<div class="swiper-pagination"></div>
+			</div>
+			<!-- 公告 -->
+			<div class="announcement" v-if='noticeFalg'>
+				<div class="announcement-content">
+					<div class="announcement-title">
+						<img src="./img/mipmap-hdpi/lapa.png" alt="">
+						<span>公告</span>
+					</div>
+					<div class="announcement-text" ref='content'>
+						{{content}}
+					</div>
+				</div>
+			</div>
+			<!-- 置顶 -->
+			<div class="top-wrap" v-if='top_post_list.length && topFalg'>
+				<div class="top-content" v-for='(item, index) in top_post_list'
+					:style="{border: index+1 == top_post_list.length ? 'none' : ''}">
+					<span class="top-text">置顶</span>
+					<div class="top-wrap-tips">
+						<span>{{item.content}}</span>
+					</div>
+				</div>
+			</div>
+			<!-- tab -->
+			<div class="tab-wrap" v-if='tag_modular.length && tabFalg'>
+				<div class="tab-content">
+					<ul class="tab-content-ul">
+						<li v-for='(item,index) in tag_modular' :key='item.id' @click='tabToogle(item, index)'
+							:class="activeIndex == index ? 'activeClass' : ''  ">{{item.name}} <span></span></li>
+					</ul>
+				</div>
+			</div>
+			<!-- tab内容 -->
+			<div>
+				<div v-show='tabContent.length > 0'>
+					<div class="tab-content-wrap" v-for='item in tabContent'>
+						<div class="tab-content-top">
+							<div class="tab-content-top">
+								<div class="tab-img-box">
+									<img :src="item.avatar" alt="">
+								</div>
+								<div class="tab-img-tips">
+									<div class="img-tips-nickname">
+										<span>{{item.nickname}}</span>
+									</div>
+									<span style="font-size: 12px;">{{item.create_time}}</span>
+								</div>
+							</div>
+							<div class="attention" onclick="clickgoapp()">
+								+ 关注
+							</div>
+						</div>
+						<div class="tab-tips-content" ref='tabContent'>
+							<div class="item-content">
+								{{item.content}}
+							</div>
+							<div class="img-content">
+								<ul>
+									<li :style="{width: item.width}" v-for='(itemSon, index) in item.img_url'>
+										<img :src="itemSon" :style="{height: item.height}" alt="">
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="buttom-wrap">
+							<div class="dongtai" onclick="clickgoapp()">
+								<span>动态</span>
+							</div>
+							<div class="dianzan">
+								<div class="dianzan-icon" onclick="clickgoapp()">
+									<img src="./img/mipmap-hdpi/icn-dianzan.png" alt="">
+									<span>{{item.like_num}}</span>
+								</div>
+								<div class="pinglun-icon" onclick="clickgoapp()">
+									<img src="./img/mipmap-hdpi/icn-pinglun.png" alt="">
+									<span>{{item.comment_num}}</span>
+								</div>
+								<div class="xingwei-icon" onclick="clickgoapp()">
+									<img src="./img/mipmap-hdpi/icn-xingwei.png" alt="">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div style="display: none;">
+		<script type="text/javascript">document.write(unescape("%3Cspan id='cnzz_stat_icon_1278943282'%3E%3C/span%3E%3Cscript src='https://v1.cnzz.com/z_stat.php%3Fid%3D1278943282' type='text/javascript'%3E%3C/script%3E"));</script>
+	</div>
+	<script>
+		new Vue({
+			el: '#app',
+			data: {
+				message: 'Hello world',
+				activeIndex: 0,
+				tag_modular: [],
+				logo: '',
+				background: '',
+				name: '',
+				one_introduce: '',
+				add_circle_num: '',
+				circle_post_num: '',
+				content: '',
+				banner: [],
+				top_post_list: [],
+				bannerFalg: false,
+				noticeFalg: false,
+				topFalg: false,
+				tabFalg: false,
+				circle_admin_list: [],
+				tabContent: []
+			},
+			mounted() {
+				this.getCircleInfo()
+				document.setTitle = function (t) {
+					document.title = t;
+					var i = document.createElement('iframe');
+					i.style.display = 'none';
+					i.onload = function () {
+						setTimeout(function () {
+							i.remove();
+						}, 9)
+					}
+					document.body.appendChild(i);
+				}
+				setTimeout(() => {
+					if (!this.bannerFalg) {
+						return
+					} else {
+						var mySwiper = new Swiper('.swiper-container', {
+							// slidesPerView: 3,
+							// spaceBetween: 25,
+							centeredSlides: true,
+							pagination: {
+								el: '.swiper-pagination',
+							},
+							direction: 'horizontal',
+							loop: true,
+							autoplay: {
+								disableOnInteraction: false, // 用户操作后，不停止自动切换
+							}
+						})
+					}
+				}, 500)
+			},
+			methods: {
+				// 底部tab内容切换
+				tabToogle(item, index) {
+					this.tabContent = []
+					this.activeIndex = index
+					let config = {
+						tabContentUrl: 'circle/getCircleTagModularPostList',
+						type: 'post',
+						data: {
+							tag_modular_id: item.id,
+							fixed_modular_type: item.tag_type,
+							circle_id: Request('circle_id'),
+							page: 1,
+							per_page: 5
+						}
+					}
+					requsetHttp(config.tabContentUrl, config.type, config.data, null, (res) => {
+						this.tabContent = res.data.data
+						res.data.data.forEach(item => {
+							if (item.img_url) {
+								let tempLength = item.img_url.length
+								if (tempLength) {
+									if (tempLength == 1) {
+										item.width = '100%'
+										item.height = '150px'
+									}
+									if (tempLength == 2 || tempLength == 4) {
+										item.width = '48%'
+										item.height = '120px'
+									}
+									if (tempLength == 3 || tempLength == 5 || tempLength == 6 || tempLength == 7 || tempLength == 8 || tempLength == 9) {
+										item.width = '32%'
+										item.height = '90px'
+									}
+								}
+							}
+						})
+					})
+				},
+				// tab内容
+				getCircleInfo() {
+					var config = {
+						circleUrl: 'circle/getGameCircleInfo',
+						type: 'post',
+						data: {
+							circle_id: Request('circle_id'),
+						}
+					}
+					requsetHttp(config.circleUrl, config.type, config.data, null, (res) => {
+						console.log(res.data, 'dasdasda')
+						this.logo = res.data.game_info.logo
+						document.setTitle(res.data.game_info.name)
+						this.name = res.data.game_info.name
+						this.background = res.data.game_info.background
+						this.one_introduce = res.data.game_info.one_introduce ? res.data.game_info.one_introduce : ''
+						this.logo = res.data.game_info.logo
+						this.add_circle_num = res.data.circle_info.add_circle_num
+						this.circle_post_num = res.data.circle_info.circle_post_num
+						this.content = res.data.notice ? res.data.notice.content : ''
+						this.top_post_list = res.data.top_post_list
+						this.banner = res.data.banner
+						this.circle_admin_list = res.data.circle_admin_list
+						this.tag_modular = res.data.tag_modular
+						var commenttitlestr = `<div class='commenttitlefont' style='padding-bottom: 15px;'>` + res.data.title + `</div>`
+
+						res.data.tab_modular.forEach(item => {
+							if (item && item.is_type == 1) {
+								this.bannerFalg = item.is_show ? true : false
+							}
+							if (item && item.is_type == 2) {
+								this.noticeFalg = item.is_show ? true : false
+							}
+							if (item && item.is_type == 3) {
+								this.topFalg = item.is_show ? true : false
+							}
+							if (item && item.is_type == 4) {
+								this.tabFalg = item.is_show ? true : false
+							}
+						})
+						if (this.tabFalg) {
+							let tag_type = this.tag_modular[0].tag_type
+							let id = this.tag_modular[0].id
+							let config = {
+								tabContentUrl: 'circle/getCircleTagModularPostList',
+								type: 'post',
+								data: {
+									tag_modular_id: id,
+									fixed_modular_type: tag_type,
+									circle_id: Request('circle_id'),
+									page: 1,
+									per_page: 5
+								}
+							}
+							this.tabContent = []
+							requsetHttp(config.tabContentUrl, config.type, config.data, null, (res) => {
+								this.tabContent = res.data.data
+								res.data.data.forEach(item => {
+									if (item.img_url) {
+										let tempLength = item.img_url.length
+										if (tempLength) {
+											if (tempLength == 1) {
+												item.width = '100%'
+												item.height = '200px'
+											}
+											if (tempLength == 2 || tempLength == 4) {
+												item.width = '48%'
+												item.height = '120px'
+											}
+											if (tempLength == 3 || tempLength == 5 || tempLength == 6 || tempLength == 7 || tempLength == 8 || tempLength == 9) {
+												item.width = '32%'
+												item.height = '90px'
+											}
+										}
+									}
+								})
+								// console.log(res.data.data, 'res')
+							})
+						}
+					})
+				}
+			}
+		})
+	</script>
+	<script>
+		// 前去app
+		function clickgoapp() {
+			goApp(7, Request('circle_id'))
+		}
+	</script>
+</body>
+
+</html>

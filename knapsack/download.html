@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <title>下载页面</title>
+</head>
+<style>
+    *{
+        padding: 0;
+        margin: 0;
+    }
+    html,body{
+        width: 100%;
+        height: 100%;
+        background:rgba(245,159,0,1)
+       
+    }
+    .download-logo{
+        width: 47vw;
+        height: 21vw;
+        margin: 30px auto auto auto;
+    }
+    .download-logo img{
+        width: 100%;
+        height: 100%;
+    }
+    .download-bg{
+        width: 100%;
+        height: 95vw;
+    }
+    .button{
+        width: 70%;
+        padding: 15px 0;
+        border: 1px solid #fff;
+        margin: 0 auto;
+        text-align: center;
+        color: #fff;
+        margin-top: 50px;
+        border-radius: 6px
+    }
+
+</style>
+<body>
+    <div class="main">
+       <div class="download-logo"> <img src="image/download-logo.png" alt="" ></div>
+       <img src="image/download-bg.png" alt="" class="download-bg">
+       <div class="button">立即下载</div>
+    </div>
+    
+</body>
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/service.js"></script>
+<script src="../public/config.js"></script>
+<script>
+    $(".button").click(function(){
+        if (browser.versions.android) {
+            //    location.href = 'https://a.app.qq.com/o/simple.jsp?pkgname=com.jumeng.lsj&channel=0002160650432d595942&fromcase=60001'
+            if (browser.versions.weixin) {
+                alert('请在浏览器中打开下载')
+            } else {
+                location.href = 'https://cdn.tinytiger.cn/titi-4.4.1_28_titi_441_jiagu_sign.apk'
+            }
+        } else {
+            location.href = 'https://itunes.apple.com/cn/app/%E8%80%81%E6%92%95%E9%B8%A1%E7%94%B5%E7%AB%9E/id1325045766?mt=8'
+        }
+    })
+</script>

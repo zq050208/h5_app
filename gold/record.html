@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <link rel="stylesheet" href="css/ydui.css">
+    <title>金币记录</title>
+</head>
+<body>
+<style>
+    body,html{
+        font-family: PingFangSC-Regular;
+        color: #333333 ;
+    }
+
+    .m-cell{
+        margin-bottom: 0 !important;
+    }
+
+    .cell-left{
+        flex-wrap: wrap;
+        justify-content:flex-start;
+    }
+
+    .source{
+        width: 100%;
+        position: relative;
+        font-size: 16px;
+    }
+
+    .time{
+        width: 100%;
+        position: relative;
+        font-size: 14px;
+        color: #999999;
+    }
+
+    .cell-right{
+        min-height:1.4rem;
+        font-family: PingFangSC-Medium;
+        font-size: 14px;
+        color: #999999;
+    }
+
+    * { touch-action: pan-y; }
+</style>
+
+<section class="g-scrollview">
+    <section id="J_List">
+        <div id="J_ListContent" class="m-list list-theme4"></div>
+    </section>
+</section>
+
+
+
+<script src="../public/jquery.min.js"></script>
+<script src="../public/ydui.flexible.js"></script>
+<script src="../public/ydui.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+<script>
+
+    var config = {
+        conversionListUrl: 'GoldController/getConversionList',                               //获取用户金币钱包
+        token: Request('token') ,
+        type: 'post',
+        page: 1,
+        pageSize: 10
+    };
+
+    $('#J_List').infiniteScroll({
+        pageSize: config.pageSize,
+        initLoad: true,
+        loadingHtml: '<strong>加载中...</strong>',
+        doneTxt: '<strong>没有更多数据了.</strong>',
+        loadListFn: function () {
+            var def = $.Deferred();
+            requsetHttp( config.conversionListUrl, config.type, { page: config.page}, config.token ,(res)=>{
+                var list = res.data.list, strHtml = '';
+                if(list.length){
+                    for( var i=0; i<list.length; i++){
+                        strHtml += '<div class="m-cell"><div class="cell-item"><div class="cell-left"><span class="source">'+list[i].desc+'</span><span class="time">'+list[i].create_time+'</span> </div><div class="cell-right">'+(list[i].flag == 1 ? "+"+list[i].gold : list[i].gold)+'</div></div></div>';
+                    }
+                    $('#J_ListContent').append(strHtml);
+                    def.resolve(list);
+                    ++config.page;
+                }else{
+                    $('.list-loading strong').text('暂无记录');
+                }
+            });
+            return def.promise();
+        }
+    });
+
+    $('#J_ListContent').pullRefresh({
+        pageSize: config.pageSize,
+        initLoad: false,
+        loadingHtml: '<strong>加载中...</strong>',
+        loadListFn: function () {
+            var def = $.Deferred();
+            config.page = 1;
+            requsetHttp( config.conversionListUrl, config.type, { page: config.page}, config.token,(res)=>{
+                var list = res.data.list, strHtml = '';
+                for( var i=0; i<list.length; i++){
+                    strHtml += '<div class="m-cell"><div class="cell-item"><div class="cell-left"><span class="source">'+list[i].desc+'</span><span class="time">'+list[i].create_time+'</span> </div><div class="cell-right">'+(list[i].flag == 1 ? "+"+list[i].gold : list[i].gold)+'</div></div></div>';
+                }
+                $('#J_ListContent').html('');
+                $('#J_ListContent').prepend(strHtml);
+                def.resolve();
+            });
+            return def.promise();
+        }
+    });
+</script>
+
+</body>
+</html>

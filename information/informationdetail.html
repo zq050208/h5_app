@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <title></title>
+    <link rel="stylesheet" href="viewer/viewer.min.css">
+    <link rel="stylesheet" href="iconfont/iconfont.css">
+    <link rel="stylesheet" href="../public/mescroll.min.css">
+    <link rel="stylesheet" href="../public/ydui.css">
+    <link rel="stylesheet" href="css/informationdetail.css?v=Math.random()">
+</head>
+
+<body>
+    <div class="pullmessage">
+        <div class="pullmessage_top">
+            <div class="pullmessage_title"></div>
+            <div class="pullmessage_msg" style="    width: 100%; display: flex;align-items: center;justify-content: space-between; color: rgba(37, 39, 42, 0.5); padding: 12px 0">
+                <span class="pullmessage_time"></span>
+                <div class="detailes_content" style="display: none">
+                    <div class="detailes" style=" display: flex; align-items: center; justify-content: space-between;color: rgba(37, 39, 42, 0.5);">
+                        <div class="detailes_msg" style="  display: flex; align-items: center"><img src="image/icon-trample.png" alt="" style="width: 12px; height: 10px"> <span class="detailes_watch" style=" margin-left: 4px"></span></div>
+                        <div class="detailes_msg" style="  display: flex; align-items: center;margin-left: 10px"><img src="image/icon-message.png" alt="" style="width: 12px; height: 10px"> <span class="detailes_review" style=" margin-left: 4px"></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="publlmessageContent"></div>
+    </div>
+    <!-- <div class="guessing_msg" style="display: none">
+            <div class="guessing" style="  padding: 0px  15px 30px 15px;  background-color: #fff; display: flex; color:rgba(255,148,0,1);align-items: center;">
+                    <div class="guessing_name"> </div>
+                    <div class="predicted" style="  width: 66px; height: 20px; background:rgba(255,148,0,1); border-radius:2px; color: #fff;font-size: 10px; display: flex; margin-left: 6px; align-items: center;justify-content: center">
+                        <span>点击预测</span>
+                        <span class="iconfont icon-xiangyoujiantou predictedIconfont" style="font-size: 8px"></span>
+                    </div>
+                </div>
+    </div> -->
+
+    <div class="buttommsg"></div>
+    <div class="commentMsg"></div>
+    <div class="pop"></div>
+</body>
+
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.3.2.js"></script>
+<script src="viewer/viewer.min.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/mescroll.min.js"></script>
+<script src="../public/service.js"></script>
+<script src="../public/ydui.js"></script>
+<script>
+    var options = {
+        url: $('img').src,
+        button: false,
+        navbar: false,
+        title: false,
+        toolbar: false,
+        fullscreen: false,
+        tooltip: false,
+        minZoomRatio: 1,
+        scalable: false,
+        movable: false
+    }
+    var config = {
+        newsInfoUrl: 'NewsController/getNewsInfo',                                                     // 资讯详情url
+        newsActionUrl: 'NewsController/newsAction',                                                    // 资讯操作url
+        commentUrl: 'NewsController/commentList',                                                      // 评论列表url
+        discussUrl: 'NewsController/comment',                                                          // 发表评论url
+        reporUrl: 'NewsController/report',                                                             // 举报url
+        giveLikeUrl: 'NewsController/commentLike',                                                     // 资讯点赞url
+        tokenUrl:"NewsController/getToken",                                                            // 小程序获取token
+        deleteUrl:"NewsController/delComment",                                                         // 删除评论
+        userAuth: 'AgentController/userAuth',                                                          // 获取代理用户授权
+        type: "post",                                                                                  // 请求方式
+        data: {
+            news_id: Request("news_id")  ,                                                              // 资讯id
+            category_id: Request("category_id")  ,                                                      // 分类id
+        },
+        commentData: {                                                                                 // 文章评论
+            news_id: Request("news_id")  ,                                                             // 文章id
+            page: 1,                                                                                   // 当前页 
+            time_sort: null,                                                                           // 排序
+            category_id: Request("category_id") ,
+        },
+        discussData: {                                                                                 // 发表评论data    
+            news_id: Request("news_id") ,                                                              // 文章id
+            parent_user_id: 0,                                                                         // user_id     
+            content: '',                                                                               // 评论内容
+            category_id: Request("category_id") 
+        },
+        reportData: {                                                                                  // 举报data
+            news_id: Request("news_id")  ,                                                             // 文章id
+            user_type: 1,                                                                              // 被举报对象的类型
+            comment_id: null,                                                                          // 评论id
+            report_type: null                                                                          // 举报类型
+        },
+        givelikeData: {                                                                                // 点赞data
+            news_id: Request("news_id")  ,                                                             // 文章id
+            comment_id: null,                                                                          // 评论id
+            category_id: Request("category_id")
+        },
+        deleteData:{
+            news_id:Request("news_id"),                                                             // 文章id
+            comment_id:null                                                                         // 文章评论id
+        },
+        tokenData:{
+            token:''
+        },
+        news_replyUrl:'',                                                                             //  回复详情地址
+        user_info: {} ,                                                                               // 用户信息
+        like_status: true,                                                                            // 资讯操作状态
+        currentSrc: "",                                                                               // 当前图片的地址
+        share: false,                                                                                 // 是否分享状态
+        imgShareUrl: 'https://cdn.lsjdj.cn/2019/05/24/cbf50e5f0d1e3e5ffcedee17e369cb5f',              // 分享按钮图标
+        downloadUrl: 'https://h5.tinytiger.cn/web_app/knapsack/download.html',                             // 下载地址
+        mescroll: '',
+        up: 'up',
+        flush: 'flush',
+        selectIndex: 0,                                                                             // 当前点击的index
+        likeIndex: 0,                                                                               // 当前点击的index
+        isState: 0,                                                                                 // 判断是回复还是评论
+        iscollect: false,                                                                           // 资讯是否收藏  
+        sendStatu: 0,                                                                               // 是否点击黄色状态按钮发送
+        content: "",                                                                                // 文本内容
+        totals: [], 
+        wkzstoken: Request('wkzstoken'),                                            // 网咖助手token
+        token: Request('token'),                                                    // app token 
+        smallroutineToken:"",                                                       // 小程序与app兑换的token
+        appversion :Request("appversion"),                                          // 版本号
+        guess_token: null,                                                          // 竞猜token
+        xhdj_token: null,                                                           // 小虎token
+        xhdj_uid: Request('xhdj_uid'),                                              // 小虎user_id
+        channel: Request('channel'),                                                // 区别小虎电竞的字段
+        handicap: null,                                                             // 跳转竞猜页面的盘口id
+    }
+    var appversion = Version(config.appversion,"4.3.0")
+    $(function(){
+        if(config.wkzstoken){
+        baseUrl='https://appweekly.lsjdj.cn/'
+        rechangeToken()
+    }
+    config.user_info = getUserInfo()
+    requsetHttp(config.newsInfoUrl, config.type, config.data, config.user_info.token || null,(res)=>{
+        var data = res.data;
+        if (data.news_status.is_collec == 0) {
+            config.iscollect = false
+        } else {
+            config.iscollect = true
+        }
+        document.title = res.data.title;
+        // 显示右上角分享按钮
+        showWebShare({ type: 1, content: config.imgShareUrl, method: 'callShowShare' });
+        //此处添加资讯内容
+        $(".pullmessage_title").html(data.title)
+        $(".pullmessage_time").html(getDateDiff(data.update_time));
+        $(".detailes_content").show()
+        $(".detailes_watch").html(data.views)
+        $(".detailes_review").html(data.comment_num)
+        $('.publlmessageContent').html(data.content);
+        config.handicap = data.guess_id
+        config.news_replyUrl = data.news_reply
+        if(data.god_prediction == 1){
+            $(".guessing_msg").show()
+        }else{
+            $(".guessing_msg").hide()
+        }
+        // getUserAuth()
+        $(".guessing_name").text(data.channel)
+        addAction(data);
+        pop();
+        if (config.wkzstoken || config.channel) {
+            config.share = false
+            return
+        }
+        if(appversion!=0){
+            return
+        }
+        addReview();
+        addComment()
+    });
+    // 跳转竞猜
+    $(".guessing_msg").click(function(){
+        var url = encodeURI('http://h5.ties.t/#/?xhdj='+config.xhdj_token+"&guess="+config.guess_token)
+        if (config.channel && config.handicap ) {
+            window.location.href= url+"&channel="+config.channel+"&handicap="+config.handicap
+        } else if (config.handicap && !config.channel) {
+            window.location.href = url+"&handicap="+config.handicap
+        } else  if (!config.handicap && config.channel) {
+            window.location.href = url+"&channel="+config.channel
+        } else {
+            window.location.href = url
+        }
+    })
+
+    })
+
+    /***
+     * 增加资讯操作
+     * @param data
+     */
+    function addAction(data) {
+        $('.buttommsg').append(`
+        <div class="bottom">
+            <div class="line">
+                <div class="lines"></div>
+                <span>${config.wkzstoken? '来自：电竞赛事' :'来自：小虎电竞赛事'}</span>
+                <div class="lines"></div>
+            </div>
+            <div class="praise">
+                <div class="praise-item praiseup">
+                    <img src="${data.news_status.is_like == 0 ? 'image/icon-nopraise.png' : 'image/icon-praise.png'}" class="praising">
+                    <span>${data.support || 0}</span>
+                </div>
+                <div class="praise-item praisedown">
+                    <img src="${data.news_status.is_dislike == 0 ? 'image/icon-noselectprasedown.png' : 'image/icon-selectpraisedown.png'}" class="nopraise">
+                    <span>${data.dislike || 0}</span>
+                </div>
+                <div class="collect-item">
+                    <img src="image/icon-inform.png" class="collect">
+                    <span style="font-size:10px">举报</span>
+                </div>
+            </div>
+        </div>`);
+        var obj = {
+            shareUrl: window.location.href, 
+            title: data.title,
+            desc: data.summary,
+            img: data.cover_img
+        }
+        if (obj.desc == null) {
+            obj.desc = ''
+        }
+        addFooterShare(obj);
+        // lookBigImg();
+
+        // 点赞up
+        $('.praiseup').click(function () {
+
+            if (!config.user_info.token && !config.wkzstoken && !config.channel) {
+                goLogin();
+                return
+            }
+            var num = $(this).children('span').text();
+            if (!config.like_status) return;
+            if (data.news_status.is_dislike == 1) {
+                var count = $('.praisedown').children('span').text();
+                data.news_status.is_dislike = 0;
+                $('.praisedown').children('img').attr('src', 'image/icon-noselectprasedown.png');
+                $('.praisedown').children('span').text(--count);
+            }
+            if (data.news_status.is_like == 0) {
+                data.news_status.is_like = 1;
+                $(this).children('img').attr('src', 'image/icon-praise.png');
+                $(this).children('span').text(++num);
+            } else {
+                data.news_status.is_like = 0;
+                $(this).children('img').attr('src', 'image/icon-nopraise.png');
+                $(this).children('span').text(--num);
+            }
+            newsAction(1);
+        });
+        //点赞down
+        $('.praisedown').click(function () {
+            if (!config.user_info.token && !config.wkzstoken && !config.channel) {
+                goLogin();
+                return
+            }
+            var num = $(this).children('span').text();
+            if (!config.like_status) return;
+            if (data.news_status.is_like == 1) {
+                var count = $('.praiseup').children('span').text();
+                data.news_status.is_like = 0;
+                $('.praiseup').children('img').attr('src', 'image/icon-nopraise.png');
+                $('.praiseup').children('span').text(--count);
+            }
+            if (data.news_status.is_dislike == 0) {
+                data.news_status.is_dislike = 1;
+                $(this).children('img').attr('src', 'image/icon-selectpraisedown.png');
+                $(this).children('span').text(++num);
+            } else {
+                data.news_status.is_dislike = 0;
+                $(this).children('img').attr('src', 'image/icon-noselectprasedown.png');
+                $(this).children('span').text(--num);
+            }
+            newsAction(2);
+        });
+        // 收藏
+        $('.collect-item').click(function () {
+            if (config.wkzstoken) {
+                $(".pupReport").show();
+                $(".comment").hide()
+            } else if (config.channel) {
+                $(".pupReport").show();
+                $(".comment").hide()
+            } else {
+                if (!config.user_info.token) {
+                    goLogin();
+                    return
+                }
+                $(".pupReport").show();
+                $(".comment").hide()
+            }
+        })
+    }
+    function pop() {
+        $(".pop").append(` <div class="pup">
+            <div class="pup-mask"></div>
+            <div class="operateContent">
+                <div class="discuss">
+                    <span class="commentBtn">评论操作</span>
+                    <span class="replyBtn">回复</span>
+                    <span class="copyBtn">复制</span>
+                    <span class="deleteBtn">删除</span>
+                    <span class="reportBtn">举报</span>
+                </div>
+                <div class="cancel">
+                    <span class="cancelBtn">取消</span>
+                </div>
+            </div>
+        </div>
+        <div class="pupReport">
+                <div class="reportmask"></div>
+                <div class="reportContent">
+                        <div class="report-choose"><span>请选择举报类型</span><img src="image/icon-close.png" alt="" class="close-report"></div>
+                    <div class="reportTxt">
+                            <div class="report-item"><span class="reporttext"><span class="reportedtxt">已举报</span>垃圾广告营销</span><span class="revocation"></span></div>
+                            <div class="report-item"><span class="reporttext"><span class="reportedtxt">已举报</span>谩骂辱骂</span><span class="revocation"></span></div>
+                            <div class="report-item"><span class="reporttext"><span class="reportedtxt">已举报</span>违法反动</span><span class="revocation"></span></div>
+                            <div class="report-item"><span class="reporttext"><span class="reportedtxt">已举报</span>淫秽色情</span><span class="revocation"></span></div>
+                            <div class="report-item"><span class="reporttext"><span class="reportedtxt">已举报</span>嘲讽/不友善</span><span class="revocation"></span></div>
+                            <div class="report-item"><span class="reporttext"><span class="reportedtxt">已举报</span>游戏私服外挂</span><span class="revocation"></span></div>
+                            <div class="report-item another"><span>其他问题描述</span><img src="image/icon-rightarrow.png" alt="" style="width:12px; height:12px"></div>
+                    </div>
+                    <span class="confirm">完成</span>
+                </div>           
+            </div>
+                <!-- 输入文本弹框 -->
+                <div class="pupInput">
+                    <div class="inputmask"></div>
+                    <div class="inputContent">
+                        <div class="inputbar"><img src="image/icon-leftarrow.png" alt="" style="width:12px; height:12px"></div>
+                        <div class="input">
+                            <div class="inputmsg">
+                                <textarea placeholder="请描述一下对方的违规行为！" class="textareainput" maxlength="200"  style="overflow-y:hidden"></textarea>
+                                <div class="num"><span class="textnum">0</span>/200</div>
+                            </div>
+                
+                        </div>
+                        <div class="submit">提交</div>
+                    </div>
+                </div>`)
+
+        // 删除评论
+        $(".deleteBtn").click(function(e){
+            e.stopPropagation()
+            $(".pup").hide();
+            $(".comment").show()
+            config.deleteData.comment_id = $(".reply-item").eq(config.selectIndex).attr("data-commentid")
+            deleteList(function(){
+                $(".commentList").empty()
+                    config.mescroll.optUp.page.num = 1;
+                    config.commentData.page = 1
+                    config.commentData.time_sort = null
+                    getcommentList();
+            })
+
+        })
+
+        // 举报弹框隐藏
+        $(".close-report , .reportmask").click(function (e) {
+            e.stopPropagation()
+            $(".pupReport").hide()
+            $(".comment").show()
+            $(".reported").removeClass("reported")
+            $(".noreportedtxt").removeClass("noreportedtxt").addClass("reportedtxt")
+            $(".revocation").text("")
+        })
+
+        // 点击其他问题显示文本弹框
+        $(".another").click(function (e) {
+            e.stopPropagation()
+            $(".pupReport").hide()
+            $(".pupInput").show()
+            $(".reported").removeClass("reported")
+            $(".noreportedtxt").removeClass("noreportedtxt").addClass("reportedtxt")
+            $(".revocation").text("")
+        })
+
+        // 隐藏文本弹框
+        $(".inputmask").click(function (e) {
+            e.stopPropagation()
+            $(".pupInput").hide();
+            $(".comment").show();
+            $(".textareainput").val("")
+            $(".textnum").text("0")
+        })
+
+        // 举报点击事件
+        $(".reportBtn").click(function (e) {
+            e.stopPropagation()
+            $(".pup").hide()
+            $(".pupReport").show()
+            var comment_id = $(".reply-item").eq(config.selectIndex).attr("data-commentid");
+            config.reportData.user_type = 2
+            config.reportData.comment_id = comment_id
+        })
+
+        // 举报选择类型
+        $(" .report-item").click(function (e) {
+            e.stopPropagation()
+            $(this).children('.revocation').text("撤销").parent().siblings().children(".revocation").text("")
+            $(this).children(".reporttext").addClass("reported").parent().siblings().children(".reporttext").removeClass("reported")
+            $(this).children(".reporttext").children(".reportedtxt").removeClass("reportedtxt").addClass("noreportedtxt")
+            $(this).siblings().children(".reporttext").children(".noreportedtxt").removeClass("noreportedtxt").addClass("reportedtxt")
+            config.reportData.report_type = $(this).index() + 1
+        })
+
+        // 撤销举报
+        $(".revocation").click(function (e) {
+            config.reportData.report_type = null
+            e.stopPropagation()
+            $(".reported").removeClass("reported")
+            $(".noreportedtxt").removeClass("noreportedtxt").addClass("reportedtxt")
+            $(this).text("")
+        })
+
+        // 举报输入文字时间
+        $(".textareainput").keyup(function () {
+            var length = $(this).val().trim().length;
+            $(".textnum").text(length)
+            if (length >= 200) {
+                $(".textnum").text("200")
+                return
+            }
+        })
+
+        // 点击确定举报
+        $(".confirm").click(function (e) {
+            e.stopPropagation()
+            if (config.reportData.report_type == null) {
+                YDUI.dialog.toast('请选择举报类型', 2000)
+                return
+            }
+            reportMsg()
+            $(".comment").show()
+            $(".pupReport").hide()
+            $('.revocation').text("")
+            $(".reported").removeClass("reported")
+            $(".noreportedtxt").removeClass("noreportedtxt").addClass("reportedtxt")
+        })
+        // 其他类型提交举报
+        $(".submit").click(function (e) {
+            e.stopPropagation()
+            config.reportData.report_desc = $(".textareainput").val()
+            if (config.reportData.report_desc.length == 0) {
+                YDUI.dialog.toast('请描述对方违规行为', 2000)
+                return
+            }
+            reportMsg()
+            $(".pupInput").hide()
+            $(".comment").show()
+            $(".textareainput").text("")
+            config.sendStatu = 0
+            $(".nopost-message").css("background", "#ccc")
+
+        })
+        // 返回上一个页面
+        $(".inputbar img").click(function(e){
+            e.stopPropagation()
+            $(".pupInput").hide()
+            $(".textareainput").text("")
+            $(".pupReport").show()
+            
+        })
+
+    }
+
+    // 资讯评论
+    function addReview(type) {
+        $(".commentMsg").empty()
+        $(".commentMsg").append(`<div class="reply">
+            <div class="reply-num">
+                <span>全部评论</span>
+                <div class="sort">
+                    <img src="${config.commentData.time_sort == null ? 'image/icon-sort-hot.png' : 'image/icon-sort-time.png'}" alt="" class="sort-img">
+                    <span class="sort-time">${config.commentData.time_sort == null ? '按热度' : '按时间'}</span>
+                </div>
+            </div>
+            <div id="mescroll" class="mescroll">
+                <div class="mescroll-content">
+                    <ul class="commentList">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+       
+        `)
+        config.mescroll = initMescroll()
+
+        // 排序切换事件
+        $(".sort").click(function () {
+            config.commentData.page = 1
+         
+            config.commentData.time_sort = config.commentData.time_sort == null ? 1 : null;
+            $(".commentMsg").empty()
+            $(".mescroll-upwarp, .mescroll-hardware").remove()
+            addReview()
+            // getcommentList()
+        })
+        // 回复点击事件
+        $(".replyBtn").click(function () {
+            $(".pup").hide()
+            $(".comment").show()
+            config.isState = 1
+            $(".commentInput").select()
+            var replayName = $(".reply-item").eq(config.selectIndex).attr("data-replayName");
+            $(".commentInput").attr("placeholder", "回复" + replayName + " :")
+        })
+
+        // 复制点击事件
+        $(".copyBtn").click(function () {
+            $(".pup").hide()
+            $(".comment").show()
+            var copy = $(".reply-item").eq(config.selectIndex).attr("data-copy")
+            if (browser.versions.android) {
+                window.titi_js.callCopy(copy);
+            } else {
+                window.webkit.messageHandlers.callCopy.postMessage(copy);
+            }
+
+        })
+
+
+    }
+
+    //获取评论列表 
+    function getcommentList(type) {
+        requsetHttp(config.commentUrl, config.type, config.commentData, config.user_info.token || null,(res)=>{
+            var list = res.data.list
+            config.totals = config.totals.concat(list)
+            var str = ''
+            if (!list.length && config.commentData.page == 1) $(".commentList").append(`<div class="nolength">暂无评论！</div>`)
+            for (var i = 0; i < list.length; i++) {
+               str += ` <li>
+                    <div class="reply-item" data-userid="${list[i].news_id}" data-replayName="${list[i].nickname}" data-copy="${list[i].content}" data-commentid="${list[i].id}" data-parentid="${list[i].user_id}">
+                        <div class="publish-main">
+                            <div class="publish-txt">
+                                <div class="publish-head">
+                                    <img src="${list[i].avatar}" alt="" class="head-img">
+                                    <div class="publish-name">
+                                        <span>${list[i].nickname}</span>
+                                        <span class="publish-time">${getDateDiff(list[i].create_time) || '刚刚'}</span>
+                                    </div>
+                                </div>
+                                <div class="publish-like">
+                                    <div class="like-up" data-id="${list[i].id}" data-index="${i + (res.data.page.page - 1) * 10}">
+                                        <img src="${list[i].is_like == 1 ? 'image/icon-praise.png' : 'image/icon-nopraise.png'}" alt=""  onclick="return false;">
+                                        <span class="likeupTxt">${list[i].like_num}</span>
+                                    </div>
+                                    <img src="image/icon-more.png" alt="" class="like-report" data-i="${i + (res.data.page.page - 1) * 10}">
+                                </div>
+                            </div>
+
+                            <div class="publish-msg">
+                                <span class="publish-info" data-i="${i + (res.data.page.page - 1) * 10}">${list[i].content}</span>
+
+                                <div class="${list[i].sub_comment.list.length == 0 ? 'reply-nomessage' : 'reply-message'}" >
+                                    <ul class="totalReply">`;
+                let repay_length = list[i].sub_comment.list.length >= 3 ? 3 : list[i].sub_comment.list.length;
+                for (let index = 0; index < repay_length; index++) {
+                        str += `<li class="message-item">
+                                            <span class="reply-info"><span class="repla-name">${list[i].sub_comment.list[index].nickname}: </span>${list[i].sub_comment.list[index].content}</span>
+                                        </li>`
+                }
+                str += ` </ul>
+                                    <div class="total-reply" data-newsid = "${list[i].news_id}" data-commentid = ${list[i].id}><span >共${list[i].sub_comment.page.total}条回复</span><span class="iconfont icon-xiangyoujiantou"></span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>`
+            }
+            if (type == config.flush) {
+                config.mescroll.endSuccess();
+                config.mescroll.optUp.page.num = 1;
+                config.mescroll.endByPage(res.data.list.length, res.data.page.totalPage);
+                config.mescroll.optUp.page.time =0.5
+                $(".commentList").html(str);
+            } else {
+                config.mescroll.endByPage(res.data.list.length, res.data.page.totalPage);
+                $(".commentList").append(str)
+            }
+            config.commentData.page++
+
+            // 跳转到全部回复页面
+            $(".total-reply").click(function (e) {
+                e.stopPropagation()
+                news_id = $(this).attr("data-newsid")
+                comment_id = $(this).attr("data-commentid")
+                category_id = config.data.category_id
+                var url= config.news_replyUrl +"?news_id=" + news_id + "&comment_id=" + comment_id + "&category_id=" + category_id+"&user_id="+config.user_info.user_id
+                callNewWeb(url)
+            })
+
+            // 弹框显示隐藏
+            $(".like-report,.publish-info").unbind("click")
+            $(".like-report,.publish-info").click(function (e) {
+                e.stopPropagation()
+                if (!config.user_info.token && !config.wkzstoken) {
+                    goLogin();
+                    return
+                }
+                $(".pup").show()
+                $(".comment").hide()
+                config.selectIndex = $(this).attr("data-i");
+                var userid = Number($(".reply-item").eq(config.selectIndex).attr("data-parentid"))
+                var user_info_id = Number(config.user_info.user_id)
+                if( user_info_id == userid){
+                    $(".deleteBtn").show()
+                }else{
+                    $(".deleteBtn").hide()
+                }
+            })
+            $(".pup-mask , .cancelBtn").click(function () {
+                $(".pup").hide()
+                $(".comment").show()
+            })
+
+            // 点赞
+            $(".like-up").unbind("click")
+            $(".like-up").click(function () {
+                if (!config.user_info.token && !config.wkzstoken) {
+                    goLogin();
+                    return
+                }
+                var likeid = $(this).attr("data-id")
+                config.likeIndex = $(this).attr("data-index")
+                config.givelikeData.comment_id = likeid
+                var likesnum = $(".likeupTxt").parent().eq(config.likeIndex).children(".likeupTxt").text()
+                if (config.totals[config.likeIndex].is_like == 0) {
+                    config.totals[config.likeIndex].is_like = 1
+                    $(this).children('img').attr('src', 'image/icon-praise.png')
+                    $(this).children(".likeupTxt").text(++likesnum)
+                    getgiveLike()
+                }
+
+
+            })
+
+        })
+    }
+
+
+    // 发表评论
+    function addComment() {
+        $("body").append(`<div class="comment">
+            <div class="comment-msg">
+                    <textarea placeholder="说点什么吧" value=""   class="commentInput"></textarea>
+                    <div class="comment-bg"><img src="${config.iscollect == false ? 'image/icon-start.png' : 'image/icon-selectStart.png'}" alt=""></div>
+                    <div class="nopost-message"><span>发布</span></div></div>
+            </div>`)
+
+        // 收藏点击切换
+        $(".comment-bg").click(function () {
+            if (!config.user_info.token && !config.wkzstoken) {
+                goLogin();
+                return
+            }
+            if (config.iscollect == false) {
+                config.iscollect = true;
+                $(this).children('img').attr('src', 'image/icon-selectStart.png');
+            } else {
+                config.iscollect = false;
+                $(this).children('img').attr('src', 'image/icon-start.png');
+            }
+            newsAction(3);
+
+        })
+
+        // input聚焦事件
+        $('.commentInput').focus(function () {
+            $(".comment-bg").css('display', 'none')
+            $(".nopost-message").css("display", 'block')
+        })
+
+        // 输入文本域键盘弹起事件
+        $('.commentInput').bind('input propertychange',function () {
+            config.content = $(this).val().trim();
+            if (config.content.length > 0) {
+                $(".nopost-message").css("background", "rgba(255,148,0,1)")
+                config.sendStatu = 1
+            } else {
+                $(".nopost-message").css("background", "#ccc")
+                config.sendStatu = 0
+            }
+
+        })
+        // 发送消息事件
+        $(".nopost-message").on("click", function () {
+            if (config.sendStatu == 1) {
+                var content = config.content;
+                config.discussData.content = content
+                var userid = $(".reply-item").eq(config.selectIndex).attr("data-parentid")
+                var comment_id = $(".reply-item").eq(config.selectIndex).attr("data-commentid")
+                if (config.isState == 0) {
+                    config.discussData.parent_user_id = 0
+                    if (config.discussData.content.length > 0) {
+                        replyessage(function () {
+                            $(".commentList").empty()
+                            config.mescroll.optUp.page.num = 1;
+                            config.commentData.page = 1
+                            config.commentData.time_sort = null
+                            getcommentList();
+                        })
+                    } else {
+                        return;
+                    }
+                } else {
+                    config.discussData.parent_user_id = userid
+                    config.discussData.comment_id = comment_id
+                    if (config.discussData.content.length > 0) {
+                        replyessage(function () {
+                            $(".commentList").empty()
+                            config.mescroll.optUp.page.num = 1;
+                            config.commentData.page = 1
+                            config.commentData.time_sort = null
+                            getcommentList();
+                        })
+                    } else {
+                        return;
+                    }
+                }
+
+            }
+
+        })
+    }
+
+
+    // 评论以及回复
+    function replyessage(callback) {
+        requsetHttp(config.discussUrl, config.type, config.discussData, config.user_info.token ,(res)=>{
+            if (res.code == 200) {
+                $(".commentInput").val("")
+                $(".commentInput").attr("placeholder", "说点什么吧")
+                $(".comment-bg").css('display', 'block')
+                $(".nopost-message").css("display", 'none')
+                $(".nopost-message").css("background", "#ccc")
+                if (config.isState == 0) { }
+                $(".commentInput").blur(function () { })
+                YDUI.dialog.toast('发送成功', 2000);
+                if (callback) {
+                    callback()
+                }
+
+            } else {
+                YDUI.dialog.toast('发送失败', 2000);
+            }
+        })
+    }
+
+    // 举报方法
+    function reportMsg() {
+        if (config.wkzstoken) {
+            requsetHttp(config.reporUrl, config.type, config.reportData, config.smallroutineToken,(res)=>{
+                if (res.code == 200) {
+                    YDUI.dialog.toast('举报成功', 2000);
+                    $(".textareainput").val("")
+                    $(".textnum").text("0")
+                } else {
+                    YDUI.dialog.toast('举报失败', 2000);
+                    $(".textareainput").val("")
+                    $(".textnum").text("0")
+                }
+            })
+
+        } else if (config.channel) {
+            requsetHttp(config.reporUrl, config.type, config.reportData, config.xhdj_token,(res)=>{
+                if (res.code == 200) {
+                    YDUI.dialog.toast('举报成功', 2000);
+                    $(".textareainput").val("")
+                    $(".textnum").text("0")
+                } else {
+                    YDUI.dialog.toast('举报失败', 2000);
+                    $(".textareainput").val("")
+                    $(".textnum").text("0")
+                }
+            })
+        } else {
+            requsetHttp(config.reporUrl, config.type, config.reportData, config.user_info.token,(res)=>{
+                if (res.code == 200) {
+                    YDUI.dialog.toast('举报成功', 2000);
+                    $(".textareainput").val("")
+                    $(".textnum").text("0")
+                } else {
+                    YDUI.dialog.toast('举报失败', 2000);
+                    $(".textareainput").val("")
+                    $(".textnum").text("0")
+                }
+            })
+        }
+    }
+
+    // 点赞方法
+    function getgiveLike() {
+        requsetHttp(config.giveLikeUrl, config.type, config.givelikeData, config.user_info.token,(res)=>{
+        })
+    }
+
+    // 删除评论方法
+    function deleteList(callback){
+        requsetHttp(config.deleteUrl,config.type,config.deleteData,config.user_info.token ,(res)=>{
+            if(res.code == 200){
+                if(callback){
+                    callback()
+                }
+            }
+        })
+    }
+
+    /***
+     * 资讯操作（点赞/踩/收藏）
+     * @param type 1：点赞  2：踩 3：收藏
+     */
+    function newsAction(type) {
+        console.log(config.xhdj_token)
+        var obj = { news_id: config.data.news_id, category_id: config.data.category_id, type: type };
+        config.like_status = false;
+        if (config.wkzstoken) {
+            requsetHttp(config.newsActionUrl, config.type, obj, config.smallroutineToken,(res)=>{
+                config.like_status = true;
+            })
+        } else if(config.channel) {
+            requsetHttp(config.newsActionUrl, config.type, obj, config.xhdj_token,(res)=>{
+                config.like_status = true;
+            })
+        } else {
+            requsetHttp(config.newsActionUrl, config.type, obj, config.token,(res)=>{
+                config.like_status = true;
+            })
+        }
+    }
+
+    // 网咖助手小程序的token与app的token转换
+    function rechangeToken() {
+        config.tokenData.token = config.wkzstoken
+        requsetHttp(config.tokenUrl, config.type, config.tokenData, null,(res)=>{
+            config.smallroutineToken = res.data.token
+        })
+    }
+    
+    // 识别文档中的图片展示出来
+    function lookBigImg() {
+        $("body").on({
+            shown: function (e) { //实例展示后执行
+                $('.download').show();
+            },
+            hide: function (e) { //实例隐藏前执行
+                $('.download').hide();
+            },
+            view: function (e) { //图片展示前执行
+                //当前展示图片下标
+                console.log(e.originalEvent.detail.index);
+                //当前展示图片src
+                console.log(e.originalEvent.detail.image.currentSrc);
+            }
+        }).viewer(options);
+        // 图片点击下载
+        $('.download img').click(function () {
+            console.log("图片下载")
+        })
+    }
+
+    /***
+     * 更新用户信息
+     */
+    function updateUserInfo() {
+        config.user_info = getUserInfo();
+    }
+
+        // 获取代理用户授权
+    // function getUserAuth() {
+    //     // var baseUrl = 'http://192.168.1.241:9032/'
+    //     var baseUrl = 'http://47.95.206.26:9032/'
+    //     requsetHttpUrl(baseUrl,config.userAuth, config.type, { user_id: config.xhdj_uid ? config.xhdj_uid : 129}, null, (res) => {
+    //         if (res.code == 200) {
+    //           config.guess_token = res.data.token
+    //           config.xhdj_token = res.data.user_token.token
+    //         }
+
+    //     })
+    // }
+
+
+    // 时间转换
+    function getDateDiff(endTime) {
+        var minute = 1000 * 60;
+        var hour = minute * 60;
+        var day = hour * 24;
+        var oldtime = new Date(endTime.replace(/-/g,"/"));
+        var now = new Date();
+        var diffValue = now.getTime() - oldtime.getTime();
+        if (diffValue < 0) {
+            return;
+        }
+        var dayC = diffValue / day;
+        var hourC = diffValue / hour;
+        var minC = diffValue / minute;
+        if (minC >= 1 && minC <= 60) {
+            result = " " + parseInt(minC) + "分钟前";
+        } else if (hourC >= 1 && hourC <= 24) {
+            result = " " + parseInt(hourC) + "小时前";
+        } else if (dayC >= 1 && dayC <= 3) {
+            result = " " + parseInt(dayC) + "天前";
+        } else if (dayC > 3) {
+            result = endTime.substring(0, 10);
+        } else {
+            result = "刚刚";
+        }
+        return result;
+    }
+
+    /**
+    * mescroll 配置
+    */
+    function initMescroll() {
+        var mescroll = new MeScroll("body", {
+            up: {
+                callback: upCallback,
+                isBounce: false,
+                noMoreSize: 5,
+                auto: true,
+                htmlNodata: '<p class="upwarp-nodata">没有更多了</p>',
+                loadFull:{
+                    delay : 500
+                }
+            },
+            down: {
+                auto: false,
+                callback: downCallback,
+                use: false,
+
+            }
+        });
+        return mescroll;
+    }
+
+    /**
+     * 下拉刷新的回调
+     */
+    function downCallback() {
+        getcommentList(config.flush);
+    }
+
+    /**
+     * 上拉加载的回调
+     */
+    function upCallback() {
+        getcommentList(config.up);
+    }
+
+    function onResume(){
+        $(".commentList").empty()
+        config.mescroll.optUp.page.num = 1;
+        config.commentData.page = 1
+        config.commentData.time_sort = null
+        getcommentList();
+
+    }
+
+
+
+</script>

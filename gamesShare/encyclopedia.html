@@ -1,0 +1,186 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width,viewport-fit=cover, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <meta name="referrer" content="no-referrer"/>
+    <title></title>
+    <link rel="stylesheet" href="css/gameDetails.css">
+    <style>
+        .encyclopediatop {
+            padding: 13px 0 8px 0;
+        }
+
+        .encyclopedia {
+            padding: 0 15px;
+        }
+        .encyclopedia img{
+            width: 100%;
+        }
+        .imgsmall {
+            width: 62px;
+            height: 35px;
+            border-radius: 5px;
+        }
+
+        .name {
+            font-size: 14px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: rgba(51, 51, 51, 1);
+            line-height: 14px;
+            margin-left: 10px;
+        }
+
+        .backimg {
+            margin-top: 10px;
+            height: 378px;
+            border-radius: 10px;
+        }
+        .encyccontent img{
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+  
+        .nametitle{
+            margin-right: 5px;
+            font-size: 20px;
+            font-family:PingFangSC-Medium,PingFang SC;
+            font-weight: 500;
+            color:rgba(255,204,3,1);
+            line-height: 40px;
+            text-align: center;
+        }
+        .img{
+            width: 100%;
+        }
+        .img img{
+            width: 80%;
+            height: 120px;
+            display: block;
+            margin: 0 auto;
+        }
+        .updatetime{
+            font-size:13px;
+            font-family:PingFangSC-Medium,PingFang SC;
+            font-weight:500;
+            color:#333333;
+            line-height:13px;
+        }
+      h1{
+          line-height: 32px;
+      }
+ 
+    </style>
+</head>
+
+<body>
+    <!--顶部展示栏*小虎Hoo图标+名称+slogan+打开app按钮-->
+    <div class="sharetop" style="padding:8px 15px 8px 15px;">
+        <!-- 左 * 小虎Hoo图标+名称+slogan、-->
+        <div class="startcenter">
+            <!--小虎Hoo图标-->
+            <div class="iconhoo">
+                <img src="https://cdn.tinytiger.cn/b55e2898efbe44673559b1a287a9960.png" />
+            </div>
+            <!--名称+slogan-->
+            <div>
+                <!--名称-->
+                <p class="appname">小虎Hoo</p>
+                <!--slogan-->
+                <p class="slogan">玩“好”游戏</p>
+            </div>
+        </div>
+        <!-- 右 * 打开app-->
+        <div>
+            <div class="openapp appname centercenterrow" onclick='clickgoapp()'>打开APP</div>
+        </div>
+    </div>
+    <div class="encycname" style="padding: 0 15px;"></div>
+    <div class="img"></div>
+    <div class="encyclopedia"></div>
+    <div class="encyccontent updatetime" style="padding: 10px 15px; line-height: 18px;"></div>
+
+    <div class="shareModal">
+        <img src="../new_information/image/icon-guidance.png" alt="">
+    </div>
+
+    <script src="../public/template-web.js"></script>
+    <script src="js/swiper.min.js"></script>
+    <script src="../public/jquery.min.js"></script>
+    <script src="../public/module/msgDialog.js"></script>
+    <script src="../public/config.js"></script>
+    <script src="../public/service.js"></script>
+
+
+    <!--详情页顶部-->
+    <script type="text/html" id="encyclopediatop">
+        {{each item v i}}
+        <div class="startcenter encyclopediatop">
+            <div class="imgsmall" style="background-image:url({{v.logo}});background-repeat:no-repeat;background-size:100% 100%;"></div>
+            <div class="name">{{v.name}}</div>
+        </div>
+
+        <div class="backimg" style="background-image:url({{v.background}});background-repeat:no-repeat;background-size:100% 100%;"></div>
+        {{/each}}
+    </script>
+    <script>
+        window.onload = function () {
+            $(".shareModal").click(function () {
+                $(".shareModal").hide()
+            });
+            getGameWikiDetail();
+        }
+
+        // 前去app
+        function clickgoapp() {
+            goApp(6, Request('wiki_id'),Request('wiki_id'))
+        }
+
+        // 游戏详情-百科详情
+        function getGameWikiDetail() {
+            var config = {
+                gameInfoUrl: 'GameWiki/getTemContentInfo',
+                type: 'get',
+                token: Request('token'),
+                data: {
+                    content_id: Request('wiki_id'),
+                    // wiki_id: Request('wiki_id'),
+                }
+            };
+            RequsetHttp(config.gameInfoUrl, config.type, config.token, config.data, function (res) {
+                if (res.code == 200) {
+                    document.title =  res.data.name;  
+                    //详情页顶部
+                    // var update=res.data.game_info.update_time.substring(0, 16).replace(/-/, "年").replace(/\s/g, "月").replace(/\s/g, "日 ")
+                    // var encycnamehtml=`<h1 class='nametitle'>`+res.data.name+`</h1>`
+                    // $('.encycname').html(encycnamehtml)
+                    // var imgCont = `<img src=`+res.data.img_url+`></img>`
+                    // $(".img").html(imgCont)
+                    $(".encyclopedia").html(res.data.content)
+                    // var detailsTopbacklist = [res.data.game_info]
+                    // var detailsTopbackitem = template('encyclopediatop', { item: detailsTopbacklist })
+                    // var encyccontenthtml=res.data.wiki_info.content.replace(/"controls"/, '"false"')
+                    // console.log(res.data.wiki_info.content)
+                    // $('.encyccontent').html(encyccontenthtml)
+                    // var video=$('video')
+                    // for(var i = 0; i < video.length; i++){
+                    //     $(video[i]).attr('autoplay','autoplay')
+                    //     // $(video[i]).attr('controls',false)
+                    // }
+                } else {
+                }
+            })
+        }
+
+    </script>
+    <div style="display: none;">
+        <script type="text/javascript">document.write(unescape("%3Cspan id='cnzz_stat_icon_1278943282'%3E%3C/span%3E%3Cscript src='https://v1.cnzz.com/z_stat.php%3Fid%3D1278943282' type='text/javascript'%3E%3C/script%3E"));</script>
+    </div>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="css/remind.css?v=Math.random()">
+    <title>领取现金红包</title>
+</head>
+<body>
+
+    <div class="page">
+        <header>
+            <img src="img/remind-logo.png">
+        </header>
+        <div class="flex-box title">
+            <div>你的好友<span class="name"></span></div>
+            <div>邀您一起领取<span class="num">1000</span>元<img src="img/remind-get.png" /></div>
+        </div>
+        <div class="flex-box">
+            <img style="width: 40%" src="img/remind-red.png"/>
+        </div>
+
+        <div class="flex-box phone">
+            <input id="mobile" placeholder="输入手机号注册" />
+        </div>
+        <div class="flex-box error"><span></span></div>
+        <div class="flex-box">
+            <div class="flex-box btn get-btn">马上领取</div>
+        </div>
+    </div>
+
+    <div class="showModel remind">
+        <div class="modal">
+            <div class="modal-content">
+                <div class="modal-line-box amount-title">
+                    <span>填写验证码马上领取</span>
+                </div>
+                <div class="modal-line-box amount-info">
+                    <div class="flex-box" >
+                        <input class="getCode" placeholder="输入验证码" />
+                    </div>
+                    <div class="flex-box modal-error"><span></span></div>
+                    <div class="flex-box">
+                       <div class="flex-box btn submit">马上领取</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-box modal-cancel"><img style="margin-top: 30px;" width="39" src="img/remind-close.png"/></div>
+        </div>
+        <div class="mask" ></div>
+    </div>
+
+    <div class="showModel down">
+        <div class="left">
+            <img class="down-tips" src="img/register-tips.png"/>
+        </div>
+        <div class="right" >
+            <img class="down-succee" src="img/register-succee.png"/>
+        </div>
+        <div class="mask" ></div>
+    </div>
+
+    <script src="../public/jquery.min.js"></script>
+    <script src="../public/config.js"></script>
+    <script src="../public/service.js"></script>
+    <script>
+
+        var config = {
+            loginUrl: 'LoginController/phoneLogin',
+            codeUrl: 'LoginController/sendVerificationCode',
+            infoUrl: 'UserController/getUserInfoFormUserId',
+            downloadUrl: 'https://h5.tinytiger.cn/web_app/knapsack/download.html',
+            type: 'post',
+            txt1: '请输入正确手机号',
+            txt2: '请输入验证码'
+        };
+        requsetHttp(config.infoUrl, config.type,{ user_id: Request('user_id') },null,(res)=>{
+            $('.name').text(res.data.user_info.nickname);
+        });
+
+        $('.get-btn').click(function () {
+            var mobile = $('#mobile').val();
+            if(checkmobile(mobile)){
+                requsetHttp(config.codeUrl, config.type, { phone: mobile},null,(res)=>{
+                    if(res.status){
+                        $('.remind').addClass('isShow');
+                    }else{
+                        $('.error span').text(res.msg).addClass('isShow');
+                    }
+                });
+            }else{
+                $('.error span').text(config.txt1).addClass('isShow');
+            }
+        });
+
+        $('.submit').click(function () {
+            var user_id = Request('user_id') || null;
+            var data = { phone: $('#mobile').val(), verification_code:  $('.getCode').val() };
+            if(user_id) data.invite_user_id = user_id;
+            if(data.verification_code){
+                requsetHttp(config.loginUrl, config.type, data ,null,(res)=>{
+                    if(res.status){
+                        alert('注册成功');
+                        location.href = config.downloadUrl;
+                    }else{
+                        $('.modal-error span').text(res.msg).addClass('isShow');
+                    }
+                });
+            }else{
+                $('.modal-error span').text(config.txt2).addClass('isShow');
+            }
+        });
+
+        $('.down').click(function () {
+            $('.down').removeClass('isShow');
+        });
+
+        $('#mobile').focus(function () {
+            $('.error span').removeClass('isShow');
+        });
+        $('.getCode').focus(function () {
+            $('.modal-error span').removeClass('isShow');
+        });
+        $('.modal-cancel').click(function () {
+            $('.remind').removeClass('isShow');
+        });
+
+    </script>
+
+</body>
+</html>

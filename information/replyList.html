@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title>回复</title>
+    <link rel="stylesheet" href="../public/mescroll.min.css">
+    <link rel="stylesheet" href="../public/ydui.css">
+    <link rel="stylesheet" href="css/replyList.css?v=Math.random()">
+</head>
+
+<body>
+    <div class="main">
+        <!-- 发表评论 -->
+        <div class="publish">
+            <div class="publish-main">
+                <div class="publish-txt">
+                    <div class="publish-head">
+                        <img src="" alt="" class="parent_avatar">
+                        <div class="publish-name">
+                            <span class="parent_nickname"></span>
+                            <span class="publish-time parent_createtime"></span>
+                        </div>
+                    </div>
+                    <div class="publish-like">
+                        <div class="like-up parent-like">
+                            <img src="image/icon-nopraise.png" alt="">
+                            <span class="parent_likenum"></span>
+                        </div>
+                        <img src="image/icon-more.png" alt="" class="parent-report">
+                    </div>
+                </div>
+                <!-- 评论 -->
+                <div class="publish-msg">
+                    <span class="publish-info parent_content"></span>
+                </div>
+            </div>
+
+        </div>
+        <!-- 回复评论 -->
+        <div class="reply">
+            <div class="reply-num">
+                <span>全部回复</span>
+                <div class="sort">
+                    <img src="image/icon-sort-hot.png" alt="" class="sort-img">
+                    <span class="sort-time">按热度</span>
+                </div>
+            </div>
+            <div id="mescroll" class="mescroll">
+                <div>
+                    <ul class="sublistContent">
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 弹框 -->
+    <div class="pup">
+        <div class="mask"></div>
+        <div class="operateContent">
+            <div class="discuss">
+                <span class="commentBtn">评论操作</span>
+                <span class="replyBtn">回复</span>
+                <span class="copyBtn">复制</span>
+                <span class="deleteBtn">删除</span>
+                <span class="reportBtn">举报</span>
+            </div>
+            <div class="cancel">
+                <span class="cancelBtn">取消</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 评论 -->
+    <div class="comment">
+        <div class="comment-msg">
+            <textarea placeholder="说点什么吧" value=""  style="overflow-y:hidden"></textarea>
+            <div class="nopost-message"><span>发布</span></div>
+
+        </div>
+    </div>
+
+    <!-- 举报 -->
+    <!-- 弹框 -->
+    <div class="pupReport">
+        <div class="reportmask"></div>
+        <div class="reportContent">
+            <div class="report-choose"><span>请选择举报类型</span><img src="image/icon-close.png" alt="" class="close-report">
+            </div>
+            <div class="reportTxt">
+                <div class="report-item"><span class="reporttext"><span class="reportedtxt">已举报</span>垃圾广告营销</span><span
+                        class="revocation"></span></div>
+                <div class="report-item"><span class="reporttext"><span class="reportedtxt">已举报</span>谩骂辱骂</span><span
+                        class="revocation"></span></div>
+                <div class="report-item"><span class="reporttext"><span class="reportedtxt">已举报</span>违法反动</span><span
+                        class="revocation"></span></div>
+                <div class="report-item"><span class="reporttext"><span class="reportedtxt">已举报</span>淫秽色情</span><span
+                        class="revocation"></span></div>
+                <div class="report-item"><span class="reporttext"><span class="reportedtxt">已举报</span>嘲讽/不友善</span><span
+                        class="revocation"></span></div>
+                <div class="report-item"><span class="reporttext"><span class="reportedtxt">已举报</span>游戏私服外挂</span><span
+                        class="revocation"></span></div>
+                <div class="report-item another"><span>其他问题描述</span><img src="image/icon-rightarrow.png" alt=""
+                        style="width:12px; height:12px"></div>
+            </div>
+            <span class="confirm">完成</span>
+        </div>
+    </div>
+    <!-- 输入文本弹框 -->
+    <div class="pupInput">
+        <div class="inputmask"></div>
+        <div class="inputContent">
+            <div class="inputbar"><img src="image/icon-leftarrow.png" alt="" style="width:12px; height:12px"></div>
+            <div class="input">
+                <div class="inputmsg">
+                    <textarea placeholder="请描述一下对方的违规行为！" class="textareainput" maxlength="200"  style="overflow-y:hidden"></textarea>
+                    <div class="num"><span class="textnum">0</span>/200</div>
+                </div>
+
+            </div>
+            <div class="submit">提交</div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/mescroll.min.js"></script>
+<script src="../public/service.js"></script>
+<script src="../public/ydui.js"></script>
+<script>
+    var config = {
+        url: 'NewsController/commentInfo',                            // 获取评论列表url
+        discussUrl: 'NewsController/comment',                         // 发表评论url
+        reporUrl: 'NewsController/report',                            // 举报url
+        giveLikeUrl: 'NewsController/commentLike',                    // 点赞url
+        deleteUrl:"NewsController/delComment",                        // 删除评论
+        data: {
+            news_id: Request("news_id"),                              // 文章id
+            comment_id: Request("comment_id"),                        // 评论id
+            page: 1,                                                  // 当前页
+            time_sort: null ,                                         // 排序
+            category_id: Request("category_id")                       // 栏目id
+        },
+        type: 'post',
+        user_info: getUserInfo(true),                                     // 用户信息
+        mescroll: initMescroll(),
+        up: 'up',
+        flush: 'flush',
+        discussData: {                                                // 评论data
+            news_id: Request("news_id"),                               // 文章id
+            parent_user_id: null,                                     // 被评论者id                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+            content: '',                                              // 评论内容
+            comment_id: null,                                          // 评论id
+            category_id: Request("category_id")
+
+        },
+        reportData: {                                                  // 举报data
+            news_id: Request("news_id"),                               // 文章id
+            user_type: 2,                                              // 被举报对象的类型
+            comment_id: null,                                          // 评论id
+            report_type: null                                          // 举报类型
+        },
+        givelikeData: {                                                // 点赞data
+            news_id: Request("news_id"),                               // 文章id
+            comment_id: null,                                           // 评论id
+            category_id: Request("category_id")                         // 栏目id
+        },
+        deleteData:{
+            news_id:Request("news_id"),                                                             // 文章id
+            comment_id:null                                                                         // 文章评论id
+        },
+        isState: 0,                                                    // 区别点击的是评论还是回复
+        selectIndex: 0,                                                // 回复列表选中的index
+        copyContent: '',                                               // 选中复制的文本
+        comment_id: null,                                               // 父级评论的id
+        list: [],
+        userId : Request("user_id")
+    }
+    // 获取列表数据
+    function getdataList(type) {
+        if (type == "flush") {
+            config.mescroll.optUp.page.num = 1;
+            config.data.page = 1
+        }
+        requsetHttp(config.url, config.type, config.data, config.user_info.token,(res)=>{
+            config.list = config.list.concat(res.data.sub.list)
+            var list = res.data
+            $(".parent_avatar").attr('src', list.parent.avatar)
+            $(".parent_nickname").text(list.parent.nickname)
+            $(".parent_createtime").text(getDateDiff(list.parent.create_time))
+            $(".parent_likenum").text(list.parent.like_num)
+            $(".parent_content").text(list.parent.content)
+            if (list.parent.is_like == 1) {
+                $(".parent-like img").attr("src", 'image/icon-praise.png')
+            } else {
+                $(".parent-like img").attr("src", 'image/icon-nopraise.png')
+            }
+            var sublist = list.sub.list
+            var str = ''
+            for (var i = 0; i < sublist.length; i++) {
+                str += ` <li>
+                            <div class="reply-item" data-replayName="${sublist[i].nickname}" data-copy="${sublist[i].content}" data-commentid="${sublist[i].id}">
+                                <div class="publish-main">
+                                    <div class="publish-txt">
+                                        <div class="publish-head">
+                                            <img src="${sublist[i].avatar}" alt="">
+                                            <div class="publish-name">
+                                                <span>${sublist[i].nickname}</span>
+                                                <span class="publish-time">${getDateDiff(sublist[i].create_time)}</span>
+                                            </div>
+                                        </div>
+                                        <div class="publish-like">
+                                            <div class="like-up chirend-like" data-index="${i + (res.data.sub.page.page - 1) * 10}">
+                                                <img src="${sublist[i].is_like == 1 ? 'image/icon-praise.png' : 'image/icon-nopraise.png'}" alt="">
+                                                <span class="likeupTxt">${sublist[i].like_num}</span>
+                                            </div>
+                                            <img src="image/icon-more.png" alt="" class="like-report" data-id="${sublist[i].id}" data-i="${i}" data-userid ="${sublist[i].user_id}">
+                                        </div>
+                                    </div>
+                                    <!-- 评论 -->
+                                    <div class="publish-msg">`
+                if (sublist[i].parent_nickname == null) {
+                    str += `<span class="publish-info children_content " data-id="${sublist[i].id}" data-i="${i}" data-userid ="${sublist[i].user_id}">${sublist[i].content}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>`
+                } else {
+                    str += `<span >回复@${sublist[i].parent_nickname}: <span>${sublist[i].content}</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>` }
+            }
+            if (type == config.flush) {
+                config.mescroll.endSuccess();
+                config.mescroll.optUp.page.num = 1;
+                config.mescroll.endByPage(res.data.sub.list.length, res.data.sub.page.totalPage);
+                $(".sublistContent").html(str);
+            } else {
+                config.mescroll.endByPage(res.data.sub.list.length, res.data.sub.page.totalPage);
+                $('.sublistContent').append(str)
+
+            }
+            config.data.page++;
+
+
+
+            // 弹框显示与隐藏
+            $(" .like-report, .children_content").click(function () {
+                var user_id = Number($(this).attr('data-userid'))
+                var user_info_id = Number(config.userId)
+                if(user_id == user_info_id){
+                    $(".deleteBtn").show()
+                }else{
+                    $(".deleteBtn").hide()
+                }
+                config.discussData.parent_user_id = $(this).attr('data-userid')
+                config.discussData.comment_id = res.data.parent.id
+                config.selectIndex = $(this).attr("data-i")
+                config.isState = 1
+                $(".comment").hide()
+                $(".pup").show()
+            })
+            $(".parent-report, .parent_content").click(function () {
+                var user_id = Number(res.data.parent.user_id);
+                var user_info_id = Number(config.userId)
+                if(user_id == user_info_id){
+                    $(".deleteBtn").show()
+                }else{
+                    $(".deleteBtn").hide()
+                }
+                config.discussData.parent_user_id = res.data.parent.user_id
+                config.discussData.comment_id = res.data.parent.id
+                config.isState = 0
+                config.comment_id = res.data.parent.id
+                $(".comment").hide()
+                $(".pup").show()
+            })
+
+
+            //子级点赞事件
+            $(".chirend-like").unbind("click")
+            $(".chirend-like").click(function () {
+                var index = $(this).attr("data-index")
+                var linkIndex = $(".reply-item").eq(index).attr("data-commentid")
+                var likesnum = $(".likeupTxt").parent().eq(index).children(".likeupTxt").text()
+                config.givelikeData.comment_id = linkIndex
+                if (config.list[index].is_like == 0) {
+                    config.list[index].is_like = 1
+                    $(this).children("img").attr("src", 'image/icon-praise.png')
+                    $(this).children(".likeupTxt").text(++likesnum)
+                    getgiveLike()
+                }
+            
+            })
+
+            //  父级元素点赞
+
+            $(".parent-like").unbind("click")
+            $(".parent-like").click(function () {
+                var parentlikeNum = $(this).children(".parent_likenum").text()
+                config.givelikeData.comment_id = list.parent.id
+                if (list.parent.is_like == 0) {
+                    list.parent.is_like = 1
+                    $(this).children('img').attr('src', 'image/icon-praise.png')
+                    $(this).children(".parent_likenum").text(++parentlikeNum)
+                    getgiveLike()
+                }
+                
+            })
+        })
+    }
+
+
+    // 隐藏弹框
+    $(".mask , .cancelBtn").click(function () {
+        $(".pup").hide()
+    })
+
+    // 排序切换
+    $(".sort").click(function () {
+        config.mescroll.optUp.page.num = 1;
+        config.data.page = 1
+        $(".sublistContent").empty()
+        config.data.time_sort = config.data.time_sort == null ? 1 : null
+        getdataList()
+        if (config.data.time_sort == null) {
+            $(".sort-time").text("按热度")
+            $(".sort-img").attr("src", 'image/icon-sort-hot.png')
+        } else {
+            $(".sort-time").text("按时间")
+            $(".sort-img").attr("src", 'image/icon-sort-time.png')
+        }
+    })
+
+    // 点击回复显示输入框
+    $(".replyBtn").click(function () {
+        $(".pup").hide()
+        $(".comment").show()
+        $("textarea").focus()
+        if (config.isState == 1) {
+            var replayName = $(".reply-item").eq(config.selectIndex).attr("data-replayName");
+            $("textarea").attr("placeholder", "回复" + replayName + " :")
+        } else {
+            $("textarea").attr("placeholder", "说点什么呢")
+        }
+    })
+
+    // 删除评论事件
+    $(".deleteBtn").click(function(e){
+        e.stopPropagation()
+        $(".pup").hide();
+       if(config.isState == 1){
+           config.deleteData.comment_id = $(".reply-item").eq(config.selectIndex).attr("data-commentid")
+
+       }else{
+          config.deleteData.comment_id = config.comment_id
+       }
+       deleteList()
+    })
+
+    // 点击举报事件
+    $(".reportBtn").click(function (e) {
+        e.stopPropagation()
+        $(".pup").hide()
+        $(".pupReport").show()
+        if (config.isState == 1) {
+            var comment_id = $(".reply-item").eq(config.selectIndex).attr("data-commentid");
+            config.reportData.comment_id = comment_id
+        } else {
+            config.reportData.reportData = config.comment_id
+        }
+    })
+
+    // 隐藏举报弹框
+    $(".close-report , .reportmask").click(function (e) {
+        e.stopPropagation()
+        $(".pupReport").hide()
+        $(".reported").removeClass("reported")
+        $(".noreportedtxt").removeClass("noreportedtxt").addClass("reportedtxt")
+        $(".revocation").text("")
+    })
+
+    // 点击其他问题显示输入弹框
+    $(".another").click(function (e) {
+        e.stopPropagation()
+        $(".pupReport").hide()
+        $(".pupInput").show()
+        $(".reported").removeClass("reported")
+        $(".noreportedtxt").removeClass("noreportedtxt").addClass("reportedtxt")
+        $(".revocation").text("")
+    })
+    $(".inputmask").click(function () {
+        e.stopPropagation()
+        $(".pupInput").hide()
+        $(".textareainput").val("")
+        $(".textnum").text("0")
+
+    })
+
+    // 点击复制事件
+    $(".copyBtn").click(function () {
+        $(".pup").hide()
+        if (config.isState == 1) {
+            config.copyContent = $(".reply-item").eq(config.selectIndex).attr("data-copy")
+        } else {
+            config.copyContent = $(".parent_content").text()
+        }
+        if (browser.versions.android) {
+            window.titi_js.callCopy(config.copyContent);
+        } else {
+            window.webkit.messageHandlers.callCopy.postMessage(config.copyContent);
+        }
+    })
+
+    // 文本域聚焦事件
+    $('textarea').bind("input propertychange",function () {
+        let content = $("textarea").val().trim();
+        if (content.length > 0) {
+            $(".nopost-message").css("background", "rgba(255,148,0,1)")
+        } else {
+            $(".nopost-message").css("background", "#ccc")
+        }
+    })
+
+    // 点击发布事件
+    $(".nopost-message").click(function () {
+        config.discussData.content = $("textarea").val()
+        if (config.discussData.content.length > 0) {
+            replyessage()
+        } else {
+            return
+        }
+    })
+
+    // 举报选择类型
+    $(" .report-item").click(function (e) {
+        e.stopPropagation()
+        $(this).children('.revocation').text("撤销").parent().siblings().children(".revocation").text("")
+        $(this).children(".reporttext").addClass("reported").parent().siblings().children(".reporttext").removeClass("reported")
+        $(this).children(".reporttext").children(".reportedtxt").removeClass("reportedtxt").addClass("noreportedtxt")
+        $(this).siblings().children(".reporttext").children(".noreportedtxt").removeClass("noreportedtxt").addClass("reportedtxt")
+        config.reportData.report_type = $(this).index() + 1
+    })
+
+    // 撤销举报
+    $(".revocation").click(function (e) {
+        config.reportData.report_type = null
+        e.stopPropagation()
+        $(".reported").removeClass("reported")
+        $(".noreportedtxt").removeClass("noreportedtxt").addClass("reportedtxt")
+        $(this).text("")
+    })
+
+    // 点击确定举报
+    $(".confirm").click(function (e) {
+        e.stopPropagation()
+        if (config.reportData.report_type == null) {
+            YDUI.dialog.toast('请选择举报类型', 2000)
+            return
+        }
+        reportMsg()
+        $(".pupReport").hide()
+        $(".reported").removeClass("reported")
+        $(".noreportedtxt").removeClass("noreportedtxt").addClass("reportedtxt")
+        $(".revocation").text("")
+    })
+
+    // 举报输入文字时间
+    $(".textareainput").keyup(function () {
+        var length = $(this).val().trim().length;
+        $(".textnum").text(length)
+        if (length >= 200) {
+            $(".textnum").text("200")
+            return
+        }
+    })
+    // 其他类型提交举报
+    $(".submit").click(function (e) {
+        e.stopPropagation()
+        config.reportData.report_desc = $(".textareainput").val()
+        if (config.reportData.report_desc.length == 0) {
+            YDUI.dialog.toast('请描述对方违规行为', 2000)
+            return
+        }
+        reportMsg()
+        $(".pupInput").hide()
+        $(".textareainput").val("")
+    })
+
+    // 返回
+    $(".inputbar img").click(function(e){
+        e.stopPropagation()
+        $('.pupInput').hide()
+        $(".textareainput").val("")
+        $(".textnum").text("0")
+        $(".pupReport").show()
+       
+    })
+
+    // 举报方法
+    function reportMsg() {
+        requsetHttp(config.reporUrl, config.type, config.reportData, config.user_info.token,(res)=>{
+            if (res.code == 200) {
+                YDUI.dialog.toast('举报成功', 2000);
+                $(".textareainput").val("")
+                $(".textnum").text("0")
+            } else {
+                YDUI.dialog.toast('举报失败', 2000);
+                $(".textareainput").val("")
+                $(".textnum").text("0")
+            }
+        })
+    }
+
+    // 点赞方法
+    function getgiveLike() {
+        requsetHttp(config.giveLikeUrl, config.type, config.givelikeData, config.user_info.token ,(res)=>{ })
+    }
+
+    // 评论以及回复
+    function replyessage() {
+        requsetHttp(config.discussUrl, config.type, config.discussData, config.user_info.token ,(res)=>{
+            if (res.code == 200) {
+                $("textarea").val("")
+                $(".nopost-message").css("background", "#ccc")
+                $("textarea").blur(function () { })
+                $(".comment").hide()
+                YDUI.dialog.toast('发送成功', 2000);
+                window.location.reload()
+            }else{
+                YDUI.dialog.toast('发送失败', 2000);
+            }
+        })
+    }
+
+    // 删除评论
+    function deleteList(){
+        requsetHttp(config.deleteUrl,config.type,config.deleteData,config.user_info.token,(res)=>{
+            if(res.code == 200){
+                if(config.isState == 1){
+                    window.location.reload()
+                }else{
+                    callFinish()
+                }
+               
+            }
+        })
+    }
+
+    // 时间转换
+    function getDateDiff(endTime) {
+        var minute = 1000 * 60;
+        var hour = minute * 60;
+        var day = hour * 24;
+        var oldtime = new Date(endTime.replace(/-/g,"/"));
+        var now = new Date();
+        var diffValue = now.getTime() - oldtime.getTime();
+        if (diffValue < 0) {
+            return;
+        }
+        var dayC = diffValue / day;
+        var hourC = diffValue / hour;
+        var minC = diffValue / minute;
+        if (minC >= 1 && minC <= 60) {
+            result = " " + parseInt(minC) + "分钟前";
+        } else if (hourC >= 1 && hourC <= 24) {
+            result = " " + parseInt(hourC) + "小时前";
+        } else if (dayC >= 1 && dayC <= 3) {
+            result = " " + parseInt(dayC) + "天前";
+        } else if (dayC > 3) {
+            result = endTime.substring(0, 10);
+        } else {
+            result = "刚刚";
+        }
+        return result;
+    }
+
+    /**
+    * mescroll 配置
+    */
+    function initMescroll() {
+        var mescroll = new MeScroll("mescroll", {
+            up: {
+                callback: upCallback,
+                isBounce: false,
+                noMoreSize: 5,
+                auto: false,
+                htmlNodata: '<p class="upwarp-nodata">没有更多了</p>'
+
+            },
+            down: {
+                // auto: false,
+                callback: downCallback
+            }
+        });
+        return mescroll;
+    }
+
+    /**
+     * 下拉刷新的回调
+     */
+    function downCallback() {
+        getdataList(config.flush);
+    }
+
+    /**
+     * 上拉加载的回调
+     */
+    function upCallback() {
+        getdataList(config.up);
+    }
+
+
+
+</script>

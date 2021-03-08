@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta name="referrer" content="no-referrer">
+  <meta charset="UTF-8">
+  <meta name="viewport"
+    content="width=device-width,viewport-fit=cover, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+  <title>词条纠错</title>
+  <link rel="stylesheet" href="./css/entryError.css">
+  <script src="./js/axios.js"></script>
+  <script src="../public/jquery.min.js"></script>
+  <script src='./js/vue.js'></script>
+  <script src="../public/module/msgDialog.js"></script>
+  <script src="../public/config.js"></script>
+  <script src="../public/template-web.js"></script>
+  <script src="../public/tool.js"></script>
+  <script src="../public/service.js"></script>
+</head>
+
+<body>
+  <div style="width: 100%;height: 100%;">
+    <div class="header">
+      <div class="headerMain">
+        <div style="width: 60px;">
+          <img src="img/icon-arrow_left.png" alt="" class="callBackBtn" onclick="handleGoBack()" />
+        </div>
+        <span style="color:rgba(51,51,51,1);font-weight:500;">词条纠错</span>
+        <button class="release">提交</button>
+      </div>
+    </div>
+    <div>
+      <div style="padding: 20px 15px 0px 15px;background-color: #fff;">
+        <textarea maxlength='200' id='textarea-text' placeholder='输入纠错的内容说明...'
+          style="width: 99.5%;height: 150px;outline: none;border: none;" name="file" cols="30" rows="10"></textarea>
+      </div>
+      <div class="err-text" style="color: red;margin-left: 15px;font-size: 12px;display: none;">请完善内容信息</div>
+      <div class="upload">
+        <div class="upload-content">
+          <div style="color: #333;font-size: 16px;position: relative;"><span style='font-weight:bold'>补充图片说明</span> <span style="color: #aaa;"> (最多上传3张图片) </span></div>
+          <div class="form-group">
+            <div class="control-form">
+              <ul class="upload-imgs">
+                <li style="overflow: hidden;" class="upload-box">
+                  <input type="file" class="upload-btn" style="opacity:0;width: 80px;height: 80px;" id="uploadFile" onchange="uploadFile(event)"
+                    name="cover" accept="image/*" />
+                  <span class="add"></span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 弹窗pop -->
+    <div id="popWindow" class="popWindow" style="display: none;">
+      <p class="pop-content" style="font-size: 16px;">正在提交...</p>
+    </div>
+    <!-- 错误提示框 -->
+    <div class="tip">
+      <div class="mask"></div>
+      <div class="tipContent">
+        <div style="display: flex;justify-content: center;flex-direction: column;align-items: center;">
+          <p class="tipWord"></p>
+        </div>
+        <div class="button" style="justify-content: center">
+          <span class="addClick" onclick="closeModal()">确定</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+  // 判断是安卓手机还是ios手机
+  // $(function () {
+  //   //获取浏览器的userAgent,并转化为小写
+  //   var ua = navigator.userAgent.toLowerCase();
+  //   //判断是否是苹果手机，是则是true
+  //   var isIos = (ua.indexOf('iphone') != -1) || (ua.indexOf('ipad') != -1);
+  //   if (isIos) {
+  //     $("input:file").removeAttr("capture");
+  //   };
+  // })
+  var imageBaseUrl = 'https://cdn.tinytiger.cn/'
+  var uploadUrl = 'https://upload-z2.qiniup.com'
+  var qiniuUrl = 'Common/getQiniuToken'
+  var qiniuToken = '' // 七牛token
+  var token = '' // 登录token
+  var uploadImg = [] // 图片数组
+  // 获取七牛token
+  let config = {
+    qiniuUrl: 'Common/getQiniuToken',
+    type: 'post',
+    token: Request('token'),
+  }
+  getQiniuToken()
+  function getQiniuToken() {
+    requsetHttp(config.qiniuUrl, config.type, {}, config.token, function (res) {
+      if (res.code == 200) {
+        qiniuToken = res.data.qiniu_token
+      }
+    })
+  }
+  // 
+  $('.add').click(function () {
+    if (browser.versions.android) {
+      window.titi_js.callAlbum()
+    } else {
+      $('#uploadFile').trigger('click')
+    }
+  })
+  // 上传图片触发
+  function uploadFile(event) {
+    
+    const url = "https://upload-z2.qiniup.com";
+    var file = event.target.files[0];
+    // if (newFlie.length >= 3 ) {
+    //   uploadImg = []
+    //   $("ul li").not(":first").remove();
+    // }
+
+    // if (newFlie.length == 2 && uploadImg.length == 2) {
+    //   uploadImg.splice(0,1)
+    //   $("ul>li").eq(2).remove();
+    // }
+
+    // if (newFlie.length == 2 && uploadImg.length == 1) {
+    //   $("ul>li").eq(0).hide();
+    // }
+    // newFlie.forEach((item) => {
+      var formData = new FormData();
+      formData.append('file', file);
+      formData.append('token', qiniuToken);
+      $.ajax({
+        url: url,
+        type: 'post',
+        data: formData,
+        processData: false, //必填 必须false才会避开jq对formdata的默认处理 XMLHttpRequest才会对formdata进行正确处理,否则会报Illegal invocation错误
+        contentType: false, //必填 必须false 才会加上正确的Content-Type
+        success: function (res) {
+          var upload_img = imageBaseUrl + res.key;
+          uploadImg.push(
+            upload_img
+          )
+          var html = ""
+          html += `<li id='uploadContent'><p class="img"><img src=` + upload_img + ` /><a class="close" id='close-icon' >×</a></p></li>`
+          $('.upload-imgs').append(html)
+          if (uploadImg.length >= 3) {
+            $('.upload-box').hide()
+          } else {
+            $('.upload-box').show()
+          }
+          $('#uploadFile').val('')
+        }
+      // })
+    })
+  }
+  // 获取安卓返回的图片地址
+  function getImgUrl(data) {
+    let upload_img = data.img
+    uploadImg.push(upload_img)
+    if (uploadImg.length >= 3) {
+      $('.upload-box').hide()
+    } else {
+      $('.upload-box').show()
+    }
+    var html = ""
+    html += `<li class='uploadContent' id='uploadContent'><p class="img"><img src=` + upload_img + ` /><a class="close" id='close-icon' >×</a></p></li>`
+    $('.upload-imgs').append(html)
+  }
+  // 删除图片
+  $(document).on('click', '#uploadContent a', function (e) {
+    console.log($(this).siblings().attr("src"), '---');
+    $(this).parent().parent().remove(); //页面中移除
+    var imgUrl = $(this).siblings().attr("src")
+    for(let i= 0;i<uploadImg.length;i++) {
+     if(imgUrl === uploadImg[i]){
+      uploadImg.splice(i, 1)
+      break
+     }
+    }
+    if (uploadImg.length < 3) {
+      $('.upload-box').show()
+    }
+  })
+  // 提交
+  $(document).on("touchstart", ".release", function () {
+    let text_content = $("#textarea-text").val()
+    if (text_content) {
+      $(".err-text").hide()
+      $("#popWindow").css({ 'display': 'block' })
+      let config = {
+        submUrl: 'GameWiki/entryError',
+        type: 'post',
+        token: Request('token'),
+        data: {
+          content_id: Request('id'),
+          error_desc: text_content,
+          game_id: Request('game_id'),
+          images: JSON.stringify(uploadImg)
+        }
+      }
+      RequsetHttp(config.submUrl, config.type, config.token, config.data, (res) => {
+        if (res.code == 200) {
+          $("#popWindow").css({ 'display': 'none' })
+          $(".tipWord").html('提交成功')
+          $(".tip").css({ 'display': 'block' })
+          // setTimeout(() => {
+          //   handleGoBack()
+          // }, 1000)
+        } else {
+          $("#popWindow").css({ 'display': 'none' })
+          $(".tip").css({ 'display': 'none' })
+        }
+      })
+    } else {
+      $(".err-text").show()
+    }
+  });
+  function closeModal () {
+    callBack()
+  }
+  function handleGoBack() {
+    callBack()
+  }
+  /***
+   * 触发返回按钮
+   */
+  function callBack() {
+    if (browser.versions.android) {
+      window.titi_js.callFinish();
+    } else if (browser.versions.iPhone || browser.versions.iPad) {
+      window.webkit.messageHandlers.callFinish.postMessage(null);
+    }
+  }
+</script>
+
+</html>

@@ -1,0 +1,1237 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width,viewport-fit=cover, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta id="viewport" name="viewport" content="user-scalable=no,width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title></title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.3.0/video-js.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../public/mescroll.min.css">
+    <link rel="stylesheet" href="css/gameDetails.css">
+    <!-- Link Swiper's CSS -->
+    <link rel="stylesheet" href="css/swiper.min.css">
+    <style>
+        .retext{
+            padding: 0 12px;
+            margin-bottom: 17px;
+            word-wrap:break-word;
+            word-break:normal; 
+        }
+        .gamesynopsis {
+            font-size: 16px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: rgba(51, 51, 51, 1);
+            line-height: 16px;
+        }
+
+        .span_list {
+            background: rgba(241, 248, 242, 1);
+            padding: 5px;
+            border-radius: 5px;
+            opacity: 0.72;
+        }
+
+        .append_div {
+            background: black;
+            color: #FFFFFF;
+            opacity: 0.5;
+            text-align: center;
+            position: absolute;
+            height: 100px;
+            width: 80px;
+        }
+
+        .retextfont {
+            font-size: 15px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: rgba(51, 51, 51, 1);
+            line-height: 22px;
+        }
+
+        .swiper-container {
+            height: 100%;
+            padding-bottom: 2px;
+        }
+
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-pack: center;
+            -ms-flex-pack: center;
+            -webkit-justify-content: center;
+            justify-content: flex-start;
+            -webkit-box-align: center;
+            -ms-flex-align: center;
+            -webkit-align-items: center;
+            align-items: center;
+            border-radius: 10px;
+        }
+
+        .slideboxviodewidth {
+            position: relative;
+            width: 150px;
+            border-radius: 5px 5px 0px 0px;
+        }
+
+        .slideboxwidth {
+            width: 309px;
+            height: 174px;
+        }
+        .slideboxwidthvideo{
+            width: 309px;
+             height: 100%;
+             border-radius: 15px;
+             object-fit: cover;
+        }
+        .slideboxheight {
+            width: 160px;
+            height: 285px;
+        }
+
+        .essential {
+            padding: 0 15px
+        }
+
+        .txt {
+            font-size: 14px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: rgba(119, 119, 119, 1);
+            line-height: 21px;
+        }
+
+        /*评分*/
+        .star {
+            width: 233px;
+            height: 20px;
+            background: rgba(245, 245, 245, 1);
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .staricondiv {
+            position: relative;
+            height: 20px;
+            background: rgba(255, 204, 3, 1);
+            border-radius: 10px;
+            margin: auto 0;
+        }
+
+        .staricon {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 67px;
+            height: 10px;
+            background-image: url(https://cdn.tinytiger.cn/icon-fivestar.png);
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            z-index: 20;
+        }
+
+        .fivestar {
+            background-position: 0px;
+        }
+
+        .fourstar {
+            background-position: -14px;
+        }
+
+        .threestar {
+            background-position: -28px;
+        }
+
+        .twostar {
+            background-position: -42px;
+        }
+
+        .onestar {
+            background-position: -56px;
+        }
+
+        .gradescoretxt {
+            font-size: 50px;
+            font-family: DINAlternate-Bold, DINAlternate;
+            font-weight: bold;
+            color: rgba(51, 51, 51, 1);
+            line-height: 58px;
+        }
+
+        .fontbig {
+            font-size: 18px;
+            font-family: DINAlternate-Bold, DINAlternate;
+            font-weight: bold;
+            color: rgba(255, 85, 110, 1);
+        }
+
+        .fontsmall {
+            font-size: 14px;
+            font-family: DINAlternate-Bold, DINAlternate;
+            font-weight: bold;
+            color: rgba(255, 85, 110, 1);
+        }
+
+        .population {
+            font-size: 15px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: rgba(119, 119, 119, 1);
+            line-height: 15px;
+            margin-top: 5px;
+            margin-bottom: 18px;
+        }
+
+        .assess {
+            width: 85px;
+            height: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(251, 204, 51, 1);
+            font-size: 14px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: rgba(251, 204, 51, 1);
+            line-height: 14px;
+        }
+
+        /*标签*/
+        .label {
+            margin: 0 18px;
+        }
+        .swiper-wrapper{
+            margin-left: 2px;
+            align-items: center;
+        }
+
+        .labelitem {
+            margin-right: 10px;
+            margin-bottom: 10px;
+            padding: 10px 10px 9px 10px;
+            background: rgba(248, 241, 241, 1);
+            border-radius: 15px;
+        }
+
+        .labelitemfont {
+            font-size: 12px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: rgba(255, 85, 110, 1);
+            line-height: 12px;
+        }
+
+        .participationcount {
+            font-size: 12px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: rgba(170, 170, 170, 1);
+            line-height: 12px;
+        }
+
+        .shrink {
+            font-size: 14px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: #FBCC33;
+            line-height: 21px;
+            text-decoration: none;
+        }
+
+        /*视频介绍*/
+        .videoIntroduction {
+            margin: 20px 0 20px 15px;
+        }
+
+        .videodiv {
+            margin: 15px 0 0 0px;
+        }
+
+        .player {
+            position: absolute;
+            left: 40%;
+            width: 28px;
+            height: 28px;
+            margin-top: 25px;
+        }
+        .player1{
+            position: absolute;
+            left: 40%;
+            width: 40px;
+            height: 40px;
+            z-index: 99;
+
+        }
+
+        .mescroll {
+            position: fixed;
+            width: 100vw;
+            top: 24px;
+            bottom: 0;
+            height: auto;
+            /*如设置bottom:50px,则需height:auto才能生效*/
+        }
+
+        .game-username {
+            font-size: 14px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: rgba(51, 51, 51, 1);
+            line-height: 14px;
+        }
+
+        .userattention {
+            width:69px;
+            height:31px;
+            background:linear-gradient(126deg,rgba(255,232,7,1) 0%,rgba(255,204,3,1) 100%);
+            border-radius:16px;
+            font-size:15px;
+            font-family:PingFangSC-Medium,PingFang SC;
+            font-weight:500;
+            color:rgba(51,51,51,1);
+            line-height:15px;
+        }
+
+        .mask {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .dialogdiv{
+            width: 100%;
+            height: 100%;
+        }
+        .mask {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+        }
+
+        .dialog {
+            width: 305px;
+            height: 187px;
+            background: rgba(255, 255, 255, 1);
+            border-radius: 10px;
+        }
+
+        .dialogtop {
+            width: 275px;
+            padding: 0 15px;
+        }
+
+        .starbtn {
+            width: 50px;
+            height: 33px;
+            border-radius: 17px;
+        }
+
+        .statcolorsele {
+            border: 1px solid rgba(119, 119, 119, 0);
+            background: linear-gradient(126deg, rgba(255, 232, 7, 1) 0%, rgba(255, 204, 3, 1) 100%);
+            font-size: 15px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: rgba(51, 51, 51, 1);
+            line-height: 15px;
+        }
+
+        .statnoselect {
+            border: 1px solid rgba(119, 119, 119, 1);
+            font-size: 15px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: rgba(119, 119, 119, 1);
+            line-height: 15px;
+        }
+
+        .dialogbtn {
+            width: 275px;
+            height: 38px;
+            background: linear-gradient(126deg, rgba(255, 232, 7, 1) 0%, rgba(255, 204, 3, 1) 100%);
+            border-radius: 19px;
+            font-size: 16px;
+            font-family: PingFangSC-Regular, PingFang SC;
+            font-weight: 400;
+            color: rgba(40, 40, 40, 1);
+            line-height: 22px;
+        }
+        .fewer {
+            -webkit-line-clamp: 2;
+        }
+        .dialogtitle{
+            text-align: center;
+            width: 200px;
+            font-size:16px;
+            font-family:PingFangSC-Regular,PingFang SC;
+            font-weight:400;
+            color:rgba(40,40,40,1);
+            line-height:16px;
+        }
+        .fourpadd{
+            /* padding: 4px 0; */
+            height: 182px;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="display: none;">
+        <script type="text/javascript">document.write(unescape("%3Cspan id='cnzz_stat_icon_1278943282'%3E%3C/span%3E%3Cscript src='https://v1.cnzz.com/z_stat.php%3Fid%3D1278943282' type='text/javascript'%3E%3C/script%3E"));</script>
+    </div>
+    <div id="mescroll" class="mescroll">
+        <div class="gameDetails">
+            <!--顶部展示栏*小虎Hoo图标+名称+slogan+打开app按钮-->
+            <div class="sharetop" style="padding:8px 15px 8px 15px;">
+                <!-- 左 * 小虎Hoo图标+名称+slogan、-->
+                <div class="startcenter">
+                    <!--小虎Hoo图标-->
+                    <div class="iconhoo">
+                        <img src="https://cdn.tinytiger.cn/b55e2898efbe44673559b1a287a9960.png" />
+                    </div>
+                    <!--名称+slogan-->
+                    <div>
+                        <!--名称-->
+                        <p class="appname">小虎Hoo</p>
+                        <!--slogan-->
+                        <p class="slogan">玩“好”游戏</p>
+                    </div>
+                </div>
+                <!-- 右 * 打开app-->
+                <div>
+                    <div class="openapp appname centercenterrow">打开APP</div>
+                </div>
+            </div>
+
+            <!--详情页顶部-->
+            <div class="detailsTopbackdiv"></div>
+
+            <!--内容栏目-->
+            <div class="content">
+                <!--基本信息-->
+                <div class="essential"></div>
+
+                <!--大家说-->
+                <div class="comment"> </div>
+
+                <!--简介-->
+                <div class="synopsis">
+                    <div style="margin:11px 0 15px 15px;" class="gamesynopsis">游戏简介</div>
+                    <!-- Swiper -->
+                    <!--轮播图片-->
+                    <div class="swiper-container bannimg">
+                        <div class="swiper-wrapper swiper-wrapperbanner">
+                        </div>
+                    </div>
+                    <!--文字简介-->
+                    <div>
+                        <p class="synopsistxt">
+                            <span class="txt" id="synopsisid">
+                            </span>
+                            <a class="shrink" href="javascript:;">收缩</a>
+                        </p>
+                    </div>
+                </div>
+
+                <!--视频介绍-->
+                <div class="videoIntroduction">
+                    <div class="IntroductionVideo gamesynopsis">视频介绍</div>
+                    <div class="videodiv">
+                        <div class="swiper-container videosw">
+                            <div class="swiper-wrapper swiper-wrappervideo">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--评分-->
+                <div class="grade">
+                    <div class="VideoScore IntroductionVideo">游戏评分</div>
+                    <div class="gradecontent centerbetween">
+                        <div class="contentList"></div>
+                        <div class="gradediv centercentercolumn">
+                        </div>
+                    </div>
+                </div>
+
+                <!--评论信息-->
+                <div class="reviewInformation">
+                    <!--筛选-->
+                    <div class="reviewInformation-top centerbetween" style="padding:0 15px">
+                        <div class="startstart">
+                            <div class="centercentercolumn" onclick="newestClick()">
+                                <div class="selectnav nav newestnav">最新</div>
+                                <div class="selectbox newestbox"></div>
+                            </div>
+                            <div class="centercentercolumn" onclick="hotClick()">
+                                <div class="noselectnav nav hotnav">最热</div>
+                                <div class="noselectbox hotbox"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="navright centercentercolumn" onclick="clickgoapp()">筛选</div>
+                            <div class="noselectboxright"></div>
+                        </div>
+                    </div>
+
+                    <!--评论消息数据集-->
+                    <div class="commentinfo">
+                    </div>
+
+                    <div class="centercenterrow gamefooter" style=" padding: 35px 0 72px 0;">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="msgdialog"></div>
+    <!-- 筛选弹窗 -->
+    <div class="centercentercolumn dialogdiv">
+    </div>
+    <div class="shareModal">
+        <img src="../new_information/image/icon-guidance.png" alt="">
+    </div>
+    <!--详情页顶部-->
+    <script type="text/html" id="detailsTopbackdiv">
+        {{each item v i}}
+        <div class="detailsTopback endbetween" style="background:url({{v.img}});background-repeat:no-repeat;background-size:100% 100%;"></div>
+        {{/each}}
+    </script>
+
+    <!--基本信息-->
+    <script type="text/html" id="essential">
+        {{each item v i}}
+        <div class="centerbetween" style="margin-bottom:13px;">
+            <!--图标信息*名称-->
+            <div class="headPortrait startend">
+                <img src="{{v.img}}" />
+                <div class="gametitle distancefooter">{{v.name}}</div>
+            </div>
+            <!--关注-->
+            <div class="attentionuser centerbetween">
+                <div class="download userbackanniu" onclick="clickgoapp()"></div>
+                <div class="followed userbackanniu" onclick="clickgoapp()"></div>
+            </div>
+        </div>
+        <div class="startbetween">
+            <div class="titlediv"> {{v.title}} </div>
+            <div class="centercentercolumn">
+                <p class="">
+                    <span class="fontbig">{{v.gradeint}}.</span><span class="fontsmall">{{v.gradedecimals}}分</span>
+                </p>
+                <p class="participationcount" style='margin-top:5px;'>{{v.peopleCount||0}}人参与</p>
+            </div>
+        </div>
+        {{/each}}
+    </script>
+
+    <!--banner-->
+    <script type="text/html" id="dataBanner">
+        {{each item v i}}
+        {{if v.state==1}}
+        {{if v.videoliststate==1}}
+            <div class="swiper-slide slideboxwidth item_banner{{i}}" onclick="clickPlayer({{v}})" >
+                <img class="player1" src="https://cdn.tinytiger.cn/icon-player1.png"  />
+                <video id="example_video" autoplay='autoplay' poster='{{v.bannerback}}' class="swiper-slide slideboxwidthvideo" >
+                    <source src="{{v.videolist}}" type="video/mp4" />
+                </video>
+            </div>
+        {{/if}}
+        {{each v.bannerlist list i}}
+        <div class="swiper-slide slideboxwidth item_banner{{v.videoliststate==1?i+1:i}}" onclick="clickmagnify('{{list}}')" style="background:url({{list}});background-size:cover;background-repeat:no-repeat;margin-right:10px;">
+        </div>
+        {{/each}}
+        <div class="swiper-slide slideboxwidth " style="margin-right:10px;"></div>
+        </div>
+        {{/if}}
+        {{if v.state==2}}
+        {{if v.videoliststate==1}}
+        <div class="swiper-slide slideboxheight " onclick="clickPlayer({{v}})" >
+            <img class="player1" src="https://cdn.tinytiger.cn/icon-player2.png" style='z-index: 99;' />
+            <video id="example_video" autoplay='autoplay' poster='{{v.bannerback}}' class="swiper-slide slideboxheight" style='object-fit: cover;'>
+                <source src="{{v.videolist}}" type="video/mp4" />
+            </video>
+        </div>
+        {{/if}}
+        {{each v.bannerlist list i}}
+        <div class="swiper-slide slideboxheight" onclick="clickmagnify({{list}})" style="background:url({{list}});background-size:cover;background-repeat:no-repeat;margin-right:10px;"></div>
+        {{/each}}
+        {{/if}}
+        {{/each}}
+
+    </script>
+
+    <!--文字简介-->
+    <script type="text/html" id="synopsisidtxt">
+        {{each item v i}}
+        <span class="txtspsn">
+            {{v.title}}
+        </span>
+        {{/each}}
+    </script>
+
+    <!--视频介绍-->
+    <script type="text/html" id="datavideo">
+        {{each item v i}}
+        {{if i<10}}
+        <div class="swiper-slide slideboxviodewidth startcentercolumn" onclick="clickPlayer({{v}})" style=' box-shadow:0px 2px 4px 0px rgba(0,0,0,0.1);
+        border-radius:5px;'>
+            <div src="{{v.cover}}" style="width:150px; height:84px; background-size: cover; background-image: url({{v.cover}}); background-repeat:no-repeat; border-radius:5px 5px 0px 0px;position: relative;">
+                <img class="player" src="https://cdn.tinytiger.cn/icon-player1.png" />
+            </div>
+            <div class="datavideotitle fewer" style="margin-top:10px; margin-bottom: 20px;">{{v.title}}</div>
+        </div>
+        {{/if}}
+        {{/each}}
+    </script>
+
+    <!--评分-->
+    <script type="text/html" id="gradediv">
+        {{each item v i}}
+        <div class="gradescoretxt">{{v.grade}}</div>
+        <div class="population">{{v.peopleCount||0}}人参与</div>
+        <div class="assess centercentercolumn"  onclick="clickgoapp()">我要打分</div>
+        {{/each}}
+    </script>
+
+    <!--评分星数-->
+    <script type="text/html" id="dataList">
+        {{each item v i}}
+        <div class="star">
+            {{if v.starNumber==5}}
+            <div class="staricondiv starcolor" style="width: {{v.count*2.33}}px;">
+                <div class="staricon fivestar">
+                </div>
+            </div>
+
+            {{/if}}
+            {{if v.starNumber==4}}
+            <div class="staricondiv starcolor" style="width: {{v.count*2.33}}px;">
+                <div class="staricon fourstar">
+                </div>
+            </div>
+            {{/if}}
+            {{if v.starNumber==3}}
+            <div class="staricondiv starcolor" style="width: {{v.count*2.33}}px;">
+                <div class="staricon threestar">
+                </div>
+            </div>
+            {{/if}}
+            {{if v.starNumber==2}}
+            <div class="staricondiv starcolor" style="width: {{v.count*2.33}}px;">
+                <div class="staricon twostar">
+                </div>
+            </div>
+            {{/if}}
+            {{if v.starNumber==1}}
+            <div class="staricondiv starcolor" style="width: {{v.count*2.33}}px;">
+                <div class="staricon onestar">
+                </div>
+            </div>
+            {{/if}}
+        </div>
+        {{/each}}
+    </script>
+
+    <!--评论消息-->
+    <script type="text/html" id="commentinfoDataList">
+        {{each item v i}}
+        <div class="commentinfoitem" style="margin:10px 15px;background:#ffffff;box-shadow:0px 1px 4px 0px rgba(0,0,0,0.1);border-radius:10px;">
+            <!--顶部信息*用户信息-->
+            <div class="commentinfoitemTop centerbetween">
+                <!-- 左 -->
+                <div class="startstart" style='margin-top: 6px;'>
+                    <!--头像-->
+                    <div class="startstart" style="margin-right:10px;"><img class="userIcon" src="{{v.avatar}}" /></div>
+                    <!--昵称及星数-->
+                    <div class="startcentercolumn">
+                        <!--昵称+关注按钮-->
+                        <div class="startcenter">
+                            <div style="margin-right:10px;word-wrap:break-word;word-break:normal; max-width: 190px;" class='game-username fewer'>{{v.nickname}}</div>
+                         
+                        </div>
+                        <!--星数-->
+                        <div class="starDiv" style='display: flex; align-items: flex-start;margin: 5px 0;'>
+                            <% for(var i = 0;i < v.score;i++){ %>
+                            <img class="staritem" src=" https://cdn.tinytiger.cn/icon-starselect.png" style='margin-right:3px;' />
+                            <% } %>
+                            <% for(var i = 0;i < 5-v.score;i++){ %>
+                            <img class="staritem" src="https://cdn.tinytiger.cn/icon-starnoselect.png" style='margin-right:3px;' />
+                            <% } %>
+                        </div>
+                        <div class="usertime" style='margin-right: 14px;'>{{v.create_time}}</div> 
+                    </div>
+                </div>
+                <!--右-->
+                <div>
+                    {{if v.user_follow_status==0}}
+                    <div class="userattention centercenterrowwrap" onclick="clickgoapp()">+ <span style='margin-left:2px;'>关注</span> </div>
+                    {{/if}}
+                    {{if v.user_follow_status==1}}
+                    <div class="nouserattention centercentercolumn"> 已关注 </div>
+                    {{/if}}
+                    <!-- <div class="centerend"><img class="morenews" src="https://cdn.tinytiger.cn/icon-morenews.png" style='margin-right: 7px;' /></div>
+                    <div class="usertime" style='margin-right: 14px;'>{{v.create_time}}</div> -->
+                </div>
+            </div>
+            <!--评论内容-->
+            {{if v.title}}
+            <div class="fewer retext">{{v.title}}</div>
+            {{/if}}
+            <div style="padding:0 12px;" v-html="v.content" class="fewer retextfont">
+                {{v.content}}
+            </div>
+            <!--图片信息-->
+            <div class="sharetop" style=" padding :0 12px;">
+                {{each v.photos sub i}}
+                {{if i<3}}
+                <img class="usercommentimg" src="{{sub}}" alt="" style="margin-top:15px">
+                {{/if}}
+                {{/each}}
+            </div>
+
+            <!--操作类型-->
+            <div class="actionType sharetop">
+                <div class="centercenterrow" style="width:110px;" onclick="clickgoapp()">
+                    <img class="icondianzan" src="https://cdn.tinytiger.cn/icon-dianzan1.png" />
+                    <div class="actionTypefont">{{v.like_num}}</div>
+                </div>
+                <div class="cut-off"></div>
+                <div class="centercenterrow" style="width:100px" onclick="clickgoapp()">
+                    <img class="icondianzan" src="https://cdn.tinytiger.cn/icon-pinglun1.png" />
+                    <div class="actionTypefont">{{v.comment_num}}</div>
+                </div>
+                <div class="cut-off"></div>
+                <div class="centercenterrow" style="width:110px;" onclick="clickgoapp()">
+                    <img class="icondianzan" src="https://cdn.tinytiger.cn/icon-fenxiang1.png" />
+                    <div class="actionTypefont">{{v.share_num}}</div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </script>
+
+    <!-- Swiper JS -->
+    <script src="../public/template-web.js"></script>
+    <script src="../public/tool.js"></script>
+    <script src="../public/jquery.min.js"></script>
+    <script src="js/swiper.min.js"></script>
+    <script src="../public/mescroll.min.js"></script>
+    <script src="../public/module/msgDialog.js"></script>
+    <script src="../public/config.js"></script>
+    <script src="../public/service.js"></script>
+    <!-- Initialize Swiper -->
+    <script>
+        var dialoghtml=`<div class="centercentercolumn dialog" style="z-index: 99;">
+                            <div class="startbetween dialogtop">
+                                <div class="starbtn statcolorsele centercentercolumn" style="margin-top: 3px;">五星</div>
+                                <div class='dialogtitle'>星级选择（可多选）</div>
+                                <div class="starbtn"></div>
+                            </div>
+                            <div class="centerbetween dialogtop" style="margin-top: 10px;margin-bottom: 30px;">
+                                <div class="starbtn statnoselect centercentercolumn fivestarstate" style="" onclick="starstate(5)">五星
+                                </div>
+                                <div class="starbtn statnoselect centercentercolumn fourstarstate" onclick="starstate(4)">四星</div>
+                                <div class="starbtn statnoselect centercentercolumn threestarstate" onclick="starstate(3)">三星</div>
+                                <div class="starbtn statnoselect centercentercolumn twostarstate" onclick="starstate(2)">二星</div>
+                                <div class="starbtn statnoselect centercentercolumn onestarstate" onclick="starstate(1)">一星</div>
+                            </div>
+                            <div class="dialogbtn centercentercolumn" onclick="isOkbtn()">确定</div>
+                        </div>
+                        <div class="clickHide mask" onclick="clickHide()" style="z-index: 90;"></div>`
+        var star_class = ''; //星级
+        var currentPage = 0;//当前页
+        var comment_list_status = 1; // 状态值  1：最新  2：最热
+        var last_page = 1;// 页数
+        var detail_introduceold = ''; // 简介内容 （用户内容收缩获取值）
+        var data = [];
+        var bannerIndex=0
+        var isGetData=false
+        var mescroll = new MeScroll("mescroll", { //第一个参数"mescroll"对应上面布局结构div的id
+            //如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考第一个基础案例
+            //解析: down.callback默认调用mescroll.resetUpScroll(),而resetUpScroll会将page.num=1,再触发up.callback
+            down: {
+                auto: false,
+                callback: downCallback //下拉刷新的回调,别写成downCallback(),多了括号就自动执行方法了
+            },
+            up: {
+                use: true,
+                isBounce: false,
+                callback: upCallback //上拉加载的回调
+            }
+        });
+        window.onload = function () {
+
+            // 收缩展开对象
+            var btn = document.getElementsByTagName("a")[0];
+            // 打开app
+            var openappBtn = document.getElementsByClassName("openapp")[0];
+            //设置一个开关，记录展开和收缩
+            var isOn = false;
+            //btn添加事件，在事件里修改span文字
+            btn.onclick = function () {
+                //点击按钮的时候改变开关的值
+                isOn = !isOn;
+                if (isOn == true) {
+                    btn.innerHTML = "收缩";
+                    $('.txtspsn').html(detail_introduceold);
+                } else {
+                    //收缩
+                    btn.innerHTML = "展开";
+                    var detail_introduce = detail_introduceold.length > 95 ? detail_introduceold.substring(0, 95) + '...' : detail_introduceold;
+                    $('.txtspsn').html(detail_introduce);
+                }
+            }
+            $(".shareModal").click(function () {
+                $(".shareModal").hide()
+            })
+            openappBtn.onclick = function () {
+                goApp(4, Request('game_id'));
+            }
+            getGameInfo();
+        }
+
+        // 点击筛选
+        function clickSelect() {
+            star_class = '';
+            $('.dialogdiv').html(dialoghtml);
+            replaceClass("onestarstate", "statcolorsele", "statnoselect");
+            replaceClass("twostarstate", "statcolorsele", "statnoselect");
+            replaceClass("threestarstate", "statcolorsele", "statnoselect");
+            replaceClass("fourstarstate", "statcolorsele", "statnoselect");
+            replaceClass("fivestarstate", "statcolorsele", "statnoselect");
+        }
+
+        // 点击星级
+        function starstate(state) {
+            switch (state) {
+                case 1:
+                    selectState('onestarstate', 'statnoselect', 'statcolorsele');
+                    break;
+                case 2:
+                    selectState('twostarstate', 'statnoselect', 'statcolorsele');
+                    break;
+                case 3:
+                    selectState('threestarstate', 'statnoselect', 'statcolorsele');
+                    break;
+                case 4:
+                    selectState('fourstarstate', 'statnoselect', 'statcolorsele');
+                    break;
+                case 5:
+                    selectState('fivestarstate', 'statnoselect', 'statcolorsele');
+                    break;
+            }
+        }
+
+        // 确认筛选
+        function isOkbtn() {
+            var onestar = document.getElementsByClassName('onestarstate')[0].className;
+            var twostar = document.getElementsByClassName('twostarstate')[0].className;
+            var threestar = document.getElementsByClassName('threestarstate')[0].className;
+            var fourstar = document.getElementsByClassName('fourstarstate')[0].className;
+            var fivestar = document.getElementsByClassName('fivestarstate')[0].className;
+            var starclass = '';
+            if (onestar.indexOf('statcolorsele') > -1) {
+                starclass = '1,';
+            }
+            if (twostar.indexOf('statcolorsele') > -1) {
+                starclass += '2,';
+            }
+            if (threestar.indexOf('statcolorsele') > -1) {
+                starclass += '3,';
+            }
+            if (fourstar.indexOf('statcolorsele') > -1) {
+                starclass += '4,';
+            }
+            if (fivestar.indexOf('statcolorsele') > -1) {
+                starclass += '5,';
+            }
+            star_class = starclass.substring(0, starclass.length - 1);
+            currentPage = 1;
+            getGameInfoCommentList(false);
+            $('.dialogdiv').html('');
+
+        }
+
+        // 更新 选中状态
+        function selectState(ele, select, noselect) {
+            var elestate = document.getElementsByClassName(ele)[0].className;
+            if (elestate.indexOf(select) > -1) {
+                replaceClass(ele, select, noselect);
+            } else {
+                replaceClass(ele, noselect, select);
+            }
+        }
+
+        // 点击隐藏筛选
+        function clickHide() {
+            star_class = '';
+            $('.dialogdiv').html('');
+        }
+
+        // 点击图片
+        function clickmagnify(img) {
+
+        }
+
+        // 点击视频
+        function clickPlayer(e) {
+            goApp(4, Request('game_id'));
+        }
+
+        // 前去app
+        function clickgoapp() {
+            goApp(4, Request('game_id'));
+        }
+
+        // 最新  点击事件
+        function newestClick(e) {
+            // 处理最热按钮样式   （下划线）
+            replaceClass("hotbox", "selectbox", "noselectbox");
+
+            // 处理最新按钮样式  （下划线）
+            replaceClass("newestbox", "noselectbox", "selectbox");
+
+            // 处理最热文本样式 
+            replaceClass("hotnav", "selectnav", "noselectnav");
+
+            // 处理最新文本样式 
+            replaceClass("newestnav", "noselectnav", "selectnav");
+
+            star_class = '';
+            // 更新当前页
+            currentPage = 1;
+            // 最新数据状态值
+            comment_list_status = 1;
+            getGameInfoCommentList(false);
+        }
+
+        // 最热  点击事件
+        function hotClick(e) {
+            // 处理最新按钮样式  （下划线）
+            replaceClass("newestbox", "selectbox", "noselectbox");
+
+            // 处理最热按钮样式   （下划线）
+            replaceClass("hotbox", "noselectbox", "selectbox");
+
+            // 处理最新文本样式 
+            replaceClass("newestnav", "selectnav", "noselectnav");
+
+            // 处理最热文本样式 
+            replaceClass("hotnav", "noselectnav", "selectnav");
+
+            star_class = '';
+            // 更新当前页
+            currentPage = 1;
+
+            // 最热数据状态值
+            comment_list_status = 2;
+            getGameInfoCommentList(false);
+        }
+
+        // 游戏详情页
+        function getGameInfo() {
+            var config = {
+                gameInfoUrl: 'game/getGameInfo',
+                type: 'get',
+                data: {
+                    game_id: Request('game_id'),
+                    comment_list_status: comment_list_status
+                }
+            };
+            RequsetHttp(config.gameInfoUrl, config.type, config.token, config.data, function (res) {
+                if (res.code == 200) {
+                    document.title =  res.data.game_info.name;  
+                    var detailsTopbacklist = [{ img: res.data.game_info.background }];
+                    var detailsTopbackitem = template('detailsTopbackdiv', { item: detailsTopbacklist });
+                    $(".detailsTopbackdiv").html(detailsTopbackitem);
+
+                    //基本信息
+                    var grade = parseFloat(res.data.assess_info.average || 0).toFixed(1).split('.');
+                    var total = res.data.assess_info.total > 10000 ? (parent(res.data.assess_info.total) / 10000) + '万' : res.data.assess_info.total;
+                    var essentiallist = [{
+                        gradeint: grade[0], 
+                        gradedecimals: grade[1], 
+                        peopleCount: total,
+                        img: res.data.game_info.logo, 
+                        name: res.data.game_info.name.length > 8 ? res.data.game_info.name.substring(0, 7) + '...' : res.data.game_info.name,
+                        title: res.data.game_info.one_introduce,
+                    }];
+                    var essentialitem = template('essential', { item: essentiallist });
+                    $(".essential").html(essentialitem);
+         
+                    var height='234px'
+                    var pointList = []
+                    // 为兼容新旧版本新版本取viewpoint_list，旧版本取tag_list
+                    if (res.data.viewpoint_list.length > 0) {
+                        pointList = res.data.viewpoint_list
+                    } else {
+                        pointList = res.data.tag_list
+                    }
+                    if (pointList.length >= 16) {
+                        height = '340px'
+                    } else if (pointList.length >= 14) {
+                        height = '264px'
+                    } else if (pointList.length > 12) {
+                        height = '244px'
+                    }
+                 
+                   
+                    var str = JSON.stringify(pointList);
+                    var tagCloudhtml = `
+                    <div style="padding:20px 0 0px 15px;" class='gamesynopsis'>大家说</div>
+                    <div class="ifrtag">
+                        <iframe id="childFrame" frameborder='0' src="tagCloud.html?list=${encodeURIComponent(str)}" width="99%" height="`+height+`"></iframe>
+                    </div> `;
+                    $('.comment').html(tagCloudhtml);
+                    //banner图集
+                    if (res.data.game_info.images_introduce) {
+                        var state = res.data.game_info.images_introduce_type;
+                        var dataBannerlist = [{
+                            state: state, 
+                            bannerback:res.data.game_info.images_introduce[0],
+                            videoliststate: res.data.game_info.video_introduce ? 1 : 0,
+                            videolist: res.data.game_info.video_introduce,//'https://cdn.tinytiger.cn/000f7efb0c259a993c1da1f6e5734ba3.mp4',//
+                            bannerlist: res.data.game_info.images_introduce
+                        }];
+                        var lidataBanner = template('dataBanner', { item: dataBannerlist });
+                        $(".swiper-wrapperbanner").html(lidataBanner);
+
+                        if (dataBannerlist[0].state == 1) {
+                            // 屏幕宽度
+                            var clientWidth = document.documentElement.clientWidth;
+                            // 按375宽度算比例值（比例值=190/375）  190为375时的偏移值
+                            // 偏移值= 比例值*当前宽度
+                            var offsetBefore = 0.51 * clientWidth * 0
+                            $('.bannimg').css('margin', '0 15px')
+                            var swiper = new Swiper('.bannimg', {
+                                width: 618,
+                                slidesOffsetBefore: offsetBefore,
+                                slidesPerView: 2,
+                                autoplay: 1000,
+                                spaceBetween: 10,
+                                // centeredSlides: true,
+                                // loop: true,
+                                pagination: {
+                                    el: '.swiper-pagination',
+                                    clickable: true,
+                                },
+                                
+                                on: {
+                                    slideChangeTransitionEnd: function(){
+                                        var activeIndex=this.activeIndex-3
+                                        var length=dataBannerlist[0].bannerlist.length
+
+                                        if (dataBannerlist[0].videoliststate) {
+                                          
+                                            if (bannerIndex < activeIndex || (activeIndex == 0 && bannerIndex == length - 1)) {
+                                                console.log('左')
+                                            } else {
+                                                console.log('右')
+
+                                                if (bannerIndex == 0 && activeIndex == -1) {
+                                                    activeIndex =  length 
+                                                } else {
+                                                    // activeIndex = bannerIndex - 1
+                                                }
+                                            }
+                                            var removeclass = 'item_banner' + bannerIndex
+
+                                            var item = 'item_banner' + activeIndex
+
+                                            var removeed = '.' + removeclass
+                                            var added = '.' + item
+
+                                            $(removeed).css('height', '174px');
+
+                                            $(added).css('height', '182px');
+                                        } else {
+                                            if (bannerIndex < activeIndex || (activeIndex == 0 && bannerIndex == length - 1)) {
+                                                console.log('左')
+                                            } else {
+                                                if (bannerIndex == 0 && activeIndex == -1) {
+                                                    activeIndex = dataBannerlist[0].videoliststate == 1 ? length : dataBannerlist[0].bannerlist.length - 1
+                                                } else {
+                                                    activeIndex = bannerIndex - 1
+                                                }
+                                            }
+                                            var removeclass = 'item_banner' + bannerIndex
+
+                                            var item = 'item_banner' + activeIndex
+
+                                            var removeed = '.' + removeclass
+                                            var added = '.' + item
+
+                                            $(removeed).css('padding', '0px');
+
+                                            $(added).css('padding', '4px 0px');
+                                        }
+                                
+                                        bannerIndex=activeIndex
+                                    },
+                                },
+                            });
+
+                        } else {
+                            $('.bannimg').css('margin-left', '15px')
+                            var swiper = new Swiper('.bannimg', {
+                                width: 326,
+                                height: 200,
+                                slidesOffsetBefore: 0,
+                                slidesPerView: 2,
+                                autoplay: 1000,
+                                spaceBetween: 10,
+                                pagination: {
+                                    el: '.swiper-pagination',
+                                    clickable: true,
+                                },
+                            });
+                        }
+                    }
+                    detail_introduceold = res.data.game_info.detail_introduce;
+                    // var title=
+                    //文字简介
+                    var synopsisidlist = [{
+                        title: detail_introduceold.length > 95 ? detail_introduceold.substring(0, 95) + '...' : detail_introduceold
+                    }];
+                    var synopsisiditem = template('synopsisidtxt', { item: synopsisidlist });
+                    if (detail_introduceold.length < 95) {
+                        $(".shrink").html('');
+                    } else {
+                        $(".shrink").html('展开');
+                    }
+                    $(".txt").html(synopsisiditem);
+
+                    //视频集
+                    var dataVideolist = res.data.recommended_video;
+                    var lidataVideo = template('datavideo', { item: dataVideolist });
+                    $(".swiper-wrappervideo").html(lidataVideo);
+                    var swipervideo = new Swiper('.videosw', {
+                        width: 310,
+                        height: 168,
+                        slidesOffsetBefore: 0,
+                        slidesPerView: 2,
+                        autoplay: 1000,
+                        spaceBetween: 10,
+                        pagination: {
+                            el: '.swiper-pagination',
+                            clickable: true,
+                        },
+                    });
+                    var totalnumber = res.data.assess_info.total || 0
+                    //详情页顶部
+                    var total = totalnumber > 10000 ? (parent(totalnumber) / 10000) + '万' : totalnumber;
+                    var gradedivlist = [{ grade: parseFloat(res.data.assess_info.average || 0).toFixed(1), peopleCount: total }];
+                    var gradedivitem = template('gradediv', { item: gradedivlist });
+                    $(".gradediv").html(gradedivitem)
+
+                    //评分数据
+                    var list = res.data.assess_info.assess_group_total;
+                    // 评分数据处理
+                 
+                    var listData = [
+                        { "starNumber": '5', count: parseInt(list[5]) / totalnumber * 100 },
+                        { "starNumber": '4', count: parseInt(list[4]) / totalnumber * 100 },
+                        { "starNumber": '3', count: parseInt(list[3]) / totalnumber * 100 },
+                        { "starNumber": '2', count: parseInt(list[2]) / totalnumber * 100 },
+                        { "starNumber": '1', count: parseInt(list[1]) / totalnumber * 100 }
+                    ];
+
+                    var listDatatem = template('dataList', { item: listData });
+                    $(".contentList").html(listDatatem);
+                } else {
+
+                }
+            })
+        }
+
+        // 游戏详情页评论列表
+        function getGameInfoCommentList(refresh) {
+            var config = {
+                gameInfoUrl: 'game/getGameInfoCommentList',
+                type: 'get',
+                data: {
+                    game_id: Request('game_id'),
+                    page: currentPage,
+                    comment_list_status: comment_list_status
+                }
+            };
+            if (star_class) {
+                config.data.star_class = star_class;
+            }
+            RequsetHttp(config.gameInfoUrl, config.type, config.token, config.data, function (res) {
+                if (res.code == 200) {
+                    var commentinfoDataList = res.data.data;
+                    last_page = res.data.last_page;
+                    for (var i = 0; i < commentinfoDataList.length; i++) {
+                        // 时间处理 N 时间前
+                        commentinfoDataList[i].create_time = timeago((new Date(commentinfoDataList[i].create_time.replace(/\-/g, "/"))).getTime());
+                        if(commentinfoDataList[i].nickname){
+                            commentinfoDataList[i].nickname =commentinfoDataList[i].nickname.length>8?commentinfoDataList[i].nickname.substring(0,8)+'...':commentinfoDataList[i].nickname
+                        }
+                        var str = commentinfoDataList[i].content;
+                        // 富文本存在内容则获取图片链接
+                        if (str) {
+                            commentinfoDataList[i].photos = getSimpleImgList(str);
+                        }
+                        commentinfoDataList[i].content = getSimpleText(commentinfoDataList[i].content);
+                    }
+                    // 下拉则追加数据，否则重新渲染
+                    if (refresh) {
+                        //mescroll.endSuccess(goodscount);
+                        var commentinfoList = template('commentinfoDataList', { item: commentinfoDataList });
+                        $(".commentinfo").append(commentinfoList);
+                    } else {
+                        //mescroll.endSuccess();
+                        //mescroll.optUp.page.num = 1;
+                        //mescroll.endByPage(res.data.data.length, 5);
+                        var commentinfoList = template('commentinfoDataList', { item: commentinfoDataList });
+                        $(".commentinfo").html(commentinfoList);
+                    }
+
+                    if (last_page <= currentPage) {
+                        var footerhtml = `  <div class="gamefooter-left"></div>
+                                          <div class="gamefooter-msg" style="padding: 0 10px;">人家是一只有底线的小脑斧</div>
+                                          <div class="gamefooter-right"></div>`;
+                        $(".gamefooter").html(footerhtml);
+                    }
+                    setTimeout(function(){
+                        isGetData=false
+                    },1000)
+                } else {
+                    setTimeout(function(){
+                        isGetData=false
+                    },1000)
+                    mescroll.endErr();
+                }
+            })
+        }
+
+        //下拉刷新的回调
+        function downCallback() {
+            currentPage = 1;
+            //getGameInfoCommentList(false)
+            mescroll.endErr();
+        }
+
+        //上拉加载的回调 page = {num:1, size:10}; num:当前页 默认从1开始, size:每页数据条数,默认10
+        function upCallback(page) {
+           if(!isGetData){
+            isGetData=true
+            if (last_page >= currentPage) {
+                currentPage++;
+                console.log(currentPage)
+                getGameInfoCommentList(true);
+            }
+           }
+            mescroll.endErr();
+        }
+    </script>
+   
+</body>
+</html>

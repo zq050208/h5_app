@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title>背包</title>
+</head>
+<style>
+     * {
+        padding: 0;
+        margin: 0
+    }
+    li{
+        list-style: none;
+    }
+    html,body{
+        height: 100%;
+        width: 100%;
+        font-size: 14px;
+        background:url("https://cdn.tinytiger.cn/icon-luckyDrawback1.jpg") repeat center center;
+        background-size: cover
+    }
+
+    .main {
+        padding: 0 20px;
+        color: #fff
+    }
+
+    .title {
+        width: 100%;
+        padding: 14px 0;
+        text-align: center;
+        border-bottom: 1px solid #5d5c5c;
+        margin-bottom: 20px
+    }
+
+    .title-close {
+        float: left;
+        color: #fff;
+        text-decoration:none;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        padding: 5px 10px
+
+    }
+    a {
+        text-decoration: none;
+        color: black;
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+        -webkit-user-select: none;
+        -moz-user-focus: none;
+        -moz-user-select: none;
+    }
+
+    .tabs-list {
+        display: flex;
+        width: 100%;
+        list-style: none;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        margin-top: 32px
+    }
+
+    .tabs-list li {
+        width: 155px;
+        height: 28px;
+        border-radius: 18px;
+        color: #fff;
+        position: relative;
+        line-height: 28px
+    }
+    .tab-txt{
+        padding-left: 50px
+    }
+    .tabs-list li img{
+        width: 61px;
+        height: 48px;
+        position: absolute;
+        top: -14px;
+        left: -10px;
+    }
+    .tab-luxury{
+        background:linear-gradient(90deg,rgba(214,8,197,1) 0%,rgba(158,4,223,1) 100%);
+        box-shadow:0px 7px 18px 0px rgba(181,5,212,0.33)
+    }
+    .tab-luck{
+        background:linear-gradient(90deg,rgba(245,45,45,1) 0%,rgba(239,85,85,1) 100%);
+        box-shadow:0px 7px 18px 0px rgba(246,99,99,0.33)
+    }
+    .tab-content{
+        margin-top: 30px
+    }
+    .knapsack-msg{
+        display: flex;
+    }
+    .knapsack-msg .knapsack-img{
+        width: 54px;
+        height: 54px;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items:center;
+        border-radius:8px
+    }
+    .knapsack-img img{
+        width: 35px;
+        height: 42px;
+
+    }
+    .ticket{
+        display: flex;
+        flex-direction: column;
+        flex: 3;
+        display: flex;
+        justify-content: center;
+        padding-left: 17px
+
+    }
+    .status{
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .ticket-status{
+        background:linear-gradient(90deg,rgba(255,229,37,1) 0%,rgba(255,136,2,1) 98%);
+        color:rgba(120,50,19,1);
+        border-radius: 15px;
+        width: 66px;
+        height: 28px;
+        text-align: center;
+        line-height: 28px
+    }
+    .ticket-nostatus,
+    .pastTime{
+        background:#5f5c5c;
+        color: #fff;
+        border-radius: 15px;
+        width: 66px;
+        height: 28px;
+        text-align: center;
+        line-height: 28px
+    }
+    .lucky-noticket{
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        margin-top: 65px;
+        color: #fff
+    }
+    .lucky-noticket img{
+        width: 71vw;
+        height: 30vw;
+        margin-bottom: 30px;
+    }
+    .lucky-ticket li{
+        margin-bottom: 20px
+    }
+    .backDraw{
+        background: linear-gradient(90deg, rgba(255, 229, 37, 1) 0%, rgba(255, 136, 2, 1) 98%);
+        padding: 8px 15px;
+        color: rgba(120, 50, 19, 1);
+        border-radius: 20px;
+        font-size: 12px;
+        margin-top: 15px
+
+    }
+
+    
+
+
+
+
+</style>
+<link rel="stylesheet" href="css/iconfont.css">
+<body>
+
+    <div class="main">
+            <div class="title">
+                    <a href="#" class="title-close" onClick="javascript :window.history.back(); return false;"><i class=" iconfont icon-weibiaoti--"></i></a>
+                    <span>我的背包</span>    
+            </div>
+            <div class="tab">
+                    <ul class="tabs-list">
+                            <li class="tab-active tab-luxury">
+                                <div class="tab-txt">
+                                        <span>豪华券</span>
+                                        <span class="luxury">x0张</span>
+                                </div>
+                                <img src="image/knapsack-gold.png" alt="">
+                            </li>
+                            <li class="tab-luck">
+                                <div class="tab-txt">
+                                        <span>幸运券</span>
+                                        <span class="luck">x0张</span>
+                                </div>
+                                <img src="image/knapsack-lucky.png" alt="">
+                            </li>
+                    </ul>
+                        <div class="tab-content">
+                                <ul class="lucky-ticket">
+                                    <!-- 列表 -->
+                                </ul>
+                            </div>
+            </div>
+    </div>
+
+    
+</body>
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/service.js"></script>
+<script src="../public/config.js"></script>
+<script src="js/iconfont.js"></script>
+<script>
+
+    var config = {
+        url:"LiveLotteryController/record",
+        type:'post', 
+        token:Request('token'),
+        data:{},
+    }
+    requsetHttp(config.url,config.type,config.data,config.token,(res)=>{
+        $(".luxury").text("x"+res.data.luxury+"张");
+        $(".luck").text("x"+res.data.luck+"张");
+        var list = res.data.list;
+        var str = '';
+        if(!list.length){
+            $(".lucky-ticket").html(`<div class="lucky-noticket">
+                            <img src="image/knapsack-no.png" alt="">
+                            <span>抽iPhone XS Max!</span>
+                            <div class="backDraw">去抽奖</div></div>`) 
+
+        $(".backDraw").click(function(){
+        var str = '?token=' + config.token + '&appversion=' + Request('appversion'); 
+        location.href = 'luckyDraw.html' + str;
+        })
+                        return false
+        }
+        for(var i = 0; i <list.length; i++){
+            var newdate = new Date();
+            var olddate = new Date((list[i].end_time).replace(/-/g, '/'));
+            var date =olddate.getTime()-newdate.getTime();
+             str += ` <li >
+                            <div class="knapsack-msg">
+                               <div class="knapsack-img">
+                                <img src="`+list[i].icon+`" alt="">
+                               </div>
+                                <div class="ticket">
+                                    <span class="ticket-name">`+list[i].title+`</span>
+                                    <span class="ticket-time">中奖时间： `+simpleDateFormat(list[i].create_time)+`</span>
+                                </div>`
+                                if(date <= 0){
+                                    str += `<div class="status">
+                                <div class="pastTime">已过期</div>
+                                </div>
+                            </div>
+                        </li>`
+                                }else{
+                                    str += ` <div class="status">
+                                <div data-id = '`+list[i].id+`' class="`+(list[i].exchange_status == '0'? 'ticket-status' : "ticket-nostatus")+`">`+(list[i].exchange_status == '0' ? "兑奖" : "已兑奖")+`</div>
+                                </div>
+                            </div>
+                        </li>`
+                                } 
+        }
+        $(".lucky-ticket").append(str);
+         //   跳转到客服页面 
+        $(".ticket-status").click(function(){
+            if(browser.versions.android){
+                window.titi_js.callYSFUnicorn();
+            }else{
+                window.webkit.messageHandlers.callYSFUnicorn.postMessage(null);
+            }
+        })
+    })
+
+     /**
+     * 日期格式化
+     * @param str 日期
+     * @returns {string}
+     */
+    function simpleDateFormat(str) {
+        return str.split(" ")[0].replace(/-/g,"-");
+    }
+
+
+  
+      
+    
+
+
+
+
+</script>

@@ -1,0 +1,100 @@
+{
+  "data": [
+    {
+      "title": "小组突围赛第一阶段",
+      "list": [
+        {
+          "date": "10月15日",
+          "name": "A组突围赛",
+          "mechanism": "FPP BO6"
+        },{
+          "date": "10月16日",
+          "name": "B组突围赛",
+          "mechanism": "FPP BO6"
+        },{
+          "date": "10月17日",
+          "name": "C组突围赛",
+          "mechanism": "FPP BO6"
+        }
+      ]
+    },{
+      "title": "小组突围赛第二阶段",
+      "list": [
+        {
+          "date": "10月18日",
+          "name": "A1 vs B1",
+          "mechanism": "FPP BO6"
+        },{
+          "date": "10月19日",
+          "name": "B1 vs C1",
+          "mechanism": "FPP BO6"
+        },{
+          "date": "10月20日",
+          "name": "C1 vs A1",
+          "mechanism": "FPP BO6"
+        }
+      ]
+    },{
+      "title": "娱乐赛",
+      "list": [
+        {
+          "date": "10月21日",
+          "name": "沙龙&公益赛",
+          "mechanism": "FPP BO3"
+        }
+      ]
+    },{
+      "title": "淘汰晋级赛",
+      "list": [
+        {
+          "date": "10月22日",
+          "name": "A/B败者组",
+          "mechanism": "FPP BO6"
+        },{
+          "date": "10月23日",
+          "name": "C/D胜者组",
+          "mechanism": "FPP BO6"
+        },{
+          "date": "10月24日",
+          "name": "败者组R1",
+          "mechanism": "FPP BO6"
+        },{
+          "date": "10月25日",
+          "name": "胜者组",
+          "mechanism": "FPP BO6"
+        },{
+          "date": "10月26日",
+          "name": "败者组R2",
+          "mechanism": "FPP BO6"
+        }
+      ]
+    },{
+      "title": "总决赛",
+      "list": [
+        {
+          "date": "10月27日",
+          "name": "总决赛",
+          "mechanism": "FPP BO6"
+        },{
+          "date": "10月28日",
+          "name": "总决赛",
+          "mechanism": "FPP BO6"
+        }
+      ]
+    }
+  ],
+  "team": [
+    {
+      "grouping": "A组",
+      "list":["FG","XZ","VTOP","TIA","TGF","1ZY","100","AWMT","P1","4KINGS","CYPHER","ECgirls","YATO","MHK","SV","MFC"]
+    },
+    {
+      "grouping": "B组",
+      "list":["XDG","CEGM","WST","JSTAR","TTG","Xsheng","RBS","FGB","HBQ","EP","5TAR","Dragon","LP","YT","SGT","ZSG"]
+    },
+    {
+      "grouping": "C组",
+      "list":["SURV","TUZ","CBT","RF","ZEUS","GGT","WSTF","SMS","TMS","BS","BEST","AWY","TIGERS","FTG","GF","STE"]
+    }
+  ]
+}

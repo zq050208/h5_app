@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <link rel="stylesheet" href="../cashback/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/teenager_player.css">
+</head>
+
+
+<body>
+    <div class="main">
+        <!-- 顶部tab -->
+        <div class="top_tab">
+                <img src="img/icon-data_logo.png" alt="" style="width: 178px;height:26px;">
+            <div class="final_content">
+                <span>周决赛</span>
+                <span>名额赛</span>
+            </div>
+        </div>
+        <!-- 内容 -->
+        <div class="content ">
+            <!-- 子集tab -->
+            <!-- <div class="picScroll-left"> -->
+                    <div class="child_tab ">
+                            <div class="hd">
+                                <img src="img/icon-arrow_left.png" alt="" class="prev">
+                                <img src="img/icon-arrow_right.png" alt="" class="next">
+                            </div>
+                            <div class="bd">
+                                <ul class="data_list">
+            
+                                </ul>
+                            </div>
+                        </div>
+            <!-- </div> -->
+
+            <table class="data_table">
+                <thead>
+                    <th>排名</th>
+                    <th>选手</th>
+                    <th>场均淘汰</th>
+                    <th>场均伤害</th>
+                    <th>场均击倒</th>
+                    <th>场均助攻</th>
+                    <th>场均救援</th>
+                    <th>场均爆头率</th>
+                </thead>
+                <tbody class="content_tbody">
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+</body>
+
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="js/superSlide.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+
+<script src="../cashback/js/bootstrap.min.js"></script>
+<script>
+    // baseUrl = "http://192.168.1.241:9063/"
+    var config = {
+        cureentTab: 0,                                    // 当前点击的tab
+        url: 'YouthTrainController/getPlayerDataList',      // 地址
+        type: 'post',
+        data: {
+            type: 1
+        },
+        weekList: [],
+        all_data_list: [],
+        isClick: -1
+
+    }
+    // 顶部tab点击事件
+    $(".totalRanking").hide()
+    $(".final_content span").eq(0).addClass("active")
+    $(".final_content span").click(function () {
+        initSlide()
+        config.cureentTab = $(this).index()
+        if (config.isClick == config.cureentTab) {
+            return;
+        }
+        config.data.type = config.cureentTab == 1 ? 2 : 1
+        requestPageInfoFromNet()
+
+        $(this).addClass("active").siblings().removeClass("active")
+        $(".child_tab ul li").removeClass("active")
+
+        if (config.cureentTab == 1) {
+            $(".totalRanking").show()
+            $(".child_tab ul li").eq(0).addClass("active")
+        } else {
+            $(".totalRanking").hide()
+            $(".child_tab ul li").eq(1).addClass("active")
+        }
+    })
+
+
+    requestPageInfoFromNet()
+
+    function tagTop(list) {
+        var top = {
+            average_DBNOs: 0,
+            average_assists: 0,
+            average_damageDealt: 0,
+            average_headshotKills: 0,
+            average_kill: 0,
+            average_revives: 0
+        }
+        for (var i = 0; i < list.length; i++) {
+            if (parseInt(list[i].average_DBNOs) > parseInt(top.average_DBNOs)) top.average_DBNOs = list[i].average_DBNOs
+            if (parseInt(list[i].average_assists) > parseInt(top.average_assists)) top.average_assists = list[i].average_assists
+            if (parseInt(list[i].average_damageDealt) > parseInt(top.average_damageDealt)) top.average_damageDealt = list[i].average_damageDealt
+            if (parseInt(list[i].average_headshotKills) > parseInt(top.average_headshotKills)) top.average_headshotKills = list[i].average_headshotKills
+            if (parseInt(list[i].average_kill) > parseInt(top.average_kill)) top.average_kill = list[i].average_kill
+            if (parseInt(list[i].average_revives) > parseInt(top.average_revives)) top.average_revives = list[i].average_revives
+        }
+        return top
+    }
+
+    function requestPageInfoFromNet() {
+        config.isClick = config.cureentTab;
+        requsetHttp(config.url, config.type, config.data, null, (res) => {
+            config.weekList = res.data.user_data_list
+            config.all_data_list = config.cureentTab == 1 ? res.data.user_all_data_list : []
+
+            $(".data_list").empty()
+            $("tbody").empty()
+            var itemString = config.cureentTab == 1 ? '<li class="totalRanking">总排名</li>' : ''
+            for (let index_f = 0; index_f < config.weekList.length; index_f++) {
+                var weak_num = config.cureentTab == 1 ? config.weekList[index_f].day_num : config.weekList[index_f].week_num;
+                itemString += `<li>${weak_num}</li>`
+            }
+            $(".data_list").append(itemString)
+            initSlide()
+
+            // 子集tab
+            $(".child_tab ul li").eq(0).addClass("active")
+            $(".child_tab ul li").click(function () {
+                $(this).addClass("active").siblings().removeClass("active")
+                $("tbody").empty()
+                console.log($(this).index());
+                var index = config.cureentTab == 1 ? $(this).index() - 1 : $(this).index();
+                getallData(index)
+            })
+
+            getallData(config.cureentTab == 1 ? -1 : 0)
+
+        })
+    }
+
+    function getallData(index) {
+        var str = ''
+        var list = config.cureentTab == 1 && index == -1 ? config.all_data_list : config.weekList[index].user_list
+        var numTop = tagTop(list);
+        if (!list.length) $("tbody").html("<div class='nolength'>暂无数据~</div>")
+        for (var i = 0; i < list.length; i++) {
+            str += `  <tr>
+                        <td>${i + 1}</td>
+                        <td class="team_playername">${list[i].name}</td>
+                        <td class="${ list[i].average_kill == numTop.average_kill ? 'coloryellow' : ''}">${list[i].average_kill || 0}</td>
+                        <td class="${ list[i].average_damageDealt == numTop.average_damageDealt ? 'coloryellow' : ''}">${list[i].average_damageDealt || 0}</td>
+                        <td class="${ list[i].average_DBNOs == numTop.average_DBNOs ? 'coloryellow' : ''}">${list[i].average_DBNOs || 0}</td>
+                        <td class="${ list[i].average_revives == numTop.average_revives ? 'coloryellow' : ''}">${list[i].average_revives || 0}</td>
+                        <td class="${ list[i].average_assists == numTop.average_assists ? 'coloryellow' : ''}">${list[i].average_assists || 0}</td>
+                        <td class="${ list[i].average_headshotKills == numTop.average_headshotKills ? 'coloryellow' : ''}">${list[i].average_headshotKills== null || list[i].average_headshotKills ==0 ? 0 :list[i].average_headshotKills+"%"}</td>
+                    </tr>`
+        }
+        $("tbody").append(str)
+
+
+    }
+
+    // initSlide()
+    function initSlide() {
+        jQuery(".child_tab").slide(
+            {
+                titCell: ".hd img",
+                mainCell: ".bd ul",
+                autoPage: true,
+                effect: 'left',
+                vis: 9,
+                pnLoop: false,
+                prevCell:'.prev',
+                nextCell:'.next'
+            });
+    }
+
+
+
+
+</script>
+
+
+</script>

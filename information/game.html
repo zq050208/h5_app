@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <title>资讯赛事</title>
+    <link rel="stylesheet" href="../public/mescroll.min.css">
+    <link rel="stylesheet" href="css/game.css">
+</head>
+
+<body>
+    <!-- tab -->
+    <div class="scoll-view mescroll-touch-x"></div>
+    <!-- 赛事 -->
+            <div id="mescroll" class="mescroll" >
+                    <div class="mescroll-content">
+                            <ul class="content-list" >
+                            </ul>
+                    </div>
+                </div>
+</body>
+
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+<script src="../public/mescroll.min.js"></script>
+<script>
+    var config = {
+        categoryUrl: 'NewsMatchController/getMatchCategory',             // 赛事分类url
+        getMatchListUrl: 'NewsMatchController/getMatchList',             // 资讯赛事url
+        totalPage:1,
+        getMatchListData: {
+            match_category: 0,
+            type: 1,
+            page: 1
+        },
+        type: "post",
+        mescroll: initMescroll(),
+        up: 'up',
+        flush: 'flush',
+        historyPage:1,                              // 历史数据当前页
+        upLoadPage:1,                               // 正常数据当前页
+        isLoadHistory:true,                         // 是否拉历史数据标识符
+        isLoadlist:true,                            // 是否拉正常数据标识符
+        lastList:[],                                // 记录上一页数组
+        jumpUrl:'',                                 // 跳转地址
+        channel: Request('channel'),                // 区别小虎电竞的标识
+        xhdj_uid: Request('xhdj_uid')              // 小虎user_id
+    }
+    requsetHttp(config.categoryUrl, config.type, {}, null, (res) => {
+        if (res.code == 200) {
+            var data = res.data.category_list
+            var str = ""
+            for (var i = 0; i < data.length; i++) {
+                str += `<li class="tab-item" data-id="${data[i].id}">${data[i].name}</li>`
+            }
+            config.getMatchListData.match_category = data[0].id
+            $(".scoll-view").append(str)
+        }
+        $(".tab-item").eq(0).addClass("tab-active");
+        $(".tab-item").click(function () {
+            $(this).addClass("tab-active").siblings().removeClass("tab-active")
+            $(".content-list").empty()
+            $(".mescroll-upwarp").remove()
+            config.getMatchListData.match_category = $(this).attr("data-id")
+            config.getMatchListData.type =1
+            config.mescroll.optUp.page.num = 1;
+            config.getMatchListData.page =1
+            config.upLoadPage = 1
+            config.historyPage = 1
+            config.isLoadHistory = true
+            config.isLoadlist = true
+            getdataList()
+        })
+        config.mescroll.optUp.page.num = 1;
+        getdataList()
+    })
+
+    function getdataList(type){
+        if (type == "flush") {
+            config.mescroll.optUp.page.num = 1;
+            // config.getMatchListData.page = 1
+            config.getMatchListData.type =2
+            config.getMatchListData.page = config.historyPage
+            if (config.isLoadHistory == false) {config.mescroll.endSuccess();return}
+        }else{
+            config.getMatchListData.type =1
+            config.getMatchListData.page = config.upLoadPage
+            if (config.isLoadlist == false) {config.mescroll.endSuccess();return}
+        }
+        requsetHttp(config.getMatchListUrl, config.type, config.getMatchListData, null, (res)=>{
+            config.jumpUrl = res.data.news_detail
+            var list = type == "flush" ? res.data.list.reverse() : res.data.list;
+            var str = ''
+            config.mescroll.setPageSize(list.length)
+            if (!list.length) $(".content-list").html("<div class='nolength' > <img src='image/icon-nolengthgame.png' alt=''><span>暂无数据</span></div>")
+            for(var i = 0; i <list.length; i++){
+                var sublist = list[i].list
+                str +=` <li class="datalist">
+                                    <div class="title_time">${getDayName(list[i].date)}</div>
+                                    <div class="game_content">`
+                                        for(var j = 0; j <sublist.length; j++){
+                                            str +=`<div class="game_item" >
+                                            <div class="title_name">${sublist[j].match_name}</div>
+                                            <div class="${Number(sublist[j].news_id)>0 ? 'goDetail' : 'gamelist'}" onclick="toDetail(${sublist[j].news_id},${sublist[j].news_category_id})">
+                                                <div class="time_content">
+                                                    <span class="time">${cutTime(sublist[j].match_time)}</span>
+                                                    <span class="match_format">${sublist[j].match_format}</span>
+                                                </div>
+                                                <div class="match_content">
+                                                    <div class="${sublist[j].match_type == 2 ? "match_schedule" : "bureauShow"}">${sublist[j].match_schedule}</div>`
+                                                    if(sublist[j].match_type == 2){
+                                                        str+=`<div class="${sublist[j].first_team ||sublist[j].second_team  || sublist[j].third_team ? 'pubg_content' :'pubg_contentShow'}">
+                                                        <div class="pubg_msg">
+                                                            <img src="image/icon-pubgfirst.png" alt="">
+                                                            <span class="pubg_name">${sublist[j].first_team}</span>
+                                                        </div>
+                                                        <div class="pubg_msg">
+                                                            <img src="image/icon-pubgsecond.png" alt="">
+                                                            <span class="pubg_name">${sublist[j].second_team}</span>
+                                                        </div>
+                                                        <div class="pubg_msg">
+                                                            <img src="image/icon-pubgthird.png" alt="">
+                                                            <span class="pubg_name">${sublist[j].third_team}</span>
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                            <div class="${Number(sublist[j].news_id)>0? 'analyze' :"analyzesShow"}">
+                                                    <img src=" image/icon-analyze.png" alt="" style="width:28px;height:34px">
+                                                </div>
+                                        </div>`
+                                                    }else{
+                                                        str+=`<div class="msg_content">
+                                                        <div class="left_msg">
+                                                            <img src="${sublist[j].team1 == null ? '' :sublist[j].team1.team_logo}"
+                                                                alt="">
+                                                            <span class="team_name">${sublist[j].team1 == null ? '' : sublist[j].team1.team_name}</span>
+                                                        </div>
+                                                        <div style="font-size: 10px" class="game_vs">
+                                                             <span class="${sublist[j].is_result == 0 ? 'vs' : "showVs"}">VS</span> 
+                                                            <div class="${sublist[j].is_result == 1 ? '' : "result"}">
+                                                                                    <span>${sublist[j].team1 == null ? '' : sublist[j].team1.score}</span>
+                                                                                    <span>-</span>
+                                                                                    <span>${ sublist[j].team2 == null ? '' : sublist[j].team2.score}</span>
+                                                                            </div>
+                                                        </div>
+                                                        <div class="right_msg">
+                                                            <img src="${ sublist[j].team2 == null ? '' : sublist[j].team2.team_logo}"
+                                                                alt="">
+                                                            <span class="team_name">${sublist[j].team2 == null ? '' : sublist[j].team2.team_name}</span>
+                                                        </div>
+                                                    </div>
+                                                </div><div class="${Number(sublist[j].news_id)>0? 'analyze' :"analyzesShow"}">
+                                                    <img src=" image/icon-analyze.png" alt="" style="width:28px;height:34px">
+                                                </div>
+                                            </div>
+                                        </div>`
+                                        }
+                              }
+                     str +=`</div></li>`
+            }
+
+            if (type == config.flush) {
+                config.mescroll.endSuccess();
+                config.mescroll.optUp.page.num = 1;
+                config.mescroll.endByPage(res.data.list.length, res.data.page.totalPage);
+                if(config.lastList.length ==0 && list.length != 0){
+                    $(".content-list").empty()
+                }
+                $(".content-list").prepend(str);
+                if(Number(res.data.page.totalPage) >= Number(config.historyPage)){
+                    if (Number(res.data.page.totalPage) == Number(config.historyPage)) {
+                        config.isLoadHistory = false
+                        return
+                    }
+                config.isLoadHistory = true
+                config.historyPage ++;
+            }
+            } else {
+                config.mescroll.endByPage(res.data.list.length, res.data.page.totalPage);
+                $(".content-list").append(str);
+                if(Number(res.data.page.totalPage) >= Number(res.data.page.page)){
+                    if(Number(res.data.page.totalPage) == Number(res.data.page.page)){
+                        config.isLoadlist = false
+                        return
+                    }
+                    config,isLoadlist = true
+                config.upLoadPage++; 
+            }
+            }
+            config.lastList = list
+        })
+    }
+    function toDetail(news_id,category_id){
+        if(Number(news_id)>0){
+            window.location.href = config.jumpUrl+'?news_id='+news_id+"&category_id="+category_id+"&channel="+config.channel+"&xhdj_uid="+config.xhdj_uid
+        }
+    }
+
+    function initMescroll() {
+        var mescroll  =  new MeScroll("mescroll", {
+            up: {
+                callback: upCallback,
+                isBounce: false,
+                noMoreSize: 1,
+                auto: false,
+                htmlNodata: '<p class="upwarp-nodata">没有更多了</p>'
+            },
+            down: { 
+                auto: false,
+                callback: downCallback 
+                }
+        });
+        return mescroll;
+    }
+
+    /**
+     * 下拉刷新的回调
+     */
+    function downCallback() {
+        getdataList(config.flush);
+    }
+
+    /**
+     * 上拉加载的回调
+     */
+    function upCallback() {
+        getdataList(config.up);
+    }
+
+    function cutTime(time) {
+        return time.substring(10, 16)
+        console.log(time)
+    }
+
+    function isNull(object) {
+    if (object == null || typeof object == "undefined") {
+      return true;
+    }
+    return false;
+  }
+
+  function getWeek(dateString) {
+    var date;
+    if (isNull(dateString)) {
+      date = new Date();
+    } else {
+      var dateArray = dateString.split("-");
+      date = new Date(dateArray[0], parseInt(dateArray[1] - 1), dateArray[2]);
+    }
+    return "星期" + "日一二三四五六".charAt(date.getDay());
+  }
+
+  function getDayName(d) {
+    var td = new Date();
+    td = new Date(td.getFullYear(), td.getMonth(), td.getDate());
+    var od = new Date(d);
+    od = new Date(od.getFullYear(), od.getMonth(), od.getDate());
+    var xc = (od - td) / 1000 / 60 / 60 / 24;
+    if (xc == 0) {
+      return "今天";
+    } else if (xc < 2&& xc>0) {
+      return "明天";
+    }else if (xc == -1) {
+      return "昨天";
+    }  else {
+      var ods = od.getMonth()+1;
+      var days = od.getDate();
+      if (ods >= 1 && ods <= 9) {
+        ods = "0" + ods;
+      }
+      if (days >= 0 && days <= 9) {
+        days = "0" + days;
+      }
+      return ods + "-" + days + " " + getWeek(d);
+    }
+}
+   
+
+
+
+
+
+
+</script>

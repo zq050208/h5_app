@@ -1,0 +1,172 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,viewport-fit=cover, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>说明</title>
+    <style>
+        body {
+            padding-bottom: constant(safe-area-inset-bottom);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+        .maincontent {
+            padding: 0px 15px;
+        }
+        .headertop {
+            width: 100%;
+            top: 0;
+            position: fixed;
+            background-color: white;
+            z-index: 99;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 40px;
+        }
+        .maincontent {
+            margin-top: 60px;
+        }
+        .header > div {
+            display: flex;
+            flex: 1;
+            text-align: center;
+            justify-content: center;
+        }
+
+        .title {
+            margin-top: 20px;
+            font-size: 14px;
+            font-family: PingFangSC-Medium;
+            font-weight: 500;
+            color: rgba(37,39,42,1);
+            line-height: 20px;
+        }
+
+        .content {
+            font-size: 14px;
+            font-family: PingFangSC-Regular;
+            font-weight: 400;
+            color: rgba(153,153,153,1);
+            line-height: 21px;
+        }
+
+        .shopselectfont, exchangselectfont {
+            font-size: 14px;
+            font-family: PingFangSC-Regular;
+            font-weight: 400;
+            line-height: 14px;
+        }
+
+        .select {
+            color: rgba(37,39,42,1);
+            font-size: 14px;
+            font-family: PingFangSC-Regular;
+            font-weight: 400;
+        }
+
+        .selected {
+            color: rgba(255,148,0,1);
+            font-size: 14px;
+            font-family: PingFangSC-Regular;
+            font-weight: 400;
+        }
+
+        .main {
+            width: 100%;
+            position: relative;
+            margin-top: 60px;
+            z-index: 1;
+        }
+
+            .main img {
+                position: absolute;
+                top: 5.3vw;
+                left: 20vw;
+                width: 60.8vw;
+                margin-bottom: 25px;
+            }
+    </style>
+</head>
+<body>
+    <div class="headertop">
+        <div class="header"></div>
+    </div>
+    <div class="maincontent"></div>
+    <div class="main"></div>
+    <script src="../public/jquery.min.js"></script>
+    <script>
+        var html = `<div class='shopselectfont selected' onclick='shop()'>商城指引</div>
+                            <div class='exchangselectfont select' onclick='exchang()'> 兑换指引</div>`;
+
+        var maincontent = ` <p class="title">赛事商城</p>
+                                        <p class="content">
+                                            1.商城仅能通过铜钱进行兑换，兑换率99.99%。 <br /> <br />
+                                            2.赛事收入+充值收入+其他收入大于等于商品价值时，才能在商城中进行兑换。  <br /> <br />
+                                            3.兑换后，工作人员会立即进行审核，一经审核通过，立即发放奖品请耐心等待。 <br /> <br />
+                                            4.查看方式：兑换后，请及时关注系统消息推送，或者从“我的奖品”中查看卡密，游戏点券请登陆所提交的游戏账号进行查看。 <br /> <br />
+                                            5.奖品发放形式：京东电子卡等虚拟卡，将以卡密形式发放；游戏点券将在游戏中直接发放。 <br /> <br />
+                                            6.兑换后，用户账户会扣除掉相应数额的铜钱。 <br /><br /><br /><br /><br />
+                                        </p>
+
+                                        <p class="title">兑换商城</p>
+                                        <p class="content">
+                                            1.商城仅能通过铜钱进行兑换，兑换率99.99%。 <br /> <br />
+                                            2.流水总额度必须大于等于充值总额度，才能在商城中进行兑换。  <br /> <br />
+                                            3.兑换后，工作人员会立即进行审核，一经审核通过，立即发放奖品请耐心等待。 <br /> <br />
+                                            4.查看方式：兑换后，请及时关注微信的兑换消息推送，或者从“我的奖品”中查看卡密，游戏点券请登陆所提交的游戏账号进行查看。 <br /> <br />
+                                            5.奖品发放形式：京东电子卡等虚拟卡，将以卡密形式发放；游戏点券将在游戏中直接发放。 <br /> <br />
+                                            6.兑换后，用户账户会扣除掉相应数额的铜钱。 <br /> <br />
+                                        </p>`;
+
+        var main = `<img src="https://cdn.tinytiger.cn/icon-exchangeguide.png" />`;
+
+        $('.header').html(html);
+        $('.maincontent').html(maincontent);
+        var className = '';
+        function shop() {
+            console.log('1')
+         
+
+            className = $('.shopselectfont')[0].className;
+            if (className.indexOf('selected')) {
+                $('.shopselectfont').addClass('selected');
+                $('.shopselectfont').removeClass('select');
+                $('.exchangselectfont').removeClass('selected');
+                $('.exchangselectfont').addClass('select');
+
+
+                var number = $(".maincontent").children().length;
+                $(".main").hide();
+                if (number > 0) {
+                    $(".maincontent").show();
+                } else {
+                    $(".maincontent").html(maincontent);
+                }
+            }
+
+        }
+        function exchang() {
+            console.log($('.exchangselectfont')[0].className)
+            className = $('.exchangselectfont')[0].className;
+            if (className.indexOf('selected')) {
+                $('.exchangselectfont').addClass('selected');
+                $('.exchangselectfont').removeClass('select');
+                $('.shopselectfont').removeClass('selected');
+                $('.shopselectfont').addClass('select');
+
+                var number = $(".main").children().length;
+                $(".maincontent").hide();
+                if (number > 0) {
+                    $(".main").show();
+                } else {
+                    $(".main").html(main);
+                }
+              
+            }
+        }
+    </script>
+</body>
+</html>

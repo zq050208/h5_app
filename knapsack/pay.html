@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1  .0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title>购买豪华券</title>
+    <link rel="stylesheet" href="../public/ydui.css">
+    <link rel="stylesheet" href="css/iconfont.css">
+</head>
+<style>
+      * {
+        padding: 0;
+        margin: 0
+    }
+    li{
+        list-style: none;
+    }
+    html,
+    body{
+        width: 100%;
+        height: 100%;
+        font-size: 14px;
+        background:url("https://cdn.tinytiger.cn/icon-luckyDrawback1.jpg") no-repeat center center;
+        background-size: cover
+    }
+
+    .main {
+        padding: 0 20px;
+        color: #fff
+    }
+
+    .title {
+        width: 100%;
+        padding: 20px 0;
+        text-align: center;
+        border-bottom: 1px solid rgba(183, 183, 210, 0.1);
+        margin-bottom: 20px
+    }
+
+    .title-close {
+        float: left;
+        color: #fff;
+        text-decoration:none;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        padding: 5px 10px;
+        
+    }
+    .choose{
+        padding-bottom: 10px;
+   
+    }
+    .choose-num{
+        width: 270px;
+        height: 65px;
+        background-color: #ba00db;
+        margin-top: 15px;
+        border-radius: 35px;
+        display: flex;
+    }
+    .choose-gold{
+        width: 91px;
+        height: 70px;
+        flex: 1;
+        margin-top: -10px;
+        margin-left: -3px
+    }
+    .calculate img{
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        
+    }
+    .calculate{
+        /* float: right; */
+        flex: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    /* 支付方式 */
+    .payWay{
+        margin-top: 20px
+    }
+    .pay{
+        display: flex;
+        margin-top: 30px
+    }
+    .pay img{
+        width: 29px;
+        height: 29px;
+    }
+    .left{
+        display: flex;
+        flex: 4;
+        align-items: center
+    }
+    .right{
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+    .pay-txt{
+        padding-left: 20px
+    }
+    .radio{
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background-color: #595c5c;
+        display: flex;
+        align-items: center;
+        justify-content: center
+        
+    }
+    .radio-active{
+        width: 7px;
+        height: 7px;
+        background-color: #fff;
+        border-radius: 50%;
+        display: none;
+    }
+    .payBtn{
+        width: 100%;
+        padding: 16px 0;
+        background:linear-gradient(90deg,rgba(255,229,37,1) 0%,rgba(255,136,2,1) 98%);
+        border-radius:26px;
+        border: none;
+        margin-top: 50px;
+        text-align: center;
+        color:rgba(120,50,19,1);
+    }
+
+
+    input{
+        background:none;
+        outline:none;
+        border:0px;
+        width: 80px;
+        height: 30px;
+        line-height: 30px;
+        color: #ffffff;
+        text-align: center;
+    }
+
+</style>
+<body>
+    <div class="main">
+            <div class="title">
+                    <i class="title-close iconfont icon-weibiaoti--"></i>
+                    <span>购买豪华券</span>
+            </div>
+            <div class="choose">
+                    <span class="choose-title">选择购买张数</span>
+                    <div class="choose-num">
+                        <img src="image/knapsack-gold.png" alt="" class="choose-gold">
+                        <div class="calculate">
+                           <img src="image/subtract.png" alt="" class="subtract">
+                            <input class="totalNum" type="number" value="3" maxlength="3" style="outline:none" />
+                           <img src="image/plus.png" alt="" class="plus">
+                        </div>
+                    </div>
+            </div>
+            <!-- 支付 -->
+            <div class="payWay">
+                <ul>
+                    <li class="pay" data-type="gold">
+                        <div class="left">
+                            <img src="image/gold.png" alt="">
+                            <div class="pay-txt">
+                                <div>金币支付</div>
+                               <div>余额：<span class="gold_balance">0</span>金币</div>
+                            </div>
+                        </div>
+                        <div class="right">
+                            <div class="radio">
+                                <div class="radio-active"></div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="pay" data-type="ali">
+                            <div class="left">
+                                <img src="image/pay.png" alt="">
+                                <div class="pay-txt">
+                                    <div>支付宝支付</div>
+                                </div>
+                            </div>
+                            <div class="right">
+                                <div class="radio">
+                                    <div class="radio-active"></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="pay" data-type="wechat">
+                                <div class="left">
+                                    <img src="image/wechat.png" alt="">
+                                    <div class="pay-txt">
+                                        <div>微信支付</div>
+                                    </div>
+                                </div>
+                                <div class="right">
+                                    <div class="radio">
+                                        <div class="radio-active"></div>
+                                    </div>
+                                </div>
+                            </li>
+                </ul>
+            
+            </div>
+            <div class="payBtn">支付0金币</div>
+
+    </div>
+    
+</body>
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/service.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/ydui.js"></script>
+<script src="../public/ydui.flexible.js"></script>
+<script src="js/iconfont.js"></script>
+<script>
+    var totalNum = 3;
+    var pay_type = 'gold';
+
+    $(function(){
+
+        changeBuyNum(totalNum);
+        $('.gold_balance').text(Request('gold'));
+        $('.radio-active').eq(0).show();
+        $('.title-close').click(function () {
+           pageCallBack();
+        });
+
+        $(".calculate .subtract").click(function(){
+            totalNum--;
+            changeBuyNum(totalNum);
+        });
+
+        $(".calculate .plus").click(function(){
+            totalNum++;
+            changeBuyNum(totalNum);
+        });
+
+        $(".totalNum").bind('input propertychange',function(res) {
+            var val = $(this).val();
+            if(val%1 !== 0){
+                val = Math.floor(val);
+            }
+            totalNum = val;
+            changeBuyNum(val);
+        }).blur(function () {
+            if(!totalNum){
+                totalNum = 1;
+                changeBuyNum(totalNum);
+            }
+        });
+
+        $(".payWay .pay").click(function(){
+            pay_type = $(this).attr('data-type');
+            $(this).find('.radio-active').show();
+            $(this).siblings().find('.radio-active').hide();
+            changeBuyNum(totalNum);
+        });
+
+        $(".payBtn").click(function(){
+            var obj = {
+                url: 'LiveLotteryController/recharge',
+                data: {num: totalNum, pay_type: pay_type },
+                token: Request('token') ,
+                type: 'post'
+            };
+            requsetHttp(obj.url, obj.type , obj.data, obj.token,(res)=>{
+                if(res.status == 1){
+                    if(obj.data.pay_type == 'gold'){
+                        onLoad();
+                    }else{
+                        var data = JSON.stringify(res.data);
+                        if(browser.versions.android){
+                            window.titi_js.callPay(data);
+                        }else{
+                            window.webkit.messageHandlers.callPay.postMessage(data);
+                        }
+                    }
+                }else{
+                    YDUI.dialog.alert(res.msg,function () {
+
+                    });
+                }
+            })
+        });
+    });
+
+    function changeBuyNum(tNum){
+        if(tNum || tNum === 0){
+            if (tNum <= 0){
+                totalNum = 1;
+            }else if( tNum >= 100){
+                totalNum = 100;
+            }
+        }
+        $(".totalNum").val(totalNum);
+        var txt = function(){
+          if (pay_type == 'gold'){
+              return '金币';
+          } else {
+              return '元';
+          }
+        };
+        $(".payBtn").html('支付' + totalNum + txt());
+    }
+
+    function pageCallBack() {
+        history.back();
+    }
+
+    function onLoad(){
+        YDUI.dialog.alert('支付成功',function () {
+            pageCallBack();
+        });
+    }
+
+</script>

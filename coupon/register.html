@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title>注册有礼</title>
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+    
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        font-size: 14px;
+        background: rgba(37, 39, 42, 1);
+    }
+    
+    .mian {
+        width: 100%;
+        height: 100vw;
+        background: url("https://cdn.tinytiger.cn/icon-registerBg.png") no-repeat 100%/100%;
+        margin-top: 30px
+    }
+    
+    .title,
+    .subheading {
+        text-align: center
+    }
+    
+    .title {
+        font-size: 16px;
+        font-family: PingFangSC-Medium;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 1);
+        padding: 11px 0
+    }
+    
+    .subheading {
+        font-size: 12px;
+        font-family: PingFangSC-Regular;
+        font-weight: 400;
+        color: #6d6e70;
+    }
+    
+    .msg {
+        padding: 0 30px
+    }
+    
+    input {
+        width: 90%;
+        background-color: #25272a;
+        border: 1px solid rgba(255, 255, 255, 0.23);
+        padding: 13px 11px;
+        color: #fff;
+        outline: none
+    }
+    
+    .codeMsg {
+        display: flex;
+        width: 100%
+    }
+    
+    .phoneNumber {
+        margin-bottom: 15px
+    }
+    
+    .codeMsg input {
+        flex: 2
+    }
+    
+    .code {
+        flex: 1;
+        border: 1px solid rgba(255, 255, 255, 0.23);
+        border-left: 0;
+        color: rgba(255, 255, 255, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center
+    }
+    
+    .tips {
+        color: rgba(242, 79, 79, 1);
+        font-size: 12px;
+        padding-top: 10px;
+        display: none
+    }
+    
+    .button {
+        width: 98%;
+        color: #fff;
+        background: linear-gradient(130deg, rgba(255, 153, 0, 1) 0%, rgba(255, 123, 0, 1) 100%);
+        border-radius: 4px;
+        text-align: center;
+        padding: 18px 0;
+        margin-top: 26px
+    }
+</style>
+
+<body>
+    <div class="mian">
+        <div class="title">恭喜，获得一张娱乐赛入场券</div>
+        <div class="subheading">活下来 荣耀与金钱与你同在</div>
+    </div>
+    <div class="msg">
+        <input type="number" placeholder="请输入手机号码注册" class="phoneNumber" maxlength="11">
+        <div class="codeMsg">
+            <input type="number" placeholder="请输入验证码" class="codeNumber">
+            <span class="code">获取验证码</span>
+        </div>
+        <div class="tips"></div>
+        <div class="button">去比赛</div>
+    </div>
+
+</body>
+
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+<script>
+    baseUrl = "http://192.168.1.241:9093/"
+    var config = {
+            loginUrl: 'LoginController/phoneLogin',
+            codeUrl: 'LoginController/sendVerificationCode',
+            type: 'post',
+            txt1: "验证码输入错误，请重新输入",
+            txt2: "请输入正确手机号",
+        }
+        // 获取验证码
+    $(".code").click(function() {
+            var mobile = $(".phoneNumber").val()
+            var data = {
+                phone: mobile
+            }
+            var phone = mobile.trim()
+            if (phone == 0) {
+                $(".tips").text(config.txt2).show()
+            } else if (!(/^[1][3-9][0-9]{9}$/.test(phone))) {
+                $(".tips").text(config.txt2).show()
+            }
+
+            requsetHttp(config.codeUrl, config.type, data, null,(res)=>{
+                if (res.status) {
+
+                    $(".tips").text(res.msg).show()
+                }
+
+            })
+
+
+        })
+        // 注册
+    $(".button").click(function() {
+        var user_id = Request('user_id');
+        var data = {
+            phone: $(".phoneNumber").val(),
+            verification_code: $(".codeNumber").val()
+        }
+        if (user_id) {
+            data.invite_user_id = user_id;
+            data.pagekey = 'live_lottery'
+        }
+        if (data.verification_code) {
+            requsetHttp(config.loginUrl, config.type, data, null,(res)=>{
+
+                if (res.status == 1) {
+                    location.href = 'https://h5.lsjdj.cn/web_app/knapsack/download.html';
+                } else {
+                    $(".tips").text(config.txt1).show()
+                }
+            })
+        }
+
+    })
+    $(".phoneNumber").focus(function() {
+        $(".tips").text(config.txt2).hide()
+
+    })
+
+    $(".codeNumber").focus(function() {
+        $(".tips").text(config.txt1).hide()
+    })
+</script>

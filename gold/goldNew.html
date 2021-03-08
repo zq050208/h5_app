@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <link rel="stylesheet" href="css/ydui.css">
+    <link rel="stylesheet" href="css/gold.css?v=Math.random()">
+    <title>金币</title>
+</head>
+<body>
+
+<div class="m-cell m-cell-top">
+    <div class="m-cell-txt">
+        <img class="gold-img" src="img/icon-gold.png">
+        <span id="record" class="dinaBold"></span>
+        <span class="gold-record">兑换记录<img src="img/icon-more.png" ></span>
+    </div>
+    <div class="m-cell-txt">
+        <div class="ratio-txt">当前兑换比例：<span id="ratio" class="dinaBold">0.5</span></div>
+        <div class="lift"><span>提升比例</span></div>
+    </div>
+
+</div>
+
+<div class="rule">
+    <div class="rule-tltle"><span style="position: relative">兑换规则</span></div>
+    <div style="font-size: 14px;color: #333333;">
+        <p>1、金币可一直累计，兑换相应人民币。</p>
+        <p>2、默认兑换比例为1：0.5，若需提升兑换比例需使用相应积分。</p>
+        <p>3、当天提升兑换比例仅限当天兑换，若当日未兑换则恢复默认兑换比例。</p>
+        <p>4、兑换金额请在“钱包”查看，进行提现。</p>
+        <p>5、奖励由本公司提供，与苹果官方无关。</p>
+    </div>
+</div>
+
+<div class="m-cell m-cell-bottom">
+    <div class="cell-item">
+        <div class="cell-left cell-wrap">
+            <span class="cell-wrap-top"></span>
+            <span class="cell-wrap-down"></span>
+        </div>
+        <div id="exchange" class="cell-right cell-top"><span>兑换</span></div>
+    </div>
+</div>
+
+
+<div class="m-actionsheet" id="integral_list">
+    <div class="title">
+        <p class="ratio">当前<span>1</span>金币兑换<span class="gold_ratio" ></span>元</p>
+        <p class="integral">积分余额：<span></span></p>
+    </div>
+    <div class="integral-content"></div>
+    <div class="submit"><span>立即兑换</span></div>
+</div>
+
+<script src="../public/jquery.min.js"></script>
+<script src="../public/ydui.flexible.js"></script>
+<script src="../public/ydui.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+<script>
+
+    var $il = $('#integral_list');
+    var config = {
+        promoteRatioUrl: 'GoldController/promoteRatio',                               //获取用户金币钱包
+        goldWalletUrl: 'GoldController/getGoldWallet',                                //积分提升金币兑换比例
+        conversionUrl: 'GoldController/conversion',                                   //金币兑换金钱
+        token: Request('token'),
+        type: 'post'
+    };
+
+    var load = {
+        init: function (){
+            requsetHttp(config.goldWalletUrl, config.type, null ,config.token,(res)=>{
+                var ratio_list = res.data.ratio_list;
+                $('#record').text(res.data.gold);//总金币
+                $('#ratio,.gold_ratio').text(res.data.gold_ratio);//兑换比例
+
+                $('.amount span, .cell-wrap-top').text(res.data.money + '元');
+
+                $('.integral span').text(res.data.integral_money);
+
+                if(res.data.gold == 0) $('.cell-wrap-down').hide();
+                else $('.cell-wrap-down').text( '(' + res.data.gold + '*' + res.data.gold_ratio  + ')');
+
+                for(var i=0; i<ratio_list.length; i++){
+                    var integral = ratio_list[i].integral;
+                    var amount = ratio_list[i].amount;
+                    if( ( parseInt(res.data.integral_money) >= parseInt(integral)) && ( parseFloat(res.data.gold_ratio) < parseFloat(amount) ) ){//可兑换
+                        $('.integral-content').append('<div class="actionsheet-item integral-btn">\
+                            <div class="cell-item cell-container">\
+                               <div class="cell-left"><span class="perch"></span><span class="pad">=</span><span>'+ratio_list[i].amount+'元</span></div>\
+                               <div class="cell-right">\
+                                   <p class="convert-btn">消耗<span>'+ratio_list[i].integral+'</span>积分</p>\
+                                   <p class="circle"><span ratio='+ratio_list[i].amount+'></span></p>\
+                               </div>\
+                            </div>\
+                        </div>');
+                    }else if(  ( parseFloat(res.data.gold_ratio) < parseFloat(amount) ) ){//不可兑换
+                        $('.integral-content').append('<div class="actionsheet-item">\
+                            <div class="cell-item cell-container opacity">\
+                               <div class="cell-left"><span class="perch"></span><span class="pad">=</span><span>'+ratio_list[i].amount+'元</span></div>\
+                               <div class="cell-right">\
+                                   <p class="convert-ban">消耗<span>'+ratio_list[i].integral+'</span>积分</p>\
+                                   <p class="circle"><span></span></p>\
+                               </div>\
+                            </div>\
+                        </div>');
+                    }
+                }
+
+                $('.integral-btn').click(function () {
+                   $('#integral_list .circle span').removeClass('active');
+                   $(this).find('.circle span').addClass('active');
+                });
+
+                $('.gold-record').click( function () {
+                    location.href = 'record.html?token='+ config.token ;
+                });
+
+                $('.lift span').click(function () {
+                    $il.actionSheet('open');
+                });
+
+                $('#exchange span').click( function () {
+                    var obj = {
+                        shareUrl: res.data.share_url,
+                        title: res.data.share_title,
+                        desc: res.data.share_content,
+                        img: res.data.share_image,
+                        share_key: 'gold',
+                    };
+                    if(res.data.gold == 0){
+                        YDUI.dialog.toast( '金币不足', 'none', 1000);
+                        return false
+                    }
+                    if (browser.versions.android) {
+                        window.titi_js.goldConvertShare(JSON.stringify(obj));
+                    } else {
+                        window.webkit.messageHandlers.goldConvertShare.postMessage(JSON.stringify(obj));
+                    }
+                    // YDUI.dialog.confirm('确认兑换', '', function () {
+                    //     requsetHttp(config.conversionUrl, config.type, null, config.token,(res)=>{
+                    //         console.log(res);
+                    //         if(res.status){
+                    //             YDUI.dialog.alert('兑换成功',function () {
+                    //                 location.reload();
+                    //             });
+                    //         }else{
+                    //             YDUI.dialog.toast( res.msg, 'none', 1000);
+                    //         }
+                    //     });
+                    // });
+                });
+
+                $('.submit span').click( function () {
+                    var ratio = $('.circle .active').attr("ratio");
+                    if(!ratio){
+                        YDUI.dialog.toast( '请选择兑换比例', 'none', 1000);
+                        return false;
+                    }
+                    YDUI.dialog.confirm('确认提升金币兑换比例', '', function () {
+                        requsetHttp(config.promoteRatioUrl, config.type, { gold_ratio: ratio }, config.token,(res)=>{
+                            if(res.status){
+                                YDUI.dialog.alert('提升成功',function () {
+                                    location.reload();
+                                });
+                            }else{
+                                YDUI.dialog.toast( res.msg, 'none', 1000);
+                            }
+                        })
+                    });
+                });
+            });
+        }
+    };
+
+    load.init();
+
+    function showGoldRule (){
+        var text = '1、金币可一直累计，兑换相应人民币。\n' +
+                    '2、默认兑换比例为1：0.5，若需提升兑换比例需使用相应积分。\n' +
+                    '3、当天提升兑换比例仅限当天兑换，若当日未兑换则恢复默认兑换比例。\n' +
+                    '4、兑换金额请在“钱包”查看，进行提现。\n' +
+                    '5、奖励由本公司提供，与苹果官方无关。';
+        YDUI.dialog.confirm('兑换规则',text,[{
+            txt: '知道了',
+            color: true,
+            callback: function () { /* 按钮回调 */}
+        }])
+    }
+
+    function goldConvertSuccess() {
+        YDUI.dialog.alert('兑换成功',function () { location.reload(); });
+    }
+</script>
+
+</body>
+</html>

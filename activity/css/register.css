@@ -1,0 +1,172 @@
+html,body{
+    margin: 0;
+    padding: 0;
+    background: #661ACE;
+}
+p{
+    margin: 0;
+}
+input {
+    width: 70%;
+    text-indent: 10px;
+    border-width: 0;
+    border-radius: 6px;
+    height: 14.2vw;
+    font-size: 16px;
+    color: #583A06;
+    outline: none;
+}
+header{
+    width: 100%;
+    height: 73vw;
+    position: relative;
+    background: url('../img/register-bg.png')no-repeat;
+    background-size: contain;
+}
+.page{
+    width: 100%;
+    min-height: 100%;
+    background: #661ACE;
+    position: absolute;
+}
+.logo img{
+    width: 33%;
+    padding-top: 10px;
+    padding-left: 20px;
+}
+.flex-box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.error {
+    height: 10px;
+    color: #FFFFFF;
+    padding: 15px;
+    font-size: 12px;
+}
+.error span {
+    display: none;
+}
+.btn {
+    width: 70%;
+    height: 15vw;
+    color: #ffffff;
+    text-align: center;
+    background: url(../img/register-btn.png)no-repeat;
+    background-size: contain;
+    margin-bottom: 20px;
+}
+
+.isShow{
+    display: flex!important;
+}
+.down{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+.down .left{
+    width: 100%;
+    position: relative;
+    z-index: 199;
+}
+.down .right{
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 199;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.down-tips{
+    width: 60%;
+    float: right;
+}
+.down-succee{
+    width: 20%;
+}
+
+.modal-error{
+    color: #FFFFFF;
+    padding: 10px ;
+    font-size: 12px;
+    height: 30px;
+}
+.modal-error span{
+    display: none;
+}
+
+.getCode, .submit {
+    width: 100% !important;
+}
+
+.showModel{
+    display: none;
+}
+
+.modal{
+    position: fixed;
+    left: 0;
+    top: 25%;
+    width:100%;
+    z-index: 101;
+}
+
+.mask{
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100%;
+    height:100%;
+    z-index: 100;
+    background:rgba(0,0,0,0.5);
+}
+
+.modal-content{
+    width: 80%;
+    margin: 0 auto;
+    background: #7E2BC6;
+    font-family: "微软雅黑";
+    border-radius: 10px;
+    padding-bottom: 20px;
+}
+
+.rule .modal{
+    top:15%;
+}
+.rule .modal-content{
+    width: 90% !important;
+}
+
+.modal-line-box.amount-title{
+    padding: 20px 10px 10px;
+    text-align: center;
+    font-family: PingFangSC-Medium;
+    font-size: 16px;
+    color: #FFFFFF;
+}
+
+.modal-line-box.amount-info{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 10px 30px;
+    color: #666666;
+    font-size: 16px;
+}
+
+.modal-line-box.amount-button div{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.modal-line-box.amount-button img{
+    height: 40px;
+}
+.modal-line-box.amount-button span{
+    margin-top: 5px;
+}

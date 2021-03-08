@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <title></title>
+    <link rel="stylesheet" href="css/share_text.css">
+    <link rel="stylesheet" href="../public/mescroll.min.css">
+</head>
+
+<body>
+    <div class="shareMain">
+        <div style="width: 100%; background: url('image//icon-shareBG.png') no-repeat 100%/100%;">
+            <div class="navigation between" onclick="goApp(1,config.content_id)">
+                <div><img src="image/icon-smallLogo.png" alt="" class="logo">小虎Hoo电竞</div>
+                <div class="download">下载APP</div>
+            </div>
+        </div>
+        <!-- tab -->
+        <div class="tab">
+            <div class="tabItem between">正文</div>
+            <div class="tabItem between">评论<span class="commentLength"></span></div>
+        </div>
+        <!-- 正文 -->
+        <div class="textMain">
+            <img src="" alt="" class="topImg">
+            <div class="textContent">
+                <div class="authorMsg between" onclick="goApp(1,config.content_id)">
+                    <div style="display: flex;align-items: center;justify-content:space-between;width: 100%;margin-bottom: 10px;">
+                        <div style="display: flex">
+                            <img src="" alt="" class="authorImg">
+                            <div>
+                                <div class="nickname"></div>
+                                <div style="font-size:12px; color:rgba(153,153,153,1);padding-top: 8px;" class="create_time"></div>
+                            </div>
+                        </div>
+                        <div class="focus">关注</div>
+                    </div>
+                    <div class="attention"></div>
+                </div>
+                <div class="title"></div>
+                <div class="introduce"></div>
+                <div class="aboutImg">
+                    <!-- <div class="smallFlex "><img src="image/icon_watch.png" alt="" class="smallImg "><span
+                            class="view_num"></span></div> -->
+                    <div class="smallFlex"><img src="image/icon-message.png" alt="" class="smallImg "><span
+                            class="comment_num"></span></div>
+                    <div class="smallFlex"><img src="image/icon-smallGivelike_defalt.png" alt="" class="smallImg "><span
+                            class="like_num"></span></div>
+                </div>
+                <div class="recommend">
+                    <div style="color:rgba(40,40,40,1);">更多推荐</div>
+                    <div id="recommendMescroll" class="mescroll">
+                        <div>
+                            <ul class="gameConten">
+                                <script type="text/html" id="gameContenList">
+                                    {{each item value i}}
+                                <div class="recommendItem" onclick="goApp({{value.type == 1? 1: 2}},{{value.id}})" >
+                                    <div class="recommend_left titleMsg">
+                                        <span class="recommend_title titleMsg">{{value.title.trim()}}</span>
+                                        <div class="recommend_bottom titleMsg">{{value.name}}</div>
+                                    </div>
+                                    <div class="recommend_right">
+                                        <img src="{{value.cover}}" alt="" class="recommend_img">
+                                        {{if value.type == 2}}
+                                        <span class="play">{{value.video_length+':00'}}</span>
+                                        {{/if}}
+                                    </div>
+                                </div>
+                                {{/each}}
+                            </script>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- 评论 -->
+        <div class="commentMain">
+            <div id="mescroll" class="mescroll">
+                <div>
+                    <ul class="commentData" onclick="goApp(1,config.content_id)">
+                        
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- bottom -->
+        <div class="bottom">
+            <div class="bottomMsg between" onclick="goApp(1,config.content_id)">
+                <input type="text">
+                <div>
+                    <img src="image/icon-bigGiveLike_defalt.png" alt="" class="is_like">
+                    <img style="margin: 0 15px;" src="image/icon-collect_defalt.png" alt="" class="is_collect">
+                    <img src="image/icon-share.png" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 下载 -->
+    <div class="shareModal">
+        <img src="image/icon-guidance.png" alt="">
+    </div>
+    <div style="display: none;">
+        <script type="text/javascript">document.write(unescape("%3Cspan id='cnzz_stat_icon_1278943282'%3E%3C/span%3E%3Cscript src='https://v1.cnzz.com/z_stat.php%3Fid%3D1278943282' type='text/javascript'%3E%3C/script%3E"));</script>
+    </div>
+</body>
+
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+<script src="../public/mescroll.min.js"></script>
+<script src="../public/template-web.js"></script>
+<script type="text/html" id="commentList">
+    {{each item v i}}
+<div class="commentList">
+    <img class="avotor" src="{{v.avatar}}" alt="">
+    <div class="commentConetnt">
+        <div class="between">
+            <div><span style="color:rgba(153,153,153,1);">{{v.nickname}}
+                {{if $imports.user_id == v.user_id}}
+                <span class="author">作者</span>
+                {{/if}}
+            </span><img class="{{v.like_num >= 50 && 2.5*v.comment_num >= 50 && comment_user_num >= 10 ? 'hot' : 'nohot' }}" src="image/icon-commentHot.png" alt=""></div>
+            <img class="more" src="image/icon-more.png" alt="">
+        </div>
+        <div class="commetDetails vertical">{{v.content}}</div>
+        <div class="commentIcon between">
+            <span>{{getDateDiff(v.create_time)}}</span>
+            <div style="display: flex; margin-right:10px">
+                <div style="display: flex; margin-right: 20px; align-items: center;"><img src="image/icon-smallGivelike_defalt.png" alt="" class="likeup">{{v.like_num}}
+                </div>
+                <div style="display: flex; align-items: center;"><img src="image/icon-message.png" alt="" class="likeup">{{v.comment_num}}</div>
+            </div>
+        </div>
+        <div class="{{v.replys.length? 'replyConetent' : 'noreplyConetent'}}">
+            {{each v.replys sub index}}
+            {{if index <= 2}}
+            <div class="reply_item vertical"><span class="replyAuthor ">{{sub.replysUserinfo.nickname}}：</span>{{sub.content}} </div>
+            {{/if}}
+            {{/each}}
+            <div style="color:rgba(255,204,3,1);" class="{{v.replys.length >=3 ? 'lookall' : 'nolookall'}}">查看全部 {{v.comment_num}} 条回复</div>
+        </div>
+    </div>
+</div>
+{{/each}}
+</script>
+<script>
+    var config = {
+        contentUrl: 'Content/getContentInfo',
+        getGameContentUrl: 'recommend/getIntroContentList',
+        indexComment: 'Comment/indexComment',
+        changeViewLength: 'Content/changeViewLength',
+        type: 'post',
+        contentInfoData: {
+            content_id: Request('content_id')
+        },
+        commentData: {
+            content_id: Request('content_id'),
+            page: 1,
+            per_page: 10
+        },
+        getGameContenDarta: {
+            content_id: Request('content_id')
+        },
+        changeViewData: {
+            view_log_id: null,
+            start_time: '',
+            end_time: ''
+        },
+        user_id: Request('user_id'),
+        mescroll: initMescroll(),
+        up: 'up',
+        flush: 'flush',
+        content_id: Number(Request('content_id'))
+    }
+    config.changeViewData.start_time = new Date(+new Date() + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+    $(".tabItem").eq(0).addClass('active')
+    getRecommend()
+    $(".tabItem").click(function () {
+        $(this).addClass('active').siblings().removeClass('active')
+        config.commentData.page = 1
+        if ($(this).index() == 1) {
+            $(".commentMain").show()
+            $(".textMain").hide()
+            getComemntList(config.flush)
+        } else {
+            $(".commentMain").hide()
+            $(".textMain").show()
+        }
+    })
+    requsetHttp(config.contentUrl, config.type, config.contentInfoData, null, (res) => {
+        if (res.code == 200) {
+            $(".topImg").attr('src', res.data.cover)
+            $(".authorImg").attr('src', res.data.avatar)
+            $(".nickname").text(res.data.nickname)
+            $(".create_time").text(changeTime(res.data.create_time) + '发布')
+            $("title").text('小虎Hoo电竞' + res.data.title)
+            if (res.data.is_mutual) {
+                $(".attention").show()
+                if (res.data.is_mutual == -1) {
+                    $(".attention").text('关注')
+                } else if (res.data.is_mutual == 0) {
+                    $(".attention").text('已关注')
+                } else if (res.data.is_mutual == 1) {
+                    $(".attention").text('相互关注')
+                } else {
+                    $(".attention").hide()
+                }
+            }
+            $(".title").text(res.data.title)
+            $(".introduce").html(res.data.introduce)
+            $(".view_num").text(returnNum(res.data.view_num))
+            $(".like_num").text(returnNum(res.data.like_num))
+            $(".comment_num").text(returnNum(res.data.comment_num))
+            $(".is_like").attr('src', res.data.is_like == 1 ? 'image/icon-bigGiveLike.png' : 'image/icon-bigGiveLike_defalt.png')
+            $(".is_collect").attr('src', res.data.is_collect == 1 ? 'image/icon-collect_active.png' : 'image/icon-collect_defalt.png')
+            $(".commentLength").text(`(${returnNum(res.data.comment_num)})`)
+            config.changeViewData.view_log_id = res.data.view_log_id
+        }
+    })
+
+    $(".shareModal").click(function () {
+        $(".shareModal").hide()
+    })
+
+    // 获取评论数据 
+    function getComemntList(type) {
+        if (type == "flush") {
+            config.mescroll.optUp.page.num = 1;
+            config.commentData.page = 1
+        }
+        config.mescroll.setPageSize(config.commentData.per_page)
+        requsetHttp(config.indexComment, config.type, config.commentData, null, (res) => {
+            if (res.code == 200) {
+                if (!res.data.data.length) $(".mescroll").html('<div style="padding: 50px 0;display:flex;justify-content: center; align-items: center;">赞无数据</div>')
+                var list = template('commentList', { item: res.data.data })
+                if (type == config.flush) {
+                    $(".commentData").empty()
+                    config.mescroll.optUp.page.num = 1;
+                    config.mescroll.setPageNum(config.commentData.page)
+                    config.mescroll.endByPage(res.data.data.length, res.data.last_page);
+                    $(".commentData").html(list)
+                } else {
+                    config.mescroll.endByPage(res.data.data.length, res.data.last_page);
+                    $(".commentData").append(list)
+                }
+                config.commentData.page++
+
+            }
+
+        })
+    }
+
+    // 获取推荐数据
+    function getRecommend() {
+        requsetHttp(config.getGameContentUrl, config.type, config.getGameContenDarta, null, (res) => {
+            if (res.code == 200) {
+                var gamelist = template('gameContenList', { item: res.data })
+                $(".gameConten").html(gamelist)
+            }
+        })
+    }
+
+    window.addEventListener("onbeforeunload ", function (event) {
+        var data = confirm('确定关闭？')
+        if (data == true) {
+            config.changeViewData.end_time = new Date(+new Date() + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+            changeViewLength()
+        }
+    })
+
+    // 更新查看内容的浏览时长
+    function changeViewLength() {
+        requsetHttp(config.changeViewLength, config.type, config.changeViewData, null, (res) => { })
+    }
+
+    // template 导出方法、参数
+    template.defaults.imports.getDateDiff = getDateDiff
+    template.defaults.imports.user_id = config.user_id
+
+    /**
+     * mescroll 配置
+     */
+    function initMescroll() {
+        var mescroll = new MeScroll("mescroll", {
+            up: {
+                callback: upCallback,
+                isBounce: true,
+                noMoreSize: 0,
+                auto: false,
+                htmlNodata: '<p class="upwarp-nodata">没有更多了</p>'
+            },
+            down: {
+                callback: downCallback
+            }
+        });
+        return mescroll;
+    }
+
+    /**
+     * 下拉刷新的回调
+     */
+    function downCallback() {
+        getComemntList(config.flush);
+    }
+
+    /**
+     * 上拉加载的回调
+     */
+    function upCallback() {
+        getComemntList(config.up);
+    }
+
+</script>

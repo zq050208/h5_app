@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width,viewport-fit=cover, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <title>数据传输</title>
+    <link rel="stylesheet" type="text/css" href="css/jqcloud.css" />
+    <script src="js/jquery-2.1.0.min.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../public/service.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        .tp {
+            height: 40px;
+            border: 1px solid beige;
+            background: burlywood;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tp a,.titleDiva a {
+            color: beige;
+            text-decoration: none;
+            font-size: 18px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: rgba(51, 51, 51, 1);
+            line-height: 18px;
+        }
+
+        .titleDiv {
+            margin: 0 auto;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+        }
+
+        .titleDiv p {
+            font-size: 22px;
+            font-family: PingFangSC-Medium, PingFang SC;
+            font-weight: 500;
+            color: rgba(51, 51, 51, 1);
+            line-height: 22px;
+        }
+        .titleDiva{
+            margin: 0 auto;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 300px;
+            height: 40px;
+            margin-top: 20px;
+            border: 1px solid blanchedalmond;
+            background: cornflowerblue;
+        }
+    </style>
+</head>
+
+<body>
+    <div class=titleDiv>
+        <p>数据传输</p>
+    </div>
+    <div style="overflow: hidden; height: 400px; margin-left: 5px;">
+
+        <div id="marqueebox" style="margin-top: -48px; height: 400px;">
+
+        </div>
+    </div>
+    <div class=titleDiva>
+        <a href="./xhdj_datacollectionDe.html" >前去数据采集页面查看</a>
+    </div>
+    <script type="text/html" id="mytablediv">
+        {{each item v i}}
+        <div class="tp"><a target="_blank" href="./xhdj_datacollectionDe.html" >
+        {{v.name}}数据传输完成
+        </div>
+        {{/each}}
+</script>
+    <script src="../public/template-web.js"></script>
+    <script src="../public/jquery.min.js"></script>
+    <script src="./js/data.js"></script>
+    <script type="text/javascript">
+
+
+    </script>
+    <script type="text/javascript">
+        function startmarquee(lh, speed, delay) {
+            var p = false;
+            var t;
+            var sh;
+            var o = document.getElementById("marqueebox");
+            o.innerHTML += o.innerHTML;
+            o.style.marginTop = 0;
+            o.onmouseover = function () { p = true; }
+            o.onmouseout = function () { p = false; }
+            function start() {
+                sh = o.offsetHeight;
+                o.style.height = sh;
+                t = setInterval(scrolling, speed);
+                if (!p) o.style.marginTop = parseInt(o.style.marginTop) - 1 + "px";
+            }
+            function scrolling() {
+                if (parseInt(o.style.marginTop) % lh != 0) {
+                    o.style.marginTop = parseInt(o.style.marginTop) - 1 + "px";
+                    if (Math.abs(parseInt(o.style.marginTop)) >= sh / 2) o.style.marginTop = 0;
+                } else {
+                    clearInterval(t);
+                    setTimeout(start, delay);
+                }
+            }
+            setTimeout(start, delay);
+        }
+        var mytablelist = arr
+        var mytableitem = template('mytablediv', { item: mytablelist })
+        $("#marqueebox").html(mytableitem)
+
+        startmarquee(40, 20, 1000); 
+    </script>
+</body>
+
+</html>

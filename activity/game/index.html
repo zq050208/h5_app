@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+</head>
+<style>
+    * { padding: 0;  margin: 0;}
+    html,
+    body { width: 100%; height: 100%; font-size: 14px; color: #fff; font-family: Microsoft Yahei; font-weight: 400; background-size: 100% 100%;}
+    ul li {list-style: none;}
+    .color{  color:rgba(249,181,25,1); }
+    .headMain,
+    .bottomMain { width: 100%;  height: auto;}
+    .headtopContnet{ padding-top: 632px;}
+    .main{ width: 1200px;  margin: 0 auto; }
+    .toptitle{  display: flex; background:rgba(40,40,40,1); color:rgba(255,255,255,1); padding: 27px 0; }
+    .topitem{ flex: 1;  display: flex; justify-content: center; align-items: center; flex-direction: column;}
+    .game_race{ margin-top: 30px;  background:rgba(40,40,40,1);  padding: 25px 0; }
+    .imgMiddle{ width: 748px;  height: 100px; }
+    .margin{  margin-top: 50px;}
+    .ruleContent{ text-align: center; margin-top: 56px;}
+    .rule_about{  display: flex; width: 630px;  margin: 50px auto 0 auto;  align-items: center; }
+    .diamonds{ width: 112px; height: 55px;  margin-right: 45px; color:rgba(26,31,78,1); font-size:24px; line-height: 55px; background: url('img/icon-diamonds.png') no-repeat 100%/100%; flex-shrink: 0; }
+    .bottom{ width: 100%; background:rgba(56,47,39,1); font-size: 16px;  margin-top: 63px;}
+    .bottomMsg{ display: flex; justify-content: space-between;  align-items: center;}
+    .raceConent_tab{ position: relative; margin-top: 32px;}
+    .raceConenthd img { width: 44px; height: 110px;  position: absolute;  top: 50%; transform: translateY(-50%);  z-index: 999; filter:alpha(opacity=50);opacity:0.5; cursor: pointer;}
+    .raceConentprev{ left: 0; }
+    .raceConentnext{ right: 0;}
+    .raceConentprev:hover,
+    .raceConentnext:hover {filter:alpha(opacity=100);opacity:1;}
+    .raceConentbd{margin: 0 60px;}
+    .raceConentdata_list .raceConentdata_li { width: 260px; height: 244px; background:rgba(20,23,28,1); border-radius:2px;  margin-right: 13px; display: inline-block;text-align: center;}
+    .itemhd img{width: 10px;height: 18px; position: absolute; z-index: 9999; top: 5%; cursor: pointer; }
+    .itemcontent {position: relative; margin: 10px 10px 0 10px;}
+    .item_prev {left: 0;}
+    .item_next {right: 0;}
+    .itemdata_list li {width: 37px; height: 32px; line-height: 32px; text-align: center; display: inline-block; cursor: pointer;}
+    .itembd{margin: 0 30px;}
+    .start {background:rgba(165,157,146,1);font-size:16px;width: 64px; text-align: center; height: 26px; line-height: 26px; }
+    .itemdata_list li.active{background:rgba(46,107,176,1);}
+    .gamedateTab{width: 100%;text-align: center; margin: 32px 0 37px 0;}
+    .gamedateTab span { width: 134px;  height: 44px; display: inline-block; line-height: 44px;background: url("img/icon-noselect.png") no-repeat 100%/100%; cursor: pointer;}
+    .gamedateTab span.active{background: url("img/icon-select.png") no-repeat 100%/100%;}
+    .raceMatch_name {font-size:32px; margin: 10px 0; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
+    .iframe {  width: 100%; height:100%; background-size: cover; }
+    .bottomMainimg {width: 1200px; display: block; margin: 0 auto;}
+</style>
+
+<body>
+    <div class="headMain">
+        <div class="headtopContnet">
+            <div class="toptitle main">
+                <div class="topitem"><img src="img/icon-data.png" alt="" style="width: 60px; height: 65px; margin-bottom: 24px;"><div>日期 <span class="color maindate"></span></div></div>
+                <div class="topitem"><img src="img/icon-teams.png" alt="" style="width: 73px; height: 60px; margin-bottom: 24px;"><div>队伍 <span class="color mainteam"></span></div></div>
+                <div class="topitem placeitem"><img src="img/icon-site.png" alt="" style="width: 60px; height: 70px; margin-bottom: 24px;"><div>地点 <span class="color mainsite"></span></div></div>
+                <div class="topitem awarditem"><img src="img/icon-award.png" alt="" style="width: 60px; height: 70px; margin-bottom: 24px;"><div>奖励 <span class="color mianaward"></span></div></div>
+            </div>
+            <div class="game_race main">
+               <div style="width: 100%;display: flex;justify-content: center;"> <img src="img/icon-game_race.png" alt="" class="imgMiddle"></div>
+                <div class="raceConent">
+                    <div class="raceConent_tab ">
+                            <div class="raceConenthd">
+                                <img src="../img/icon-next.png" alt="" class="raceConentprev">
+                                <img src="../img/icon-prev.png" alt="" class="raceConentnext">
+                            </div>
+                            <div class="raceConentbd">
+                                <ul class="raceConentdata_list">
+                                
+                                </ul>
+                            </div>
+                        </div>
+                </div>
+            </div>
+            <!-- 赛事数据 -->
+            <div class="game_data margin  main" >
+                <div style="width: 100%;display: flex;justify-content: center;"> <img src="img/icon-game-data.png" alt="" class="imgMiddle"></div>
+                <div class="gaemdataContent">
+                    <div class="gamedateTab">
+                        <span style="margin-left:10px">积分榜</span>
+                        <span>数据榜</span>
+                    </div>
+                    <div class="iframe">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bottomMain">
+            <img src="" class="bottomMainimg">
+        </div>
+        <div class="bottom ">
+        <div class="bottomMsg main">
+            <div>
+                <div class="color" style="font-size:30px;">联系我们</div>
+                <div>地址：<span class="color">广东省深圳市福田区侨香路君子广场A座15楼</span></div>
+                <div>新浪微博：<span class="color">@小虎电竞</span></div>
+                <div>公司合作：<span class="color">邹先生 zouchuping@tinytiger.cn</span></div>
+            </div>
+            <div style="display: flex;flex-direction: column;justify-content: center;align-items: center; font-size: 18px;color:rgba(255,255,255,.5);padding: 18px 0 34px 0;"><img src="img/icon-publicnum.jpg" alt="" style="width:100px;height:100px;margin-bottom: 10px;"><span>关注公众号</span></div>
+        </div>
+        <div style="font-size:12px; color:rgba(255,255,255,1);opacity:0.5;padding:12px 0 8px 0; text-align: center; background:#251b13;" >©ALIMAMA MUX, powered by alimama THX.ICP 证: 浙ICP备09109183号-25法律声明</div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
+<script src="../../public/jquery.min.js"></script>
+<script src="../../public/config.js"></script>
+<script src="../../public/service.js"></script>
+<script src="../js/superSlide.js"></script>
+<script>
+    var config = {
+        url: 'MatchCooperation/getContestData',
+        type: 'post',
+        data: {
+            contest_id: Request("contest_id")
+        },
+        proceedStatus: false,   // 赛事是否进行中
+        currentdataTab: 0,          // 当前点击的赛事数据tab
+    }
+
+    requsetHttp(config.url,config.type,config.data,null,(res)=> {
+       if(res.code == 200) {
+        var list = res.data.match_list 
+        if(!res.data.contest_data.place) $(".placeitem").hide()
+        if(!res.data.contest_data.bonus) $(".awarditem").hide()
+        var type = 0
+        $(".mainteam").text(res.data.contest_data.team_num +"支")
+        $(".mianaward").text(res.data.contest_data.bonus)
+        $(".mainsite").text(res.data.contest_data.place)
+        $(".maindate").text(cutStr(res.data.contest_data.start_time)+"-" +cutStr(res.data.contest_data.end_time))
+        $("body").css('background', 'url('+res.data.contest_data.header_img+') no-repeat ')
+        $(".bottomMain img").attr("src", res.data.contest_data.desc_img)
+        var str = ''
+        for(var i = 0 ; i < list.length; i++) {
+            var subList = list[i].schedule
+            str += ` <li class="raceConentdata_li" data-rowId = ${i}>
+                                           <div style="display: flex;justify-content: flex-end; width: 100%; margin-top: 2px;"> <div class="start" style:"${config.proceedStatus == true ? 'background:rgba(25,130,249,1)' : ''}"></div></div>
+                                            <div style="font-size:20px">${ list[i].match_start_time.substring(16,5)}</div>
+                                            <div class="raceMatch_name" style="${config.proceedStatus == true ? 'color:rgba(249,181,25,1)' : 'color:rgba(255,255,255,1)'}">${list[i].match_name}</div>
+                                            <div style="font-size:20px;">${list[i].match_mechanism}</div>
+                                            <div class="itemcontent">
+                                                   <div class="itemhd" style="${subList.length >= 5 ? 'display:block': 'display:none'}">
+                                                        <img src="img/icon-arrow_left.png" alt="" class="item_prev" >
+                                                        <img src="img/icon-arrow_right.png" alt="" class="item_next">
+                                                   </div>
+                                                   <div class="itembd">
+                                                        <ul class="itemdata_list">`
+                                                            for(var j = 0; j <subList.length; j++) {
+                                                                str += ` <li data-status="${j}" data-big="${i}" >${subList[j].name}</li>`
+                                                                if(subList[j].status == "1" && list.length - 1 >= 4 && type ==0){
+                                                                    type = Math.ceil(i)
+                                                                }
+                                                            }
+                                                            
+                                                       str +=` </ul>
+                                                    </div>
+                                                    <div class="footStatus" style="height: 60px; line-height: 60px;overflow: hidden; white-space: nowrap; text-overflow: ellipsis;"></div>
+                                            </div>
+                                        </li>`
+        }
+        $(".raceConentdata_list").append(str)
+    
+        for(var i = 0 ; i < list.length; i++) {
+            updateStatus(i,0,list);
+            $(".raceConentdata_li").eq(i).find(".itemdata_list li").eq(0).addClass("active")
+        }
+        $(".itemdata_list li").click(function(){
+            $(this).addClass("active").siblings().removeClass("active");
+            var samll_index = $(this).attr("data-status");
+            var big_index = $(this).attr("data-big");
+            updateStatus(big_index,samll_index,list);
+        })
+        initSlide(type)
+        itemSlide()
+       }
+    })
+
+        
+    // 赛事数据点击事件
+    getHeight(document.getElementById("iframepage"))
+    $(".gamedateTab span").eq(0).addClass("active")
+    $(".iframe").html(`<iframe id="iframepage" name="iframepage" width="1200px" src="${'game_integral.html?contest_id='+config.data.contest_id}"  frameborder="no" scrolling="no" style="margin-bottom: 50px"></iframe>`)
+    setTimeout(function () {
+            setIframeHeight(document.getElementById("iframepage"))
+        },100)
+        
+    $(".gamedateTab span").click(function () {
+        $(".iframe").empty()
+        config.currentdataTab = $(this).index()
+        $(this).addClass("active").siblings().removeClass("active")
+        $(".iframe").html(`<iframe id="iframepage" width="1200px" name="iframepage" src="${config.currentdataTab == 0 ? 'game_integral.html?contest_id='+config.data.contest_id : 'game_data.html?contest_id='+config.data.contest_id}" frameborder="no" scrolling="no" style="margin-bottom: 50px" ></iframe>`)
+        getHeight(document.getElementById("iframepage"))
+        setTimeout(function () {
+            setIframeHeight(document.getElementById("iframepage"))
+        },100)
+    })
+    function updateStatus(big_index,samll_index,list){
+        $(".raceConentdata_li").eq(big_index).find(".footStatus").html("")
+        if (Number(list[big_index].schedule[samll_index].status) == 1) {
+                $(".raceConentdata_li").eq(big_index).find(".start").text("未开始")
+                $(".raceConentdata_li").eq(big_index).find(".footStatus").html("<span>未开始</span>")
+            } else if(Number(list[big_index].schedule[samll_index].status) == 2) {
+                config.proceedStatus = true
+                $(".raceConentdata_li").eq(big_index).find(".start").text("进行中")
+                $(".raceConentdata_li").eq(big_index).find(".footStatus").html("<span>进行中</span>")
+            }else{
+                $(".raceConentdata_li").eq(big_index).find(".start").text("已结束")
+                if (list[big_index].schedule[samll_index].first_team == "") {
+                    $(".raceConentdata_li").eq(big_index).find(".footStatus").html(`<span>已结束</span>`);
+                } else {
+                    $(".raceConentdata_li").eq(big_index).find(".footStatus").html(`<img src="img/icon-drumstick.png" alt="" style="width:32px;height:23px;margin-right:12px; "><span style="overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">${list[big_index].schedule[samll_index].first_team}</span>`);
+                }   
+            }
+    }
+
+    // 设置嵌入页面的高度
+    function setIframeHeight(iframe) {
+            if (iframe) {
+                var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
+                if (iframeWin.document.body) {
+                    iframe.height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight;
+                }
+            }
+        };
+
+    function initSlide(type) {
+        jQuery(".raceConent_tab").slide(
+            {
+                titCell: ".raceConenthd img",
+                mainCell: ".raceConentdata_list",
+                autoPage: true,
+                effect: 'left',
+                vis: 4,
+                pnLoop: false,
+                prevCell: '.raceConentprev',
+                nextCell: '.raceConentnext',
+                defaultIndex: type
+            });
+    }
+    function itemSlide() {
+        jQuery(".itemcontent").slide(
+            {
+                titCell: ".itemhd img",
+                mainCell: ".itemdata_list",
+                autoPage: true,
+                effect: 'left',
+                vis: 5,
+                pnLoop: false,
+                prevCell: '.item_prev',
+                nextCell: '.item_next'
+            });
+    }
+    function cutStr(str) {
+        return str.substring(5,10).replace(/-/g,".")
+    }
+    function getHeight(transport_height) {
+        $("#iframepage").height(transport_height)
+    }
+</script>

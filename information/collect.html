@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title>我的收藏</title>
+    <link rel="stylesheet" href="../public/mescroll.min.css">
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0
+    }
+    
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        font-size: 14px;
+    }
+    
+    li {
+        list-style: none;
+    }
+
+    .list-item {
+        padding: 15px;
+        display: flex;
+        border-bottom: 1px solid rgba(221, 221, 221, 1);
+    }
+
+    .item-left{
+        flex: 2;
+        padding-right: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .item-right{
+        flex: 1;
+        position: relative;
+        display: flex;
+    }
+
+    .item-right img{
+        border-radius: 4px;
+        width: 120px;
+        height: 72px;
+    }
+
+    .left-bottom,
+    .bottom-right {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: rgba(37,39,42,0.5);
+    }
+
+    .left-bottom {
+        width: 100%;
+        font-size: 12px;
+        margin-top: 2px;
+    }
+
+    .bottom-left img, .bottom-right img {
+        width: 12px;
+        height: 10px;
+        margin-right: 4px
+    }
+
+    .bottom-right div {
+        display: flex;
+        align-items: center
+    }
+
+    .left-top{
+        width: 100%;
+    }
+    
+    .mask {
+        position: absolute;
+        background: rgba(0, 0, 0, 0.5);
+        top: 0;
+        left: 0;
+        z-index: 111;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 4px;
+    }
+    
+    .play {
+        border-style: solid;
+        border-width: 12px 16px 12px 16px;
+        border-color: transparent transparent transparent #fff;
+        width: 0px;
+        height: 0px;
+        position: absolute;
+        top: 30%;
+        left: 45%
+    }
+        /* 分页 */
+        .mescroll{
+			position: fixed;
+			top: 0;
+			bottom: 0;
+			height: auto; 
+            padding: 0;
+	}
+</style>
+
+<body>
+    <div>
+        <div class="tabs-container">
+            <div class="tab-content">
+                <div id="mescroll" class="mescroll">
+                    <div class="mescroll-content">
+                <ul class="content-list">
+                </ul>
+                </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+<script src="../public//mescroll.min.js"></script>
+<script>
+    var config = {
+        collectListUrl: 'NewsController/collectList',               //收藏列表
+        type: 'post',                                               //请求方式
+        totalPage: 1,                                               //总页数
+        jumpUrl: '',                                                //跳转地址
+        category_id: '',                                            //资讯分类id
+        user_info: getUserInfo(),                                   //用户信息
+        data:{ page:1, type: 3},
+        mescroll: initMescroll(),
+        up: 'up',
+        flush: 'flush'
+    }
+    loadData(config.flush);
+    function loadData(type){
+        if(type == 'flush' ) config.data.page = 1;
+        requsetHttp(config.collectListUrl, config.type, config.data, config.user_info.token, (res)=>{
+            if(res.code !== 200 ) return
+            //显示数据
+            var str = '';
+            var obj = res.data.list;
+            config.jumpUrl = res.data.news_detail;
+            for (var i = 0; i < obj.length; i++) {
+                var itemObj = obj[i];
+                str += `<li>
+                    <div class="list-item" onclick="toDetail(${ itemObj.id + `,` + itemObj.category_id })">
+                        <div class="item-left">
+                            <div class="left-top">${itemObj.title}</div>
+                            <div class="left-bottom">
+                                <div class="bottom-left"><span>${ itemObj.update_time.substring(0, 10) }</span></div>
+                            </div>
+                        </div>
+                        <div class="item-right">
+                            ${itemObj.news_type == 1 ? `` : `<div class="mask"><div class="play"></div></div>`}
+                            <img src="${itemObj.cover_img}" />
+                        </div>
+                    </div>
+                </li>`
+            }
+
+            if(type == config.flush){
+                config.mescroll.endSuccess();
+                config.mescroll.optUp.page.num = 1;
+                config.mescroll.endByPage(res.data.list.length, res.data.page.totalPage);
+                $(".content-list").html(str);
+            }else{
+                config.mescroll.endByPage(res.data.list.length, res.data.page.totalPage);
+                $(".content-list").append(str);
+            }
+            config.data.page++
+        })
+    }
+
+    function toDetail(news_id,category_id) {
+        var url = config.jumpUrl+"?news_id="+ news_id + '&category_id=' + category_id;
+        callNewWeb(url);
+    }
+
+    /**
+     * mescroll 配置
+     */
+     function initMescroll() {
+        var mescroll  =  new MeScroll("mescroll", {
+            up: {
+                callback: upCallback,
+                isBounce: false,
+                noMoreSize: 5,
+                auto: false,
+                htmlNodata: '<p class="upwarp-nodata">没有更多了</p>'
+            },
+            down: {
+                auto: false,
+                callback: downCallback 
+            }
+        });
+        return mescroll;
+    }
+
+    /**
+     * 下拉刷新的回调
+     */
+    function downCallback() {
+        loadData(config.flush);
+    }
+
+    /**
+     * 上拉加载的回调
+     */
+    function upCallback() {
+        loadData(config.up);
+    }
+
+   
+</script>

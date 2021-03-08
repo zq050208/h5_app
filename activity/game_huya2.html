@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <link rel="stylesheet" href="../cashback/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/teenager_team.css">
+</head>
+
+<body>
+    <div class="main">
+        <!-- 顶部tab -->
+        <div class="top_tab">
+            <img src="img/icon-data_logo.png" alt="" style="width: 178px;height:26px;">
+            <div class="final_content">
+                <span class="weekfinal_name">周决赛</span>
+                <span class="numfinal_name">名额赛</span>
+            </div>
+            <span class="integralRule">积分规则</span>
+        </div>
+        <!-- 内容 -->
+        <div class="content">
+            <!-- 子集tab -->
+            <div class="child_tab">
+                <div class="hd">
+                    <img src="img/icon-arrow_left.png" alt="" class="prev">
+                    <img src="img/icon-arrow_right.png" alt="" class="next">
+                </div>
+                <div class="bd">
+                    <ul class="data_list">
+
+                    </ul>
+                </div>
+            </div>
+            <table class="data_table">
+                <thead style="height: 54px">
+                    <tr class="tab_head">
+                            <th>排名</th>
+                            <th colspan="2">战队</th>
+                            <th>第一场</th>
+                            <th>第二场</th>
+                            <th>第三场</th>
+                            <th>第四场</th>
+                            <th>第五场</th>
+                            <th>第六场</th>
+                            <th class="yellowColor">总积分</th>
+                            <th></th>
+                    </tr>
+                </thead>
+                <tbody class="content_tbody">
+
+                </tbody>
+            </table>
+
+            <!-- 底部 -->
+            <div class="bottom">
+                <ul class="bottom_content">
+
+                </ul>
+            </div>
+        </div>
+        <!-- 积分规则 -->
+        <div class="integrationRule">
+            <table class="rule_table">
+                <tr>
+                    <td>排名</td>
+                    <td>积分</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td class="yellowColor">10</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td class="yellowColor">6</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td class="yellowColor">5</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td class="yellowColor">4</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td class="yellowColor">3</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td class="yellowColor">2</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td class="yellowColor">1</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td class="yellowColor">1</td>
+                </tr>
+                <tr>
+                    <td>9-16</td>
+                    <td class="yellowColor">0</td>
+                </tr>
+                <tr>
+                    <td>淘汰分</td>
+                    <td class="yellowColor">1/人</td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="js/superSlide.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+<script src="../cashback/js/bootstrap.min.js"></script>
+<script>
+    // baseUrl = "http://192.168.1.241:9063/"
+    var config = {
+        cureentTab: 0,                   //当前点击的tab
+        childcurrentTab: 0,           // 当前点击的子集tab
+        isShow: false,                   // 是否显示积分规则
+        url: "YouthTrainController/getTeamDataList",
+        data: {
+            type: 1
+        },
+        type: 'post',
+        matchList: [],                      // 列表数组
+        all_data_list: [],                  // 总积分数组
+        isClick: -1                          // 是否点击多次标记符
+    }
+    // tab切换
+    $(".totalintegral").hide()
+    $(".final_content span").eq(0).addClass("active")
+    $(".final_content span").click(function () {
+        initSlide()
+        config.cureentTab = $(this).index()
+        config.data.type = config.cureentTab == 0 ? 1 : 2
+        if (config.isClick == config.cureentTab) {
+            return
+        }
+        requestPageInfoNet()
+        $(this).addClass("active").siblings().removeClass("active")
+
+        $(".child_tab ul li").removeClass("active")
+        if (config.cureentTab == 1) {
+            $(".totalintegral").show()
+            $(".child_tab ul li").eq(0).addClass("active")
+        } else {
+            $(".totalintegral").hide()
+            $(".child_tab ul li").eq(1).addClass("active")
+        }
+
+    })
+
+
+    // 显示积分规则
+    $(".integralRule").click(function () {
+        if (config.isShow == false) {
+            $(".integrationRule").show()
+            config.isShow = true
+        } else {
+            $(".integrationRule").hide()
+            config.isShow = false
+        }
+    })
+
+
+    requestPageInfoNet()
+    function requestPageInfoNet() {
+        config.isClick = config.cureentTab
+        requsetHttp(config.url, config.type, config.data, null, function (res) {
+            config.matchList = res.data.team_data_list;
+            config.all_data_list = config.cureentTab == 1 ? res.data.team_all_data_list : []
+            $(".bottom_content").empty()
+            $(".data_list").empty();
+            $(".content_tbody").empty()
+
+            var itemString = config.cureentTab == 1 ? ' <li class="totalintegral">总积分</li>' : ''
+            for (let index_f = 0; index_f < config.matchList.length; index_f++) {
+                var weak_num = config.cureentTab == 1 ? config.matchList[index_f].day_num : config.matchList[index_f].week_num;
+                itemString += `<li>${weak_num}</li>`
+            }
+            $(".data_list").append(itemString)
+            initSlide()
+            $(".child_tab ul li").eq(0).addClass("active")
+            $(".child_tab ul li").click(function () {
+                $(this).addClass("active").siblings().removeClass("active")
+                config.childcurrentTab = $(this).index()
+                $(".content_tbody").empty()
+                $(".bottom_content").empty()
+                var index = config.cureentTab == 1 ? $(this).index() - 1 : $(this).index();
+                getallData(index)
+                $(".tab_head").empty();
+                if (config.cureentTab == 1 && index == -1) {
+                    $(".tab_head").append(`
+                        <th>排名</th>
+                        <th colspan="2">战队</th>
+                        <th>排名分</th>
+                        <th>总淘汰</th>
+                        <th>淘汰分</th>
+                        <th class="yellowColor">总积分</th>
+                        <th></th>
+                        `);
+                } else {
+                    $(".tab_head").append(`
+                        <th>排名</th>
+                        <th colspan="2">战队</th>
+                        <th>第一场</th>
+                        <th>第二场</th>
+                        <th>第三场</th>
+                        <th>第四场</th>
+                        <th>第五场</th>
+                        <th>第六场</th>
+                        <th class="yellowColor">总积分</th>
+                        <th></th>
+                        `);
+                }
+
+            })
+
+            getallData(config.cureentTab == 1 ? -1 : 0)
+        })
+    }
+
+    function getallData(index) {
+        var list = [];
+        var drumstick = [];
+        if (config.matchList.length != 0) {
+            list = config.cureentTab == 1 && index == -1 ? config.all_data_list : config.matchList[index].team_list
+            drumstick = config.cureentTab == 1 && index == -1 ? [] : config.matchList[index].first_team_list
+        }
+
+        $(".tab_head").empty();
+        if (config.cureentTab == 1 && index == -1 ) {
+            $(".tab_head").append(`
+                        <th>排名</th>
+                        <th colspan="2">战队</th>
+                        <th>排名分</th>
+                        <th>总淘汰</th>
+                        <th>淘汰分</th>
+                        <th class="yellowColor">总积分</th>
+                        <th></th>
+                        `);
+
+            var str = ''
+            if (!list.length) $(".content_tbody").html("<div class='nolength'>暂无数据~</div>")
+            for (var i = 0; i < list.length; i++) {
+                str += `<tr class="parent" id="row_${i}">
+                        <td>${i + 1}</td>
+                        <td class="team_msg" colspan="2" >
+                            <img src="${list[i].team_logo}" alt="" class="team_logo">
+                            <span class="team_name coloryellow">${list[i].team_name}</span>
+                        </td>
+                        <td>${list[i].rankIntegral}</td>
+                        <td>${list[i].kills}</td>
+                        <td>${list[i].eliminateIntegral}</td>
+                        <td class="coloryellow">${list[i].integral}</td>
+                        
+                        <td><span class="retractable">展开</span></td>
+                    </tr>
+                    <tr class="child_row_${i} sub">
+                        <td colspan="7">`;
+
+                var item_list = list[i].team_user_list;
+                var item_list_length = item_list.length >=4 ? 4 :item_list.length
+                for (let index = 0; index < item_list_length ; index++) {
+                    str += `<div class="subaggregate">
+                                <div class="subaggregate_title">${item_list[index].game_nickname}</div>
+                                <div>
+                                    <span>场均淘汰:<span class="coloryellow">${item_list[index].average_kill}</span></span>
+                                    <span>场均伤害:<span class="coloryellow">${item_list[index].average_damageDealt}</span></span>
+                                </div>
+                            </div>`;
+                }
+
+                str += `
+                        </td>
+                    </tr>`
+            }
+            $(".content_tbody").append(str)
+        } else {
+            $(".tab_head").append(`
+                        <th>排名</th>
+                        <th colspan="2" >战队</th>
+                        <th>第一场</th>
+                        <th>第二场</th>
+                        <th>第三场</th>
+                        <th>第四场</th>
+                        <th>第五场</th>
+                        <th>第六场</th>
+                        <th class="yellowColor">总积分</th>
+                        <th></th>
+                        `);
+            var str = ''
+            var imgStr = '<img src="img/icon-drumstick.png" style="width:20px;height:15px;margin-left:10px">'
+            if (!list.length) $(".content_tbody").html("<div class='nolength'>暂无数据~</div>")
+            for (var i = 0; i < list.length; i++) {
+                str += `<tr class="parent" id="row_${i}">
+                        <td>${i + 1}</td>
+                        <td class="team_msg" colspan="2" >
+                            <img src="${list[i].team_logo}" alt="" class="team_logo">
+                            <span class="team_name coloryellow">${list[i].team_name}</span>
+                        </td>
+                        <td><span class="${list[i].first_ranking == 1 ? 'coloryellow' : ''}">${list[i].first_point}</span>${list[i].first_ranking == 1 ? imgStr : ''}</td>
+                        <td><span class="${list[i].second_ranking == 1 ? 'coloryellow' : ''}">${list[i].second_point}</span>${list[i].second_ranking == 1 ? imgStr : ''}</td>
+                        <td><span class="${list[i].third_ranking == 1 ? 'coloryellow' : ''}">${list[i].third_point}</span>${list[i].third_ranking == 1 ? imgStr : ''}</td>
+                        <td><span class="${list[i].fourth_ranking == 1 ? 'coloryellow' : ''}">${list[i].fourth_point}</span>${list[i].fourth_ranking == 1 ? imgStr : ''}</td>
+                        <td><span class="${list[i].fifth_ranking == 1 ? 'coloryellow' : ''}">${list[i].fifth_point}</span> ${list[i].fifth_ranking == 1 ? imgStr : ''}</td>
+                        <td><span class="${list[i].sixth_ranking == 1 ? 'coloryellow' : ''}">${list[i].sixth_point}</span> ${list[i].sixth_ranking == 1 ? imgStr : ''}</td>
+                        <td class="coloryellow">${list[i].total_point}</td>
+                        <td><span class="retractable">展开</span></td>
+                    </tr>
+                    <tr class="child_row_${i} sub">
+                        <td colspan="9" class="subnolength">`;
+
+                var item_list = list[i].team_user_list;
+                var item_list_length = item_list.length >=4 ? 4 :item_list.length
+                for (let index = 0; index < item_list_length; index++) {
+                    str += `<div class="subaggregate">
+                                <div class="subaggregate_title">${item_list[index].game_nickname}</div>
+                                <div>
+                                    <span>场均淘汰:<span class="coloryellow">${item_list[index].average_kill}</span></span>
+                                    <span>场均伤害:<span class="coloryellow">${item_list[index].average_damageDealt}</span></span>
+                                </div>
+                            </div>`;
+                }
+                str += `
+                        </td>
+                    </tr>`
+            }
+            $(".content_tbody").append(str)
+
+            // 场次吃鸡
+            var drumstickStr = ''
+            for (var j = 0; j < drumstick.length; j++) {
+                drumstickStr += ` <li class="drumstickList" >
+                        <div>${drumstick[j].index}</div>
+                        <div class="drumstick_box" style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis">
+                            <img src="${drumstick[j].team_logo}" alt="" style="width:26px;height:26px;">
+                            <span style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis; padding:0 10px" >${drumstick[j].team_name}</span>
+                            <img src="${drumstick[j].team_logo== '' ?'':'img/icon-drumstick.png'}" alt="" class="drumstick">
+                        </div>
+                    </li>`
+            }
+            $(".bottom_content").html(drumstickStr)
+        }
+
+        // 点击
+        $(".parent ~ .sub").toggle();
+        $(".retractable").click(function () {
+            $(this).parent().parent().toggleClass("selected").siblings(".child_" + $(this).parent().parent().attr("id")).toggle()
+            if ($(this).parent().parent().attr("class").indexOf('selected') >= 0) {
+                $(this).text("收起")
+            } else {
+                $(this).text("展开")
+            }
+
+        })
+    }
+
+    function initSlide() {
+        jQuery(".child_tab").slide(
+            {
+                titCell: ".hd img",
+                mainCell: ".bd ul",
+                autoPage: true,
+                effect: 'left',
+                vis: 9,
+                pnLoop: false,
+                prevCell:'.prev',
+                nextCell:'.next'
+            });
+    }
+
+
+</script>

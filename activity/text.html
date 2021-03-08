@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="../public/jquery.min.js"></script>
+</head>
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    .iframe {
+        width: 100%;
+        height: 100%;
+        /*position: absolute;*/
+        background-size: cover;
+    }
+    .iframe, #iframepage{
+        text-align:center;
+        margin: auto;
+    }
+</style>
+<body>
+    <div class="iframe">
+        <iframe id="iframepage" width="1200px" src="game_huya1.html" frameborder="no" scrolling="no" style="margin-top: 100px"></iframe>
+    </div>
+
+    <div style="display: flex;flex-wrap: wrap;align-items: center;justify-content: center;width: 100%">
+        <div class="btn" style="padding: 10px;border: 1px solid #46aaff;background: red ">战队数据</div>
+        <div class="btn" style="padding: 10px;border: 1px solid #46aaff;background: red ">选手数据</div>
+    </div>
+
+    <div class="iframe">
+        <iframe id="iframepage1" width="1200px" src="game_huya2.html" frameborder="no" scrolling="no" style="margin-bottom: 100px"></iframe>
+    </div>
+
+    <div class="iframe">
+        <iframe id="iframepage2" width="1200px" src="game_huya3.html" frameborder="no" scrolling="no" style="margin-bottom: 100px;"></iframe>
+    </div>
+
+    <script>
+        function setIframeHeight(iframe) {
+            if (iframe) {
+                var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
+                if (iframeWin.document.body) {
+                    iframe.height = iframeWin.document.documentElement.scrollHeight || iframeWin.document.body.scrollHeight;
+                }
+            }
+        };
+        window.onload = function () {
+            $('.btn').click(function () {
+                console.log($(this).index());
+                var $index = $(this).index();
+                if ($index == 0) {
+                   $('#iframepage1').show();
+                   $('#iframepage2').hide();
+                } else {
+                    $('#iframepage1').hide();
+                    $('#iframepage2').show();
+                }
+            })
+            setTimeout( function () {
+                setIframeHeight(document.getElementById('iframepage'));
+                setIframeHeight(document.getElementById('iframepage1'));
+                setIframeHeight(document.getElementById('iframepage2'));
+            },100)
+
+        };
+    </script>
+</body>
+</html>

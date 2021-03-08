@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title>小虎青训营</title>
+</head>
+<link rel="stylesheet" href="iconfont/iconfont.css">
+<style>
+    * {
+        padding: 0;
+        margin: 0
+    }
+    
+    ul,
+    li {
+        list-style: none;
+    }
+    
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+        font-size: 14px;
+        box-sizing: border-box;
+        font-family: PingFangSC-Semibold;
+        background-color: #333333;
+    }
+    
+    .header {
+        width: 100%;
+        height: 76vw;
+        background: #333333;
+        text-align: center;
+        position: relative;
+    }
+    
+    .header img {
+        width: 100%;
+        height: 48vw;
+    }
+    
+    .header-box {
+        width: 100%;
+        position: absolute;
+        bottom: 20px;
+        box-sizing: border-box
+    }
+    
+    .goteam {
+        width: 33vw;
+        height: 13vw;
+        margin: 0 auto;
+        background: url("https://cdn.tinytiger.cn/icon-Rectangle%20.png") no-repeat 100%/100%;
+        line-height: 13vw;
+        color: rgba(0, 0, 0, 1);
+        font-weight: 600;
+    }
+    
+    .title {
+        width: 35vw;
+        height: 10vw;
+        background: url("https://cdn.tinytiger.cn/icon-teenagerGroup.png") no-repeat 100%/100%;
+        margin: 0 auto;
+        margin-top: 25px
+    }
+    
+    .tab {
+        width: 100%;
+    }
+    
+    .scoll-view {
+        display: flex;
+        background-color: #222222;
+        color: #ffffff;
+        position: relative;
+        justify-content: center;
+        align-items: center
+    }
+    
+    .scoll-view-total {
+        flex: 9;
+        display: flex;
+        overflow-x: scroll;
+        white-space: nowrap;
+        margin-bottom: 7px;
+    }
+    
+    .iconfont {
+        font-size: 12px;
+        flex: 1;
+        display: flex;
+        justify-content: center
+    }
+    
+    .tab-item {
+        margin-right: 5px;
+        padding: 10px 15px;
+        position: relative
+    }
+    
+    .line {
+        display: none
+    }
+    
+    .line.active {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        height: 4px;
+        left: 0;
+        background: linear-gradient(90deg, rgba(227, 187, 57, 1) 0%, rgba(206, 105, 22, 1) 100%);
+        display: block
+    }
+    
+     ::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+        background-color: transparent;
+    }
+    
+    .main {
+        position: relative;
+    }
+    
+    .tabs-container {
+        width: 100%;
+    }
+    
+    .tab-content {
+        padding: 0 10px;
+    }
+    
+    .tabs-container .tab-content {
+        display: none;
+    }
+    
+    .tabs-container .tab-content.active {
+        display: block;
+    }
+    
+    .list-item .team_list {
+        padding: 15px 0;
+        width: 100%;
+        background: rgba(34, 34, 34, 1);
+        border: 1px solid;
+        border-image: linear-gradient(90deg, rgba(227, 187, 57, 1), rgba(206, 105, 22, 1)) 1 1;
+    }
+    
+    .planTitle {
+        width: 55vw;
+        height: 10vw;
+        display: flex;
+        justify-content: center;
+        background: url(" https://cdn.tinytiger.cn/icon-teenagerGame.png") no-repeat 100%/100%;
+        margin: 40px auto 16px auto
+    }
+    
+    .gamePlan {
+        padding-bottom: 50px;
+        position: relative;
+        z-index: 9999;
+    }
+    
+    .planMsg {
+        width: 100%;
+        border: 1px solid;
+        border-image: linear-gradient(90deg, rgba(227, 187, 57, 1), rgba(206, 105, 22, 1)) 1 1;
+        color: rgba(255, 255, 255, 1);
+        background-color: #222222;
+        z-index: 9999;
+    }
+    
+    .information {
+        padding: 16px
+    }
+    /* 战队名称 */
+    
+    .team_list {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    
+    .team_list_msg {
+        display: flex;
+        flex-direction: column;
+        flex-basis: 20%;
+        margin-bottom: 15px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    .team_list_msg img {
+        width: 44px;
+        height: 44px;
+        margin: 0 auto
+    }
+    
+    .team_list_msg span {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 1);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: center
+    }
+    /* 底部 */
+    
+    .bottom {
+        width: 100%;
+        height: 38vw;
+        background: url("https://cdn.tinytiger.cn/icon-teenagerBottomBg.png") no-repeat 100%/100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+    }
+    
+    .teenagerGameshare {
+        width: 15vw;
+        height: 15vw;
+        position: fixed;
+        bottom: 80px;
+        right: 5px;
+        z-index: 999999;
+        display: none
+    }
+    /* 底部分享 */
+    
+    .share-mask {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        display: none;
+    }
+    
+    .mask {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 1;
+        top: 0;
+    }
+    
+    footer {
+        position: fixed;
+        bottom: 0;
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        background: #FFFFFF;
+        z-index: 99999;
+        color: black;
+    }
+    
+    footer .share {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 12px 0 8px 0;
+    }
+    
+    footer .share>span {
+        padding-top: 5px;
+    }
+    
+    footer img {
+        height: 30px;
+    }
+</style>
+
+<body>
+    <div class="header">
+        <img src="https://cdn.tinytiger.cn/icon-teenagerBg.jpg" alt="">
+        <div class="header-box">
+            <div class="goteam"><span>查看战队数据</span></div>
+            <div class="title"></div>
+        </div>
+    </div>
+    <!-- 中间部分 -->
+    <div class="main">
+        <div class="tab">
+
+            <div class="scoll-view">
+
+                <div class="scoll-view-total"></div>
+                <span class="icon iconfont icon-ln_jiantouyou"></span>
+            </div>
+            <div class="tabs-container">
+                <div class="tab-content">
+                    <ul class="content-list">
+                        <li>
+                            <div class="list-item">
+                                <div class="team_list" id="team_list">
+                                    <!-- 战队名称 -->
+                                </div>
+                                <div class="gamePlan">
+                                    <span class="planTitle"></span>
+                                    <div class="planMsg">
+                                        <div class="information">
+                                            <p>2019绝地求生青训营是由小虎电竞主办，PUBG官方认证和授权的训练营系列赛事！赛事覆盖全国范围所有绝地求生玩家。</p>
+                                            <p>本次比赛分为海选赛、淘汰赛、晋级赛、表演赛和总决赛五个阶段</p>
+                                            <p>其中海选赛、淘汰赛、晋级赛、表演赛均为线上赛</p>
+                                            <p>海选赛 &nbsp &nbsp 2019年5月15日-5月26日</p>
+                                            <p>淘汰赛 &nbsp &nbsp 2019年5月28日-5月30日</p>
+                                            <p>晋级赛 &nbsp &nbsp 2019年5月31日-6月2日</p>
+                                            <p>表演赛 &nbsp &nbsp 2019年6月3日</p>
+                                            <p>总决赛为线下赛，将于2019年6月7日-6月9日在深圳举行</p>
+                                            <p>2019绝地求生青训营与官方进行深度的合作，届时在比赛中表现优异的战队将会获得PDL夏季赛线上32强参赛席位。</p>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </li>
+                    </ul>
+
+                </div>
+
+            </div>
+        </div>
+        <!--  -->
+        <div class="bottom"></div>
+    </div>
+    <!-- 固定图标 -->
+    <img src="https://cdn.tinytiger.cn/icon-teenagerGame-share.png" alt="" class="teenagerGameshare">
+
+    <!--底部分享栏-->
+    <div class="share-mask">
+        <div class="mask"></div>
+        <footer>
+            <div class="share"><img src="https://cdn.tinytiger.cn/invite-WeChat.png" /><span>微信</span></div>
+            <div class="share"><img src="https://cdn.tinytiger.cn/invite-discover.png" /><span>朋友圈</span></div>
+            <div class="share"><img src="https://cdn.tinytiger.cn/invite-QQ.png" /><span>QQ</span></div>
+            <div class="share copylink"><img src="https://cdn.tinytiger.cn/invite-link.png" /><span>复制链接</span></div>
+        </footer>
+    </div>
+    </div>
+
+
+
+</body>
+
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/service.js"></script>
+<script src="../public/config.js"></script>
+<script>
+    // baseUrl = 'http://120.77.181.145:9032/' //正式ip
+    baseUrl = 'https://tinytigersmall.tinytiger.cn/' //正式域名
+        // baseUrl = 'https://tinytiger.lsjdj.cn/'; //测试
+        // baseUrl = 'https://tinytigersmallrelease.lsjdj.cn/'; //预发布
+
+
+
+    var config = {
+            listurl: "YouthTrainController/getGroupList",
+            getTeamListulr: "YouthTrainController/getTeamList",
+            type: 'post',
+            token: null,
+            listdata: {},
+            getTeamLisdata: {
+                group_id: 0
+            }
+        }
+        // 跳转到战队信息
+    $(".goteam").click(function() {
+            location.href = "game.html"
+        })
+        // 数据请求
+    requsetHttp(config.listurl, config.type, config.listdata, config.token,(res)=>{
+            var str = ''
+            var list = res.data.group_list
+            for (var i = 0; i < list.length; i++) {
+                str += `<li class="tab-item" data-id="${list[i].group_id}">${list[i].group_name}<div class="line"></div></li>`
+            }
+            $('.scoll-view-total').append(str);
+            $('.tab-item').eq(0).children(".line").addClass('active');
+            loadData(list[0].group_id)
+            $('.tab-item').click(function() {
+                $(this).children(".line").addClass('active').parent().siblings().children(".line").removeClass("active")
+                loadData($(this).attr("data-id"))
+            });
+
+            function loadData(itemId) {
+                config.getTeamLisdata.group_id = itemId
+                var index = $(this).index() >= 0 ? $(this).index() : 0;
+                $('.tabs-container .tab-content').eq(index).addClass('active').siblings().removeClass('active')
+                $('.tabs-container .tab-content').eq(index).addClass('active').siblings().removeClass('active')
+                $("#team_list").empty()
+                requsetHttp(config.getTeamListulr, config.type, config.getTeamLisdata, config.token,(res)=>{
+                    var gamestr = ''
+                    var gamelist = res.data.team_list
+                    if (gamelist.length == 0) {
+                        $("#team_list").html(`<div style="text-align: center; color: #fff; padding: 50px 0; width:100%">暂无数据</div>`)
+                    }
+                    for (var j = 0; j < gamelist.length; j++) {
+                        gamestr += ` <div class="team_list_msg">
+                              <img src="${gamelist[j].team_logo}" alt="">
+                               <span>${gamelist[j].team_name}</span>
+                            </div>`
+                    }
+                    $("#team_list").append(gamestr)
+
+                })
+            }
+
+        })
+        //     // 安卓机显示浮标
+    if (browser.versions.android) {
+        window.titi_js.callIsLogin()
+        if (String) {
+            $(".teenagerGameshare").show()
+        } else {
+
+            $(".teenagerGameshare").hide()
+
+        }
+    } else {
+        $(".teenagerGameshare").hide()
+    }
+
+    $(".teenagerGameshare").click(function() {
+        $(".share-mask").show()
+    })
+    $(".mask").click(function() {
+            $(".share-mask").hide()
+        })
+        // 分享
+    $(".share").click(function() {
+        var obj = {
+            type: $(this).index(),
+            shareUrl: 'http://120.78.172.201/web_app/teenagerGame/index.html',
+            title: '【青训营】比赛数据',
+            desc: '发掘更多高手，成就电竞“新星”',
+            img: 'https://cdn.tinytiger.cn/teenagerGame-share.jpg'
+        }
+        if (browser.versions.android) {
+            window.titi_js.callShare(JSON.stringify(obj));
+        } else {
+            window.webkit.messageHandlers.callShare.postMessage(JSON.stringify(obj));
+        }
+    })
+</script>

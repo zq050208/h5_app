@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <title></title>
+</head>
+
+<body>
+    <style>
+        *,
+        html,
+        body {
+            font-size: 14px;
+            background: #f7f7f7;
+            color: #333333;
+            position: relative;
+        }
+
+        .header,
+        .cell {
+            display: flex;
+            -webkit-justify-content: center;
+            justify-content: center;
+
+        }
+
+        .header {
+            margin-top: 2.45em;
+        }
+
+        .cell {
+            margin-top: 0.625em;
+        }
+
+        .teamLogo {
+            position: relative;
+            width: 41.34% !important;
+            height: 0px;
+            padding-top: 41.34%;
+            display: block;
+        }
+
+        .teamLogo div {
+            position: absolute;
+            display: block;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        .teamName {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .tips {
+            display: none;
+            text-align: center;
+            margin-top: 4.25em;
+        }
+
+        .tips p,
+        .tips span {
+            color: #999999 !important;
+        }
+
+        .content {
+            margin-top: 1.875em;
+            text-align: center;
+            padding: 0 15.6%;
+        }
+
+        .info {
+            border-radius: 4px;
+        }
+
+        .group {
+            padding: 15px 0;
+            color: #fff;
+            background: #ffffff;
+            color: #333333;
+            border-bottom: 1px solid #dadada;
+        }
+
+        .group span {
+            color: #999999;
+            background: #ffffff;
+        }
+
+        .group input {
+            outline: none;
+            border: none;
+            box-shadow: none !important;
+            background: #ffffff;
+            text-indent: 10px;
+        }
+
+        .group:last-child {
+            border-bottom: none;
+        }
+
+        .footer {
+            width: 100%;
+            position: absolute;
+            padding: 0 4%;
+           margin-top: 100px
+            /* bottom: 1.875em; */
+        }
+
+        .footer span {
+            display: flex;
+            padding: 15px;
+            -webkit-justify-content: center;
+            justify-content: center;
+            background: #FFC648;
+            border-radius: 4px;
+        }
+
+        #getcode {
+            position: absolute;
+            margin-top: -5px;
+            right: 10%;
+            color: #999999;
+            background: #ffffff;
+            z-index: 99;
+        }
+
+
+        .text span {
+            color: #999999;
+        }
+
+        .toast {
+            /* position: absolute; */
+            width: 100%;
+            /* bottom: 20%; */
+            opacity: 0;
+            text-align: center;
+            margin-top: 50px;
+            /* z-index: 999; */
+        }
+
+        .toast span {
+            padding: 15px 30px;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #ffffff;
+            border-radius: 6px
+        }
+
+        .isShow {
+            opacity: 1 !important;
+            transition: opacity .15s linear;
+        }
+
+        @media (max-height: 400px) {
+            .footer {
+                display: none;
+            }
+        }
+
+        .join-tips {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 111;
+            display: none;
+            background: rgba(0, 0, 0, 0.7)
+        }
+
+        .mask {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            z-index: 100;
+            opacity: 0.1;
+        }
+
+        .join-content {
+            width: 65%;
+            height: 140px;
+            position: fixed;
+            top: 35%;
+            left: 18%;
+            border-radius: 4px;
+            z-index: 999;
+        }
+
+        .submit-tips {
+            padding: 25px 30px 20px 30px;
+            border-radius: 4px
+        }
+
+        .tips-button {
+            border-top: 1px solid #e9e9e9;
+            display: flex;
+
+        }
+
+        .tips-button span {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 0
+        }
+
+        .tips-button span:first-child {
+            border-right: 1px solid #e9e9e9
+        }
+        button{
+            border: none !important;
+            outline: none !important;
+            background-color: transparent !important;
+            box-shadow: none !important;
+        }
+    </style>
+    <div class="page">
+        <div class="header">
+            <div class="teamLogo">
+                <div></div>
+            </div>
+        </div>
+
+        <div class="cell">
+            <span class="teamName"></span>
+        </div>
+
+        <div class="tips" style="text-align: center;color: #999999">
+            <span>很抱歉，该战队已解散</span>
+            <p>下载APP查看更多战队信息</p>
+        </div>
+
+        <div class="content">
+            <div class="info">
+                <div class="group">
+                    <span>PUBG:</span>
+                    <input id="pubgName" placeholder="PUBG" onpaste="return false" ondragenter="return false"
+                        oncontextmenu="return false;" style="ime-mode:disabled">
+                </div>
+                <div class="group">
+                    <span>手机号:</span>
+                    <input id="mobile" type="tel" maxlength="11" placeholder="手机号" />
+                </div>
+                <div class="group">
+                    <span>验证码:</span>
+                    <input id="code" type="number" maxlength="6" placeholder="验证码" />
+                    <button id="getcode" class="btn" onclick="getcode()">获取验证码</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <span>加入战队</span>
+        </div>
+
+        <div class="toast"><span></span></div>
+
+        <div class="join-tips">
+            <div class="mask"></div>
+            <div class="join-content">
+                <div class="submit-tips">已提交加入战队申请，下载TiTi电竞及时查看战队信息哦~</div>
+                <div class="tips-button">
+                    <span style="color: rgba(0,0,0,0.5)" class="cancel-button">取消</span>
+                    <span class="download">下载APP</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="../public/jquery.min.js"></script>
+    <script src="../public/config.js"></script>
+    <script src="../public/service.js"></script>
+    <script>
+        baseUrl = 'https://new_api.tinytiger.cn/'
+        var config = {
+            downloadUrl: 'https://h5.tinytiger.cn/web_app/knapsack/download.html',              // 下载地址
+            applyTeamUrl: 'WarTeamUserController/teamUserApply',                           // 申请加入战队
+            teamInfoUrl: 'WarTeamController/getTeamIdToTeamInfo',                          // 战队详情
+            codeUrl: 'LoginController/sendVerificationCode',                               // 发送验证码
+            teamId: Request('teamId'),                                            // 获取战队id
+            type: 'post',                                                                  // 请求方式
+            InterValObj: null,                                                             // timer变量，控制时间
+            curCount: null,                                                                // 当前剩余秒数
+            count: 30,                                                                    // 间隔函数，1秒执行
+            PUBG_STR: '请输入PUBG',
+            ACCOUNT_STR: '请输入正确的手机号码',
+            CODE_STR: '请输入验证码',
+        };
+
+        requsetHttp(config.teamInfoUrl, config.type, { team_id: config.teamId }, config.token, (res) => {
+            if (res.status) {
+                $('.teamName').text(res.data.team_info.team_name);
+                $('.teamLogo div').css('background', 'url(' + res.data.team_info.team_logo + ')0% 0% / 100% 100%');
+            } else {
+                $('.teamLogo div').css('background', 'url("img/icon-team.png")0% 0% / 100% 100%');
+                $('.content, .footer').hide();
+                $('.text, .download,.tips').show();
+            }
+        });
+
+        $('.footer').click(function () {
+            var data = {
+                team_id: config.teamId,
+                mobile_phone: $('#mobile').val(),
+                valid_code: $('#code').val(),
+                game_nickname: $('#pubgName').val()
+            };
+            if (!data.game_nickname) {
+                toastMsg(config.PUBG_STR);
+                return false;
+            }
+            if (/[\u0391-\uFFE5]/i.test(data.game_nickname)) {
+                toastMsg('PUBG不能为中文');
+                return false;
+            }
+            if (!checkmobile(data.mobile_phone)) {
+                toastMsg(config.ACCOUNT_STR);
+                return false;
+            }
+            if (!data.valid_code) {
+                toastMsg(config.CODE_STR);
+                return false;
+            }
+            requsetHttp(config.applyTeamUrl, config.type, data, null, (res) => {
+                console.log(res);
+                if (res.status) {
+                    $(".join-tips").show()
+                } else {
+                    toastMsg(res.msg);
+                }
+            });
+        });
+
+        $('.download').click(function () {
+            location.href = config.downloadUrl;
+            $(".join-tips").hide()
+            $('#pubgName').val("")
+            $("#mobile").val("")
+            $("#code").val("")
+            clearInterval(config.InterValObj);
+            $("#getcode").attr('disabled', false).text('获取验证码');
+        });
+
+        function getcode() {
+            config.curCount = config.count;
+            var data = { phone: $("#mobile").val() }
+            if (checkmobile(data.phone)) {
+                requsetHttp(config.codeUrl, config.type, data, null, (res) => {
+                    if (res.status) {
+                        toastMsg('验证码已经发送至' + data.phone);
+                        config.InterValObj = setInterval(SetRemainTime, 1000);
+                    } else {
+                        toastMsg(res.msg);
+                    }
+                })
+            } else {
+                toastMsg(config.ACCOUNT_STR);
+            }
+        }
+
+        function SetRemainTime() {
+            if (config.curCount == 1) {
+                clearInterval(config.InterValObj);
+                $("#getcode").attr('disabled', false).text('获取验证码');
+            } else {
+                config.curCount--;
+                $("#getcode").attr('disabled', true).text(config.curCount + "秒后获取");
+            }
+        }
+
+        function toastMsg(msg) {
+            $('.toast span').text(msg);
+            $('.toast').addClass('isShow');
+            setTimeout(function () {
+                $('.toast').removeClass('isShow');
+            }, 2000);
+        }
+
+        $(".mask,.cancel-button").click(function () {
+            $(".join-tips").hide()
+            $('#pubgName').val("")
+            $("#mobile").val("")
+            $("#code").val("")
+            clearInterval(config.InterValObj);
+            $("#getcode").attr('disabled', false).text('获取验证码');
+        })
+    </script>
+
+</body>
+
+</html>

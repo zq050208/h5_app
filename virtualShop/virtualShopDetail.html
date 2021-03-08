@@ -1,0 +1,413 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,viewport-fit=cover, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title>商品详情</title>
+    <link rel="stylesheet" href="css/virtualShopDetail.css">
+    <link rel="stylesheet" href="../public/module/dialog.css">
+</head>
+<body>
+    <div class="top">
+        <div class='main'>
+            <form bindsubmit='submit' report-submit='true'>
+                <div class="mainimg"></div>
+                <div class="detail-title">
+                    <div class="title1">
+                    </div>
+                    <div>
+                        <span class="pricetext">价格：</span><span class="pricet"></span>
+                    </div>
+                </div>
+                <div class="introduce">
+                    商品介绍
+                </div>
+                <div class="introducedata">
+                    <div>礼品类型：<span class="gifttype"></span> </div>
+                    <div class="details" style="margin:18px 0;"></div>
+                    <div class="mess"></div>
+                </div>
+                <div class="main-footer">
+                    <div class="numdata">
+                        <div class="numtext">数量</div>
+                        <div class="minus">-</div>
+                        <div class="nums"><input class="num" type="number" value="1" onkeyup="clearNoNum(this)" onchange="inputChange()" oninput="if(value>10)value=10;if(value<0)value=0" /></div>
+                        <div class="addition">+</div>
+
+
+                    </div>
+                    <div class="btn">
+                        <div class="btntext">兑换</div>
+                        <div class="btnprice"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="msgdialog"></div>
+    </div>
+    <div class="dia"></div>
+
+    <script src="../public/module/msgDialog.js"></script>
+    <script src="../public/jquery.min.js"></script>
+    <script src="../public/config.js"></script>
+    <script src="../public/service.js"></script>
+    <script>
+        //判断为ios则不展示下列文本数据
+        var u = navigator.userAgent;
+        var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/);
+        if (isiOS) {
+            $('.mess').html('<p>商品和活动皆与Apple 无关</p>');
+        }
+
+        var shopping_type = 0;                    // 商城类型 
+        var unitprice = 0;                        // 详情消耗
+        var payMoney = 1;                         // 添加数量
+        var money = 0;                            // 该商品的价格
+        var goods_id = 0;                         // 该商品id
+        var expirytype = 0;                       // 该商品类型
+        var token = ''
+        var ticketRecordinfo = ''                 // 兑奖记录页面地址
+        var myPrizeinfo = ''                      // 我的奖品页面地址
+        var numkey = false;                       // 用于区分价格输入框与兑奖信息输入框
+      
+        window.onload = function () {
+            var argsFromPageA = args();
+            // 打印a页面传递来的参数
+            if (argsFromPageA) {
+                if (argsFromPageA.img) {                   //商品图片
+                    img(decodeURIComponent(argsFromPageA.img));
+                }
+                if (argsFromPageA.title) {                 //商品标题
+                    title(argsFromPageA.title);
+                }
+                if (argsFromPageA.price) {                 //商品价格
+                    unitprice = argsFromPageA.price;
+                    price(argsFromPageA.price);
+                }
+                if (argsFromPageA.type) {                  //商品类型
+                    expirytype = argsFromPageA.type;
+                    type(argsFromPageA.type);
+                }
+                if (argsFromPageA.info) {                 //商品简介
+                    info(argsFromPageA.info);
+                }
+                if (argsFromPageA.id) {                  //商品id
+                    goods_id = argsFromPageA.id
+                }
+                if (argsFromPageA.shopping_type) {       //商城类型
+                    shopping_type = argsFromPageA.shopping_type
+                }
+                if (argsFromPageA.ticketRecordinfo) {    // 兑奖记录页面地址
+                    ticketRecordinfo = decodeURIComponent(argsFromPageA.ticketRecordinfo)
+                }
+                if (argsFromPageA.myPrizeinfo) {        // 我的奖品页面地址
+                    myPrizeinfo = decodeURIComponent(argsFromPageA.myPrizeinfo)
+                }
+                if (argsFromPageA.token) {
+                    token = argsFromPageA.token
+                }
+            }
+        };
+
+        $('body').height($('body')[0].clientHeight);
+
+        $(".minus").click(function () {
+            if (payMoney > 0) {
+                payMoney -= 1
+                if (payMoney <= 0) {
+                    toolTipDialog("最少购买1张!");
+                    payMoney = 1;
+                    moneycount(unitprice, payMoney)
+                } else {
+                    moneycount(unitprice, payMoney)
+                }
+            } else {
+                toolTipDialog("最少购买1张!");
+                payMoney = 1;
+                moneycount(unitprice, payMoney)
+            }
+            $(".num").val(payMoney);
+        });
+
+        $(".addition").click(function () {
+            payMoney += 1;
+            if (payMoney <= 10) {
+                moneycount(unitprice, payMoney)
+                $(".num").val(payMoney);
+            } else {
+                payMoney=10
+                toolTipDialog("最多可购买10张!");
+            }
+        });
+
+        $(".btn").click(function () {
+            numkey = true;
+            if (expirytype == 1 || expirytype == 5) {
+                purchase()
+            } else if (expirytype == 2 || expirytype == 3) {
+                var html = `  <div class='dialog'>
+                                            <div class="mains1">
+                                            <div class="dialog-top aligntype">
+                                                <div style='width: 20px;'></div>
+                                                <div>兑换</div>
+                                                <img src="https://cdn.tinytiger.cn/icon-close.png" onclick='hideida()' />
+                                            </div>
+                                            <div class="dialog-footer1">
+                                                <div class="qq aligntype1">
+                                                    <div class="qqtext">QQ号</div>
+                                                    <input type="number" class='qqinput' placeholder = "请输入QQ账号" />
+                                                </div>
+                                                <div class="qufu aligntype1">
+                                                    <div class="qufutext">区服</div>
+                                                    <input type="text" class='qufuinput' placeholder = "请输入区服" />
+                                                </div>
+                                            </div>
+                                            <div class="footers" onclick='sendInfo(event)'><p>发送申请</p></div>
+
+                                        </div>
+                                    </div>
+                                  <div class="mask"></div>`
+                $('.dia').html(html);
+            }
+        })
+
+        $(document).on('focusin', function () {
+            if (numkey) {
+                console.log(numkey)
+                console.log("软键盘弹出的事件处理")
+                document.body.scrollTop = parseInt(document.body.scrollHeight / 4);
+            } else {
+                document.body.scrollTop = document.body.scrollHeight;
+            }
+        });
+
+        $(document).on('focusout', function () {
+            if (numkey) {
+                console.log(numkey)
+                console.log("软键盘收起的事件处理")
+                document.body.scrollTop = 0; 
+            } else {
+                document.body.scrollTop = 0; 
+            }
+        });
+  
+        function args(params) {
+            var a = {};
+            params = params || location.search;
+            if (!params) return {};
+            params = decodeURI(params);
+            params.replace(/(?:^\?|&)([^=&]+)(?:\=)([^=&]+)(?=&|$)/g, function (m, k, v) { a[k] = v; });
+            return a;
+        };
+        function img(img) {
+            var html = `<image src=` + img + ` class='detail-img'></image>`
+            $('.mainimg').html(html);
+        }
+        function title(title) {
+            var html = `<p>` + title + `</p>`
+            $('.title1').html(html);
+        }
+        function price(price) {
+            var html = `<span>` + parseInt(price) + `铜钱</span>`
+            $('.pricet').html(html);
+
+            money = price * payMoney;
+            var html = `<span>` + parseInt(money) + `铜钱</span>`
+            $('.btnprice').html(html);
+
+        }
+        function moneycount(pPrice, pPayMoney) {
+            money = pPrice * pPayMoney;
+            var html = `<span>` + parseInt(money) + `铜钱</span>`
+            $('.btnprice').html(html);
+        }
+        function type(type) {
+
+            var arr = ['无数据', '京东卡', '王者荣耀点券', 'LOL点券', '网吧消费券', '话费卡']
+            var html = `<span>` + arr[type] + `</span>`
+            $('.gifttype').html(html);
+
+        }
+        function info(info) {
+            var html = `<p>` + info + `</p>`
+            $('.details').html(html);
+        }
+        function inputChange() {
+            var num = $(".num").val();
+            if (num >= 0) {
+            } else {
+                payMoney = 1;
+                $(".num").val(1);
+            }
+        }
+        //商品数量输入监听检验
+        function clearNoNum(obj) {
+            obj.value = obj.value.replace(/[^\d.]/g, "");  //清除“数字”和“.”以外的字符
+            obj.value = obj.value.replace(/^\./g, "");  //验证第一个字符是数字而不是.
+            obj.value = obj.value.replace(/\.{2,}/g, "."); //只保留第一个. 清除多余的.
+            obj.value = obj.value.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
+
+            if (obj.value >= 0) {
+                console.log('111')
+                obj.value = Math.round(obj.value); 
+                payMoney = Math.round(obj.value);
+                
+            } else {
+                obj.value = 1
+                payMoney = 1;
+                $(".num").val(obj.value);
+            }
+            moneycount(unitprice, obj.value)
+        }
+        //兑换
+        function purchase() {
+            var config = {
+                gameInfoUrl: 'VirtualMallController/purchase',
+                type: 'post',
+                token: token,
+                data: { number: payMoney, goods_id: goods_id, shopping_type: shopping_type }
+            };
+            console.log(config)
+            RequsetHttp(config.gameInfoUrl, config.type, config.token, config.data, function (res) {
+                if (res.code == 4039) {
+                    var html = ` <div class='dialog'>
+                                    <div class="mains2">
+                                        <div class="dialog-top aligntype">
+                                            <div class='titleRecharge'>`+ res.msg +`</div>
+                                        </div>
+                                        <div class="footers1"><p class="cancel"  onclick='hideida()'>取消</p><p class="affirm"  onclick='toRecharge()' >确认</p></div>
+                                    </div>
+                                </div>
+                                <div class="mask" onclick='hideida()' ></div>`
+                    $('.dia').html(html);
+                } else if (res.code == 200) {
+                    var html = `<div class='dialog'> <div class="mains">
+                                                        <div class="dialog-top aligntype">
+                                                               <div style='width: 20px;'></div>
+                                                            <div>兑换成功</div>
+                                                            <img src="https://cdn.tinytiger.cn/icon-close.png" onclick='hideida()' />
+                                                        </div>
+                                                        <div class="dialog-middle">
+                                                            <img src="https://cdn.tinytiger.cn/icon-ok.png" />
+                                                            <p>恭喜你兑换成功  <br /> 系统审核后将发放兑奖码</p>
+                                                        </div>
+                                                        <div class="dialog-footer aligntype">
+                                                            <div class="examine examinereturn" onclick='examineRecord()'>查看兑换记录</div>
+                                                            <div class="return examinereturn" onclick='returnIndex()'>返回商城首页</div>
+                                                        </div>
+                                                    </div>
+                                                 </div>
+                                   <div class="mask" onclick='hideida()' ></div>`
+                    $('.dia').html(html);
+
+                } else if (res.code == 4014) {
+                    goLogin()
+                } else {
+                    toolTipDialog(res.msg)
+                }
+            });
+        }
+        //弹窗移除
+        function hideida() {
+            numkey = false;
+            $('.dia').html('');
+        }
+        //去兑换记录页面操作
+        function examineRecord() {
+            numkey = false;
+            ticketRecordinfo = ticketRecordinfo + "?token=" + token + '&shopping_type=' + shopping_type;
+            // ticketRecordinfo = ticketRecordinfo.replace("https", "http");
+            callNewWeb(ticketRecordinfo);
+
+            //callNewWeb('https://testpaysmall.lsjdj.cn/web_app/virtualShop/ticketRecord.html?token=' + token + '&shopping_type=' + shopping_type );
+            //location.href = 'ticketRecord.html?token=' + token + '&shopping_type=' + shopping_type;
+        }
+        //去充值操作
+        function toRecharge() {
+            numkey = false;
+            $('.dia').html('');
+            coinsRecharge()
+        }
+        //返回首页操作
+        function returnIndex() {
+            numkey = false;
+            callFinish();
+            //location.href = 'virtualShop.html?token=' + token + '&shopping_type=' + shopping_type;
+        }
+        //王者荣耀点券与LOL点券兑换领取操作检验
+        function sendInfo(event) {
+          
+            var qq = $('.qqinput').val();
+            var qufu = $('.qufuinput').val();
+
+            if (qq.length == 0) {
+                toolTipDialog("请输入QQ账号")
+                return
+            }
+
+            if (qufu.length == 0) {
+                toolTipDialog("请输入服务器名称")
+                return
+            } else if (!(qufu.replace(/[^\u4E00-\u9FA5]/g, ''))) {
+                toolTipDialog("请输入正确的服务器名称")
+                return
+            }
+            if (qq.length > 0 && qufu.length > 0) {
+                var config = {
+                    gameInfoUrl: 'VirtualMallController/purchase',
+                    type: 'post',
+                    token: token,
+                    data: {
+                        number: payMoney,
+                        qq_number: qq,
+                        district_service: qufu,
+                        goods_id: goods_id,
+                        shopping_type: shopping_type
+                    }
+                };
+                RequsetHttp(config.gameInfoUrl, config.type, config.token, config.data, function (res) {
+                    if (res.code == 4039) {
+                        var html = ` <div class='dialog'>
+                                    <div class="mains2">
+                                        <div class="dialog-top aligntype">
+                                            <div  class='titleRecharge'>`+ res.msg + `</div>
+                                        </div>
+
+                                        <div class="footers1"><p class="cancel"  onclick='hideida()'>取消</p><p class="affirm"  onclick='toRecharge()' >确认</p></div>
+                                    </div>
+                                </div>
+                                <div class="mask" onclick='hideida()' ></div>`
+                        $('.dia').html(html);
+                    } else if (res.code == 200) {//兑换成功
+                        var html = `<div class='dialog'> <div class="mains">
+                                                        <div class="dialog-top aligntype">
+                                                           <div style='width: 20px;'></div>
+                                                            <div>兑换成功</div>
+                                                            <img src="https://cdn.tinytiger.cn/icon-close.png" onclick='hideida()' />
+                                                        </div>
+                                                        <div class="dialog-middle">
+                                                            <img src="https://cdn.tinytiger.cn/icon-ok.png" />
+                                                            <p>恭喜你兑换成功  <br /> 系统审核后将发放兑奖码</p>
+                                                        </div>
+                                                        <div class="dialog-footer aligntype">
+                                                            <div class="examine examinereturn" onclick='examineRecord()'>查看兑换记录</div>
+                                                            <div class="return examinereturn" onclick='returnIndex()'>返回商城首页</div>
+                                                        </div>
+                                                    </div>
+                                                 </div>
+                                   <div class="mask" onclick='hideida()' ></div>`
+                        $('.dia').html(html);
+                    } else {//兑换失败原因
+                        toolTipDialog(res.msg)
+                        $('.dia').html('');
+                        numkey = false;
+                    }
+                })
+            }
+        }
+    </script>
+
+</body>
+</html>

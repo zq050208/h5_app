@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,viewport-fit=cover, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title></title>
+    <link rel="stylesheet" href="../public/mescroll.min.css">
+    <link rel="stylesheet" href="css/virtualShop.css">
+</head>
+<body>
+    <div id="mescroll" class="mescroll">
+        <div>
+            <div class='top'>
+                <div class='main'>
+                    <div class="header">
+                        <div class="header-left">
+                            <div class="header-leftimg"><img src="https://cdn.tinytiger.cn/icon-tongbao.png" /></div>
+                            <div>
+                                <div class="moneytq"></div>
+                                <div class="moneytext">铜钱</div>
+                            </div>
+                        </div>
+                        <div class="recharge money" onclick="coinsRecharge()">充值</div>
+                    </div>
+                    <div class="content">
+                        <div class="content-hearder">
+                            <div class="people">大家都在兑</div>
+                            <div class="content-hearder-right">
+                                <div class="order hotOrder">热门<div class="order order-hot"></div></div>
+                                <div class="order priceOrder" style="margin-left:15px;">价格<div class="order order-price"></div></div>
+                            </div>
+                        </div>
+                        <div class="content-footer">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="msgdialog"></div>
+
+    <script src="../public/jquery.min.js"></script>
+    <script src="../public/mescroll.min.js"></script>
+    <script src="../public/module/msgDialog.js"></script>
+    <script src="../public/config.js"></script>
+    <script src="../public/service.js"></script>
+    <script src="js/virtualShop.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,427 @@
+﻿* {
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+html, body {
+    padding: 0;
+    margin: 0;
+}
+
+.drawBack {
+    width: 100%;
+    min-height: 100%;
+    position: absolute;
+    background: url(https://cdn.tinytiger.cn/icon-luckyDrawback1.jpg);
+    display: block;
+    background-size: cover;
+}
+/*选择抽奖转盘类型*/
+    .drawBack .drawTop {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: row;
+        margin: 10px 0px 0px 0px;
+        padding: 0 4%;
+        width:92%;
+    }
+
+.drawBack .drawTop img {
+}
+
+.drawBack .drawTop .drawTabOpacity {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 27px;
+    background: rgba(0,0,0,1);
+    opacity: 0.1;
+    border-radius: 14px;
+}
+
+        .drawBack .drawTop .drawTab {
+            position: relative;
+            margin-top: -27px;
+            font-size: 12px;
+            font-family: PingFangSC-Regular;
+            font-weight: 400;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 98%;
+            height: 27px;
+            border-radius: 14px;
+            padding: 0px 3px;
+        }
+
+            .drawBack .drawTop .drawTab .selectItem {
+                width: 100%;
+                height: 21px;
+                text-align: center;
+                position: relative;
+                margin-top: -20px;
+                font-size: 12px;
+                font-family: PingFangSC-Regular;
+                font-weight: 400;
+                color: rgba(255,255,255,1);
+            }
+
+.drawBack .drawTop .drawTab .drawSelectItem {
+    width: 100%;
+    height: 21px;
+    background: #D9E6EE;
+    opacity: 0.1;
+    border-radius: 11px;
+    color: rgba(255,255,255,1);
+    text-align: center;
+    margin-top: 3px;
+}
+
+.draw {
+    text-align: center;
+    margin-top: 3px;
+    font-size: 12px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(128,136,141,1);
+}
+
+.drawBack .drawTop .drawTab .drawitem {
+    width: 100%;
+    height: 21px;
+    position: relative;
+    margin-top: -20px;
+    color: rgba(128,136,141,1);
+    width: 127px;
+    height: 21px;
+    text-align: center;
+}
+
+/*通知*/
+.inform {
+    padding: 0 4%;
+    font-size: 12px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(149,150,161,1);
+    display:flex;
+    justify-content:space-between;
+}
+.wheelDisc {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100vw;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    /*margin-top: 10px;
+    margin-bottom: 10px;*/
+}
+.bottom {
+    margin: 0 4%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-size: 14px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(254,254,254,1);
+    opacity: 0.6;
+}
+
+#prize {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-family: FZLTZHK--GBK1-0;
+    font-weight: 400;
+    color: rgba(255,255,255,1);
+    text-align: center;
+    width: 87.5%;
+    height: 87.5%;
+    position: relative;
+}
+.awardItem {
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    height: 50%;
+    position: absolute;
+}
+    .awardItem img {
+        width: 50%;
+        height: 30%;
+        margin: 10% 10% 0% 10%;
+    }
+.out-modals {
+    position: fixed;
+    left: 10%;
+    top: 50%;
+    width: 80%;
+    transform: translateY(-50%);
+    z-index: 112
+}
+
+.out-modals-content {
+    width: 100%;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 10px;
+}
+
+.modal-content-title {
+    text-align: center;
+    padding: 45px 0px 24px 0px;
+    position: relative;
+    font-size: 16px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(0,0,0,1);
+}
+.modal-content-msg{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    text-align:center;
+    width:100%;
+
+}
+.boxImg {
+    margin-bottom: 58px;
+    background: rgba(255,136,3,1);
+    width: 80%;
+    font-size: 15px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(243,243,243,1);
+    border-radius: 15px;
+}
+.buttondiv {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    padding-bottom: 21px;
+    font-size: 14px;
+}
+    .buttondiv .continue {
+        width: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: row;
+        font-family: PingFangSC-Regular;
+        font-weight: 400;
+        color: rgba(153,153,153,1);
+    }
+    .buttondiv .share {
+        width: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: row;
+        font-family: PingFangSC-Medium;
+        font-weight: 500;
+        color: rgba(255,136,3,1);
+    }
+.footer_mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    background: rgba(0,0,0,0.5);
+}
+.draw_mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+}
+.mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    background: rgba(0,0,0,0.5);
+}
+#m0 {
+    top: 0;
+    left: 45%;
+    transform: rotate(22.5deg);
+}
+#m1 {
+    top: 15%;
+    right: 10%;
+    transform: rotate(67.5deg);
+}
+#m2 {
+    bottom: 15%;
+    left: 60%;
+    transform: rotate(112.5deg);
+}
+#m3 {
+    bottom: 0;
+    left: 45%;
+    transform: rotate(157.5deg);
+}
+#m4 {
+    bottom: 0;
+    right: 45%;
+    transform: rotate(202.5deg);
+}
+#m5 {
+    bottom: 15%;
+    right: 60%;
+    transform: rotate(247.5deg);
+}
+#m6 {
+    top: 15%;
+    left: 10%;
+    transform: rotate(292.5deg);
+}
+#m7 {
+    top: 0;
+    right: 45%;
+    transform: rotate(337.5deg);
+}
+.share-mask {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    display: none
+}
+footer {
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    background: #FFFFFF;
+    z-index: 99999;
+    color: black;
+}
+
+    footer .share {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 12px 0 8px 0;
+    }
+
+        footer .share > span {
+            padding-top: 5px;
+        }
+
+    footer img {
+        height: 30px;
+    }
+.notices {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 75%;
+}
+
+/*先初始化一下默认样式*/
+.notice {
+    width: 100% ; /*单行显示，超出隐藏*/
+    height: 30px;
+    overflow: hidden;
+}
+
+    .notice ul li {
+        list-style: none;
+        line-height: 30px;
+        /*以下为了单行显示，超出隐藏*/
+        display: block;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+.navigation {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.pointer {
+    width: 30%;
+    height: 42vw;
+    border-radius: 50px;
+    position: absolute;
+    display: flex;
+    -webkit-align-items: center;
+    -webkit-justify-content: center;
+    align-items: center;
+    justify-content: center;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+.pointerText {
+    position: absolute;
+    bottom: 28%;
+    font-size: 10px;
+    left: 50%;
+    font-family: PingFangSC-Regular;
+    transform: translate(-50%, 0%);
+    font-weight: 400;
+    color: rgba(255,237,179,1);
+    text-align:center;
+}
+#corona {
+    width: 86.4%;
+    height: 86.4vw;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+.numberSecurities {
+    text-align: center;
+    margin: 0 4%;
+    font-size: 14px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(153,153,153,1);
+    width: 127px;
+    height: 24px;
+    overflow: hidden;
+    margin-bottom: 9px;
+    border-radius: 12px;
+}
+.numberSecurities_ {
+    width: 127px;
+    height: 24px;
+    background: rgba(255,255,255,1);
+    background: rgba(255,255,255,1);
+    opacity: 0.1;
+}
+.numberSecuritiestext{
+    margin-top:-23px;
+}
+    .numberSecuritiestext span {
+        font-size: 14px;
+        font-family: PingFangSC-Regular;
+        font-weight: 400;
+        color: #FFBE05;
+    }

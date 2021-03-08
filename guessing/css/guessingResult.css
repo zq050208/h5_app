@@ -1,0 +1,151 @@
+*{
+    padding: 0;
+    margin: 0
+}
+
+body {
+    font-size: 14px;
+    font-family: PingFangSC-Regular;
+    background-color: #000547;
+    color: #fff
+}
+.main{
+    padding: 0 4%;
+    margin-bottom: 30px;
+}
+.out-modals {
+    position: fixed;
+    left: 15px;
+    top: 50%;
+    width: 92%;
+    transform: translateY(-50%);
+    z-index: 112
+}
+.out-modals-content {
+    width: 100%;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 10px;
+    padding-bottom: 24px;
+}
+.modal-content-title {
+    text-align: center;
+    padding: 15px 0;
+    color: #0C2281;
+    font-size: 16px;
+    position: relative;
+}
+ .close,
+  .close_confirm,
+  .close_img{
+     position: absolute;
+     right: 16px;
+     width: 15px;
+     height: 15px;
+     padding: 5px;
+  }
+.takeGuessing_cat {
+    display: none
+}
+.mask {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    background: rgba(0,0,0,0.5);
+}
+.boxImg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.imgShow {
+    width: 310px;
+    height: 196px;
+}
+.content_box,
+.total_title {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.total {
+    width: 92%;
+    position: fixed;
+    background: #000547;
+    z-index: 99;
+}
+.total_title {
+    padding: 26px 15px 20px 15px;
+}
+.fixationoverlap {
+    padding-top: 60px;
+}
+.content_box {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding: 28px 15px;
+    background-color: #fff;
+    color: #0C2281;
+    border-radius: 10px;
+    margin-top: 20px
+}
+.guess,
+.content_title{
+    flex: 2;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    font-weight:bold;
+}
+.result,
+.content_msg{
+    flex: 3;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+.sigle_double,
+.num,
+.result{
+    padding: 0px 15px;
+}
+.line{
+    color: rgba(163,147,255,1);
+    opacity: 0.3;
+}
+.icon-fanhui_you{
+    color: #0C2281;
+    font-weight: bold;
+    font-size: 12px
+}
+.result{
+    font-weight: bold;
+}
+
+.noList{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.noList img{
+    width: 150px;
+    margin: 20px 0;
+}
+
+.noList p{
+    color: #0C2281;
+    font-size:16px;
+    font-family:PingFangSC-Medium;
+    margin-bottom: 20px;
+}
+
+.noList span{
+    color: #0C2281;
+    font-size:12px;
+}

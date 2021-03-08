@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <title>话题</title>
+    <link rel="stylesheet" href="../public/mescroll.min.css">
+    <link rel="stylesheet" href="../public/ydui.css">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            font-size: 14px;
+            font-family: PingFang-SC-Medium, PingFang-SC;
+            background: rgba(247, 247, 247, 1);
+            padding-bottom: constant(safe-area-inset-bottom);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .flex {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: rgba(77, 77, 77, 1);
+        }
+
+        .main {
+            padding: 15px;
+        }
+
+        .banner {
+            width: 100%;
+            height: 37.3vw;
+        }
+
+        .tab {
+            width: 100%;
+            font-size: 16px;
+            font-family: PingFang-SC-Heavy, PingFang-SC;
+            color: rgba(171, 171, 171, 1);
+            padding: 16px 0;
+            display: flex;
+        }
+
+        .tabItem {
+            padding-bottom: 8px;
+            position: relative;
+        }
+
+        .tabItem:first-child {
+            margin-right: 20px;
+        }
+
+        .tabItem.active {
+            color: rgba(56, 52, 49, 1);
+            font-weight: 800;
+            font-size: 18px;
+        }
+
+        .tabItem.active:after {
+            content: "";
+            width: 22px;
+            height: 3px;
+            background: rgba(255, 161, 96, 1);
+            border-radius: 2px;
+            margin: 0 auto;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .listItem {
+            padding: 15px 12px;
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0px 3px 4px 0px rgba(233, 233, 233, 0.8);
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+
+        .avotor {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .title {
+            width: 100%;
+            margin: 15px 0 10px 0;
+            color: rgba(77, 77, 77, 1);
+        }
+
+        .itemImage {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .itemImage img {
+            width: 26.2vw;
+            height: 26.2vw;
+            box-sizing: border-box;
+            margin-right: 7px;
+            margin-bottom: 7px;
+        }
+
+        .itemImage img:nth-child(3n) {
+            margin-right: 0;
+        }
+
+        .bottom {
+            width: 100%;
+            background: rgba(254, 254, 254, 1);
+            box-shadow: 0px 1px 0px 0px rgba(218, 218, 218, 0.5);
+            position: fixed;
+            bottom: 0;
+            z-index: 999;
+            padding-bottom: env(safe-area-inset-bottom)
+        }
+
+        .bottomContent {
+            padding: 10px 50px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .bottomContent img {
+            width: 31.4vw;
+            height: 10vw;
+            box-sizing: border-box;
+        }
+
+        .bottomContent img:last-child {
+            height: 8.5vw;
+        }
+
+        .topicContent {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+        }
+
+        .mescroll {
+            height: auto;
+        }
+
+        .contentList {
+            height: auto;
+            margin-bottom: 70px;
+        }
+
+        .nolength {
+            width: 100%;
+            text-align: center;
+            padding-top: 80px;
+            display: none;
+            color:#4D4D4D;
+        }
+
+        .topic {
+            padding: 8px 10px;
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0px 3px 4px 0px rgba(233, 233, 233, 0.8);
+            border-radius: 14px;
+            margin-top: 15px;
+            color: rgba(255, 175, 46, 1);
+        }
+
+        .topicRight {
+            padding-left: 5px;
+            color: rgba(77, 77, 77, 1);
+        }
+
+        .topicLeft {
+            color: rgba(255, 175, 46, 1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <img src="image/icon-chatBanner.png" alt="" class="banner">
+        <div class="topic">
+            <img src="image/icon-topicimg.png" alt="" style="width: 14px;height: 14px;margin-right: 2px; vertical-align: middle;display: inline-block">今日话题
+            <span style="color:rgba(77,77,77,1);">:</span>
+            <span class="topicRight"></span>
+        </div>
+        <div class="tab">
+            <span class="tabItem active">热门</span>
+            <span class="tabItem">最新</span>
+        </div>
+        <div class="content">
+            <div id="mescroll" class="mescroll">
+                <div class="contentList"></div>
+                <div class="nolength">暂无数据</div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom">
+        <div class="bottomContent">
+            <img src="image/icon-passChatbutton.png" class="previous">
+            <img src="image/icon-chatingbutton.png" class="chating">
+        </div>
+    </div>
+
+</body>
+
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+<script src="../public/mescroll.min.js"></script>
+<script src="../public/template-web.js"></script>
+<script src="../public/ydui.js"></script>
+<script type="text/html" id="dataList">
+    {{each item.data v i}}
+    <div class="listItem">
+      <div class="flex">
+          <div class="flex"><img src="{{v.userinfo.avatar}}" alt="" class="avotor">{{v.userinfo.nickname}}</div >
+          <div class="flex " id='{{v.id}}' myAttr="{{v.is_like}}"  onclick="likeClick({{v}}, {{i+(item.current_page-1)*10}})"><span class="likeNumber" data-num="{{v.like_num}}">{{v.like_num}}</span> <img src="image/icon-messageHot.png" style="width: 14px;height: 16px;margin-left: 2px;"></div>
+      </div>
+      <div class="title">{{v.content}}</div>
+      {{if v.images}}
+      <div class="itemImage" >
+          {{each v.images sub i}}
+          <img src="{{sub}}" alt="">
+          {{/each}}
+      </div>
+      {{/if}}
+    </div>
+    {{/each}}
+</script>
+<script>
+    // baseUrl = 'http://192.168.1.241/wanpai_api/public/index.php/'   // 测试
+    // baseUrl = 'https://wanpai.titipa.cn/xhdj/wanpai_api/public/index.php/'   // 预发
+    baseUrl = 'https://fenz.tinytiger.cn/xhdj/wanpai_api/public/index.php/'   // 正式
+    var config = {
+        url: 'Topic/index',
+        commentUrl: 'Topic/indexComment',
+        addLikeUrl: 'Topic/addLike',
+        cancelLike: 'Topic/cancelLike',
+        type: 'get',
+        token: Request('token'),
+        diftype: Request('diftype'),
+        tab: Request('tab'),
+        data: {
+            topic_id: Request('topic_id') || null
+        },
+        commentData: {
+            type: 0,
+            topic_id: null,
+            page: 1,
+            per_page: 10,
+        },
+        likeData: {
+            topic_id: null,
+            comment_id: null
+        },
+        mescroll: initMescroll(),
+        up: 'up',
+        flush: 'flush',
+        topic_id: Request("topic_id"),
+        is_like: -1,
+        pages:1
+    }
+    if (config.topic_id && config.diftype) {
+        $(".bottomContent").css('justify-content', 'center')
+        $(".previous").hide()
+    }
+    // 获取话题数据
+    requsetHttp(config.url, config.type, config.data, null, (res) => {
+        if (res.code == 200) {
+            if(res.data.data.length) {
+              $(".topicRight").text(res.data.data[0].content)
+              config.commentData.topic_id = res.data.data[0].id
+              config.likeData.topic_id = res.data.data[0].id
+              getCommentList()
+            }
+        }
+    })
+    if (config.tab == 2) {
+        config.commentData.type = 1
+        $(".tabItem").eq(1).addClass("active").siblings().removeClass('active')
+    }
+
+    // 获取评论数据
+    function getCommentList(type) {
+        if (type == "flush") {
+            config.mescroll.optUp.page.num = 1;
+            config.commentData.page = 1
+        }
+        $(".nolength").hide()
+        requsetHttp(config.commentUrl, config.type, config.commentData, config.token, (res) => {
+            console.log(res)
+            if (res.code == 200) {
+                if (res.data.data.length == 0) { $(".nolength").show() }
+                var list = template('dataList', { item: res.data })
+                if (type == config.flush) {
+                    config.mescroll.optUp.page.num = 1;
+                    config.mescroll.setPageNum(config.commentData.page)
+                    config.mescroll.endByPage(res.data.data.length, res.data.last_page);
+                    $(".contentList").html(list)
+                } else {
+                    config.mescroll.endByPage(res.data.data.length, res.data.last_page);
+                    $(".contentList").append(list)
+                }
+                config.commentData.page++;
+            }
+        })
+    }
+    $(".tabItem").click(function () {
+        $(this).addClass('active').siblings().removeClass('active')
+        $(".contentList").empty()
+        config.commentData.type = $(this).index()
+        config.commentData.page = 1
+        getCommentList(config.flush)
+    })
+    $(".previous").click(function () {
+        window.location.href = 'pastChat.html?token='+config.token
+    })
+    $(".chating").click(function () {
+        window.location.href = 'addChat.html?topic_id=' + config.commentData.topic_id + "&token=" + config.token
+    })
+    $('.likeNumber').click(function () {
+        console.log(1111)
+    })
+
+    // 点赞事件
+    function likeClick(item, index) {
+        console.log(item)
+        console.log(index)
+        config.is_like = document.getElementById(item.id).getAttribute('myAttr')
+        var str=String(item.id) 
+        config.likeData.comment_id = item.id
+        var num = Number($(".likeNumber").eq(index).text())
+        requsetHttp( config.is_like == 1 ? config.cancelLike : config.addLikeUrl, config.type, config.likeData, config.token, (res) => {
+            if (res.code == 200) {
+                if( config.is_like== 1) {
+                    $(".likeNumber").eq(index).text(num-=1)
+                    document.getElementById(str).setAttribute("myAttr","-1");
+                } else {
+                    $(".likeNumber").eq(index).text(num+=1)
+                    document.getElementById(str).setAttribute("myAttr","1");
+                }
+            } else {
+                YDUI.dialog.toast(res.msg, 2000) 
+            }
+        })
+    }
+
+    
+
+    /**
+   * mescroll 配置
+   */
+    function initMescroll() {
+        var mescroll = new MeScroll("body", {
+            up: {
+                callback: upCallback,
+                isBounce: true,
+                noMoreSize: 0,
+                auto: false,
+                htmlNodata: '<p class="upwarp-nodata">没有更多了</p>'
+            },
+            down: {
+                auto: false,
+                use: false,
+                callback: downCallback
+            }
+        });
+        return mescroll;
+    }
+
+    /**
+     * 下拉刷新的回调
+     */
+    function downCallback() {
+        getCommentList(config.flush);
+    }
+
+    /**
+     * 上拉加载的回调
+     */
+    function upCallback() {
+        getCommentList(config.up);
+
+    }
+</script>

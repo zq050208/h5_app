@@ -1,0 +1,430 @@
+* {
+    padding: 0;
+    margin: 0
+}
+html,
+body {
+    font-family: PingFangSC-Regular;
+    width: 100%;
+    height: 100%;
+    background: rgba(12, 10, 9, 1) url('../image/icon-bg.jpg') no-repeat 100%/100%;
+    font-size: 14px;
+    position: relative;
+    /* overflow: hidden; */
+}
+.userinfo {
+    padding: 20px 15px 0px 15px;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    position: absolute;
+    z-index: 888;
+}
+.user_details{
+    display: flex;
+    align-content: center;
+    justify-content: flex-start;
+    
+    
+}
+.user_details img{
+    padding-right: 0
+}
+
+.userinfo-msg .userinfo-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%
+}
+
+.userinfo-msg {
+    display: flex;
+    align-items: center;
+    font-size: 14px
+}
+.user_msg{
+    margin-left: 15px
+}
+.user_msg img {
+    width: 5px;
+    height: 16px;
+    margin-right: 3px
+}
+.four_row,
+.two_row,
+.one_row{
+    display: none
+}
+
+.user_txt {
+    font-size: 12px;
+    color: rgba(138, 122, 91, 1);
+    margin-left: 5px
+}
+
+.dan {
+    font-size: 12px;
+    padding: 0 8px;
+    color: #131413;
+    line-height: 20px;
+    color: #fff
+}
+
+.dan_num {
+    font-size: 14px
+}
+
+.colornum {
+    color: rgba(206, 154, 64, 1);
+
+}
+
+.dan_time {
+    color: rgba(153, 153, 153, 1)
+}
+
+/* tab */
+.tab-nav {
+    width: 70%;
+    height: 30px;
+    background: rgba(43, 43, 43, 1);
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 15px;
+    z-index: 888;
+    position: absolute !important
+}
+
+.tab-nav .tab-nav-item {
+    font-size: 12px;
+    color: #fff;
+    text-align: center;
+    line-height: 30px;
+    height: 30px;
+    border-radius: 15px
+}
+
+.tab-nav .tab-active {
+    font-family: PingFangSC-Medium !important;
+    color: rgba(60, 44, 19, 1) !important;
+    background: rgba(206, 154, 64, 1) !important;
+}
+.tab-nav-item.tab-active:before {
+    background: none;
+}
+.tab-nav:after,
+.tab-nav-item:after {
+    width: 0 !important;
+    height: 0 !important;
+}
+
+.tab-panel .tab-panel-item.tab-active {
+    background-color: none;
+}
+.mescroll-content{
+    margin-top: 15px
+}
+.tab-nav {
+    position: fixed;
+    margin-bottom: 15px;
+}
+
+.table-view {
+    padding: 0px 15px 0px 15px;
+}
+
+.m-tab {
+
+    padding-top: 85px
+}
+
+.about_mine {
+    background: rgba(206, 154, 64, 1);
+
+}
+
+.mine_data {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.mine_data li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 15px 0;
+}
+
+.data_num {
+    font-size: 20px;
+    color: rgba(60, 44, 19, 1);
+    position: relative;
+}
+
+.mescroll{
+    margin-top: 20px;
+    overflow: auto;
+    position: absolute;
+    top: 110px;
+    left: 0;
+    right: 0;
+    bottom: 0px;
+}
+
+.data_txt,
+.msg_txt,
+.kill_txt,
+.killTst {
+    font-size: 10px;
+    color: rgba(138, 122, 91, 1)
+}
+
+.mine_msg {
+    margin-top: 10px
+}
+
+.msg_data {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1px solid rgba(61, 54, 40, 1);
+    border-radius: 4px;
+    background-color: rgba(12, 10, 9, 1);
+    opacity: 0.8;
+}
+
+.msg_data li {
+    flex: 0 25%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px 0
+}
+
+.msg_num {
+    color: #fff
+}
+
+.person_data li {
+    display: flex;
+    justify-content: space-between;
+    color: #fff;
+    padding: 10px 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.personName {
+    flex: 1;
+    padding-top: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: center
+}
+
+.personData,
+.personDatas {
+    flex: 2
+}
+
+.personData {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 10px 0;
+    border-bottom: 1px solid #3D3628
+}
+.iconfont{
+    color: #6d6c6c;
+    padding-left: 10px
+}
+
+.person_kill {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column
+}
+
+.person_distance {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.person_distance .distance {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column
+}
+
+.personDatas {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    border-bottom: 1px solid rgba(47,42,33,1);
+    padding: 0px 0px 10px 20px
+}
+
+.personDataBottom {
+    margin-top: 10px;
+    padding-right: 25px;
+    display: none
+
+}
+
+/* tab3 */
+.ranking {
+    display: flex;
+    color: #fff;
+    width: 100%
+}
+
+.ranking_num,
+.ranking_txt {
+    display: flex;
+    align-items: center;
+    justify-content: space-around
+}
+.personDataTop,
+.personDataBottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between
+}
+
+.ranking_txt {
+    flex: 3;
+}
+
+.ranking_kill,
+.ranking_hurt,
+.ranking_dis{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column
+}
+.ranking_name,
+.ranking_nameList,
+.ranking-teamMine-name {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    font-size: 12px;
+    flex: 2;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+
+.front_ranking li{
+    padding: 5px 10px;
+    margin-bottom: 15px
+}
+
+.ranking-team {
+    background: rgba(0, 0, 0, 1);
+    border: 1px solid rgba(206, 154, 64, 1);
+    opacity: 0.8;
+    border-radius: 3px;
+    padding: 8px 10px;
+    margin-bottom: 15px
+}
+.ranking_num{
+    display: flex;
+    justify-content: space-around;
+    flex: 2;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    padding-right: 20px
+}
+.num_first{
+    flex: 1;
+    font-size: 16px;
+    font-weight:500;
+    color:rgba(206, 154, 64, 1);
+    margin-right: 10px;
+}
+.ranking_nameList span,
+.ranking-teamMine-name span,
+.ranking_name span{
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+
+/* 进度条 */
+.progress_bar {
+    font-size: 12px;
+    border-left: 3px solid rgba(206, 154, 64, 1);
+    color: #ccc;
+    padding-left: 10px
+}
+
+.containt{
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between
+}
+.containt .num{
+    font-size: 12px;
+    color: #bfbfbf
+}
+.progress_about{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end
+}
+.processcontainer{  
+    width:80%;  
+    background-color: #453e2d;
+    height:4px; 
+    border-radius: 2px ;
+  } 
+
+ .processbar{  
+    background:rgba(206, 154, 64, 1);  
+    float:left; 
+    height:100%;  
+    text-align:center; 
+    border-radius: 2px ;
+  }
+.progress_msg{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #fff;
+    margin-top: 15px ;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.progress_msg:last-child{
+    margin-bottom: 15px
+}
+
+.progress_txt{
+    flex: 1;
+    color: #bfbfbf;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+.progress_about{
+    flex: 4;
+}
+
+
+
+

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title></title>
+    <link rel="stylesheet" href="css/index.css?v=Math.random()">
+</head>
+
+<body>
+    <div class="top">
+        <div class="top-msg">
+            <div class="top-left">
+                <img src="image/icon-sharedata-logo.png" alt="" style="width:40px;height:40px;margin-right: 8px">
+                <span style="font-size:18px;color:rgba(37,39,42,1);font-weight:500">小虎电竞</span>
+            </div>
+            <div class="top-right">
+                <div>
+                    <span
+                        style="color:rgba(37,39,42,1);padding: 7px 20px; background:rgba(243,159,24,1);border-radius:17px ;font-weight:500"
+                        class="download">下载app</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="header">
+        <div class="header-bg"></div>
+        <div class="header-msg">
+            <div class="herder-top">
+                <div class="msg-left">
+                    <img src="" alt="" class="icon-img">
+                    <div class="user-msg">
+                        <span class="game_nickname"></span>
+                        <div>
+                            <span style="font-size:12px;color:rgba(161,166,172,1)">ID: <span class="user_id">
+                                    0</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="msg-right">
+                    <span class="team_introduce">战队数据</span>
+                    <span class="high_data">天梯数据</span>
+                </div>
+            </div>
+            <div class="header-bottom">
+                <div class="data-top"></div>
+            </div>
+        </div>
+
+    </div>
+    <div class="line"></div>
+    <div class="history-result">
+        <span style="color:rgba(37,39,42,1); " class="history-title">历史战绩</span>
+        <div class="history_list">
+            <div class="result-name">
+                <div class="name-item">比赛时间</div>
+                <div class="name-item">淘汰</div>
+                <div class="name-item">击倒</div>
+                <div class="name-item">伤害</div>
+            </div>
+            <ul class="team_match_list"> </ul>
+        </div>
+    </div>
+ 
+    <!-- 底部 -->
+    <div class="bottom">
+        <div class="bottom_msg">
+            <img src="image/icon-sharedata-arrow.png" alt="" style="width:9px;height:8px;">
+            <div style="color:rgba(255,148,0,1);padding: 3px 0 25px 0">打开小虎APP，查看更多精彩数据</div>
+        </div>
+
+
+
+</body>
+
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+<script>
+    var config = {
+        downloadUrl: 'https://h5.tinytiger.cn/web_app/knapsack/download.html',  // 下载地址
+        url: "WarTeamDataController/getUserSeasonData",
+        data: {
+            user_id: Request("user_id"),
+            v: Request("appversion")
+        },
+        type: 'post',
+        user_info: getUserInfo(),
+    }
+
+    requsetHttp(config.url, config.type, config.data, config.user_info.token, (res) => {
+        if (res.code == 200) {
+
+            $("title").text(res.data.user_info.nickname + "-" + res.data.my_team_info.team_name + "成员")
+            $(".icon-img").attr("src", res.data.user_info.avatar)
+            $(".game_nickname").text(res.data.user_info.game_nickname)
+            $(".user_id").text(res.data.user_info.user_id)
+            var user_game_data = res.data.user_game_data
+            var str = ""
+            var history_str = ""
+            for (var i = 0; i < user_game_data.length; i++) {
+                str += `<div class="data-item">
+                        <span class="total-session">${user_game_data[i].value}</span>
+                        <span>${user_game_data[i].name}</span>
+                    </div>`
+            }
+            $(".data-top").append(str)
+            var history_list = res.data.team_match_list
+            if (history_list.length == 0) $(".history_list").html(`<div class="nolist">暂无数据~</div>`)
+            var histiry_length = res.data.team_match_list.length >= 10 ? 10 : res.data.team_match_list.length
+            for (var j = 0; j < histiry_length; j++) {
+                history_str += ` <li class="result-data">
+                <div class="result-item">
+                    <span class="cuttime">${cutTime(res.data.team_match_list[j].match_starttime)}</span>
+                    <span style="padding-left: 5px" class="datatime">${res.data.team_match_list[j].match_name}</span>
+                </div>
+                <div class="result-item">${res.data.team_match_list[j].kills || 0}</div>
+                <div class="result-item">${res.data.team_match_list[j].DBNOs || 0}</div>
+                <div class="result-item">${res.data.team_match_list[j].damageDealt || 0}</div>
+            </li>`
+            }
+            $(".team_match_list").append(history_str)
+
+            if (histiry_length >= 10) {
+                $(".bottom").show()
+            }
+        }
+    })
+
+    $(".download,.bottom, .team_introduce, .high_data").click(function () {
+        window.location.href = config.downloadUrl
+    })
+
+    function cutTime(time) {
+        return time.substring(5, 10).replace(/-/g, ".")
+    }
+
+
+
+
+
+
+</script>

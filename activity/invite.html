@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <link rel="stylesheet" href="css/ydui.css?v=Math.random()">
+    <link rel="stylesheet" href="css/invite.css?v=Math.random()">
+    <title>邀请好友得现金</title>
+</head>
+
+<body>
+
+    <div class="page">
+    <header class="header"></header>
+    <section>
+        <!--已获取奖励用户-->
+        <div class="made"></div>
+        <div class="news" id="h">
+            <ul id="h1"></ul>
+            <ul id="h2"></ul>
+        </div>
+
+        <!--邀请主题-->
+        <div class="theme">
+            <div><img src="img/invite-theme.png"></div>
+        </div>
+
+        <!--邀请标语-->
+        <div class="current-reward">
+            <span class="current-reward-txt">每邀请一位好友，您和好友共获得</span><span class="current-reward-num"><span></span>元现金</span>
+        </div>
+
+        <!--签到礼包-->
+        <div class="demo">
+            <div class="demo-body sign">
+                <div class="demo-title"><span>我的礼包</span></div>
+            </div>
+        </div>
+
+        <!--活动剩余时间-->
+        <div class="remaining">
+            <span class="remaining-time">
+                <span class="gray">倒计时 </span>
+                <span class="white countdown"></span>
+            </span>
+        </div>
+
+        <!--领取步骤-->
+        <div class="step-demo">
+            <div class="step-body">
+                <div class="step-top">
+                    <div class="step-top-warp">
+                        <span class="step-top-left">如何领取</span>
+                        <span class="step-top-right">规则<span class="arrows"></span></span>
+                    </div>
+                </div>
+                <div class="step-mid">
+                    <img src="img/invite-steps.png"/>
+                </div>
+                <div class="step-down">
+                    <div class="step-down-warp">
+                        <div class="step-box step-box-start"><p>好友注册</p><p>登录APP</p></div>
+                        <div class="step-box step-box-center"><p>好友每日任务</p><p>获得<span class="step-box-integral">50积分</span></p></div>
+                        <div class="step-box step-box-end"><p>双方得到</p><p>现金红包</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="switch">
+            <div class="switch-warp">
+                <span class="switch-invite switch-isShow">我的邀请</span>
+                <span class="switch-list">排行榜</span>
+            </div>
+        </div>
+
+        <div class="demo-list">
+            <div class="demo-list-body">
+                <div class="invite-box">
+                    <div class="gray invite-box-txt">
+                        <span class="box-txt-1">邀请人数：</span>
+                        <span class="box-txt-2"></span>
+                        <span class="box-txt-3">待领取</span>
+                        <span class="box-txt-4"></span>
+                    </div>
+
+                    <div class="invite-item invite-item-title white">
+                        <div class="invite-item-box step-box-start flex-3">用户信息</div>
+                        <div class="invite-item-box step-box-center flex-4">当前/预计收益</div>
+                        <div class="invite-item-box step-box-center flex-3">今日任务</div>
+                    </div>
+
+                </div>
+
+                <div class="list-box box-isHide">
+                    <div class="gray invite-box-txt">你已成功邀请<span class="invite-num"></span>位好友，获得<span class="invite-money"></span>元</div>
+                    <div class="invite-item list-top"></div>
+                    <div class="invite-item invite-item-title white" style="margin-top: 5px">
+                        <div class="invite-item-box step-box-start flex-1">排名</div>
+                        <div class="invite-item-box step-box-center flex-2">用户信息</div>
+                        <div class="invite-item-box step-box-center flex-2">邀请人数</div>
+                        <div class="invite-item-box step-box-center flex-2">总收益</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!--底部分享栏-->
+        <footer>
+            <div class="share"><img src="img/invite-WeChat.png"/><span>微信</span></div>
+            <div class="share"><img src="img/invite-discover.png"/><span>朋友圈</span></div>
+            <div class="share"><img src="img/invite-QQ.png"/><span>QQ</span></div>
+            <div class="share copylink"><img src="img/invite-link.png"/><span>复制链接</span></div>
+        </footer>
+
+    </section>
+    </div>
+
+    <div class="showModel invitation">
+        <div class="modal">
+            <div class="modal-content">
+                <div class="modal-line-box amount-title">
+                    <span>提醒</span>
+                    <img class="modal-close" src="img/invite-close.png">
+                </div>
+                <div class="modal-line-box amount-info">
+                    <div class="text">你的好友还差50积分拿现金奖励</div>
+                    <div class="decs">
+                        你的好友<span></span>邀你一起领取1000元现金,可提现哦~
+                    </div>
+                </div>
+                <div class="modal-line-box amount-button">
+                    <div class="invitation-btn"><img src="img/invite-WeChat.png"/><span>微信邀请</span></div>
+                    <div class="invitation-btn"><img src="img/invite-QQ.png"/><span>QQ邀请</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="mask"></div>
+    </div>
+
+    <div class="showModel gift-demo">
+        <div class="modal">
+            <div class="demo">
+                <div class="demo-body" style="z-index: 111">
+                    <div class="demo-title"><span>优惠券大礼包</span><img class="modal-close" src="img/invite-close.png"></div>
+                    <div class="gift-content"></div>
+                </div>
+            </div>
+        </div>
+        <div class="mask"></div>
+    </div>
+
+    <div class="showModel rule">
+        <div class="modal">
+            <div class="modal-content">
+                <div class="modal-line-box amount-title">
+                    <span>活动规则</span>
+                </div>
+                <div class="modal-line-box amount-info">
+                    <div class="txt">
+                        <p>1.自好友注册当日为第一天，好友必须每日完成任务领取50积分，您和好友才可获得当日金币奖励，持续三天（奖励自动到账）。</p>
+                        <p>2.APP内所有金币均可提现到支付宝账户，金币提现规则参考 “我的-金币-兑换规则”。</p>
+                        <p>3.您和好友共获得22元，奖励分3天发放，其中您获得10元（3元、2元、5元），好友获得12元（5元、2元、5元）。</p>
+                        <p>4.好友只有在活动期间完成注册登录流程，才有资格 完成任务获得相应金币奖励。</p>
+                        <p>5.您最多可邀请100人，领取1000枚金币。</p>
+                        <p>6.好友需在新设备上注册（之前未注册登录过TiTi电竞APP的手机）才算新用户，可参加活动领取金币奖励。</p>
+                        <p>7.本活动所有奖励与苹果公司无关，该活动的解释权在法律规定的范围内归本公司所有。</p>
+                    </div>
+                </div>
+                <div class="modal-line-box amount-button">
+                    <div class="modal-cancel"><span>知道了</span></div>
+                </div>
+            </div>
+        </div>
+        <div class="mask" ></div>
+    </div>
+
+    <script src="../public/jquery.min.js"></script>
+    <script src="../public/ydui.flexible.js"></script>
+    <script src="../public/ydui.js"></script>
+    <script src="../public/config.js"></script>
+    <script src="../public/service.js"></script>
+    <script>
+
+        var config = {
+            shareUrl: 'ActivityController/shareInvitePageInfo',
+            listUrl: 'ActivityController/inviteRank',
+            inviteUrl: 'ActivityController/inviteList',
+            giftUrl: 'CouponController/giftBagCouponList',
+            shareRemindUrl: 'https://h5.lsjdj.cn/web_app/activity/remind.html' + '?user_id=' + Request('user_id'),
+            shareRegisterUrl: 'https://h5.lsjdj.cn/web_app/activity/register.html' + '?user_id=' + Request('user_id'),
+            imgUrl: 'http://p1arvhkn5.bkt.clouddn.com/108x108.png',
+            shareData: {type: 1},
+            inviteData: {page: 1},
+            nickname: '',
+            token: Request('token') ,
+            user_id: Request('user_id'),
+            type: 'post',
+        };
+
+        var getRewardList = {
+            Screening: function (n) {
+                var array = ['一', '二', '三', '四', '五', '六', '七', '八', '九'];
+                if (n > 8) return array[8];
+                return array[n-1];
+            },
+            getStr1: function (reward) {//钱+金币
+                var str = '<div class="item item-2">\
+                                <div class="item-top ticket-btn" data-id='+reward.gift_bag+' >\
+                                    <div class="item-money">\
+                                        <span class="money">'+parseFloat(reward.gold)+'元</span>\
+                                    </div>\
+                                    <div class="item-and"><span>+</span></div>\
+                                    <div class="item-ticket"><span>'+parseFloat(reward.coupon_total)+'元约玩券<span class="arrows"></span></span></div>\
+                                </div>\
+                                <div class="item-down"><span>第'+this.Screening(reward.day)+'天</span></div>\
+                            </div>';
+                return str;
+            },
+            getStr2: function (reward) {//只有券
+                var str = '<div class="item item-2">\
+                            <div class="item-top ticket-btn" data-id='+reward.gift_bag+' >\
+                                <div class="step-box-info"><span class="money">'+parseFloat(reward.coupon_total)+'元</span><span class="money">约玩券<span class="tome"></span></span></div>\
+                            </div>\
+                            <div class="item-down"><span>第'+this.Screening(reward.day)+'天</span></div>\
+                        </div>';
+                return str;
+            },
+            getStr3: function (reward) {//只有金币
+                var str = '<div class="item item-2">\
+                        <div class="item-top" >\
+                            <div><span class="money">'+parseFloat(reward.gold)+'元</span></div>\
+                        </div>\
+                        <div class="item-down"><span>第'+this.Screening(reward.day)+'天</span></div>\
+                    </div>';
+                return str;
+            }
+        };
+
+        RequsetHttp(config.inviteUrl , config.type, config.token, config.inviteData,function (res) {
+            $('.box-txt-2').text(res.data.invite_total + '/' + res.data.limit);
+            $('.box-txt-4').text(res.data.stay_receive + '元');
+            if(!res.data.list.length){
+                $('.invite-box').append('<div class="invite-item">\<div class="flex-box column"><img src="img/invite-default.png" style="margin: 20px;" /><p style="color: #a576ce">暂无邀请好友</p></div></div>');
+                return false;
+            }
+            for(var i=0; i< res.data.list.length; i++){
+                if(i <= 5){
+                    $('.invite-box').append('<div class="invite-item">\
+                                                <div class="invite-item-box step-box-start step-box-info"><div class="nickName white">'+usernameHidden(res.data.list[i].nickname)+'</div><div class="phone gray">'+res.data.list[i].username+'</div></div>\
+                                                <div class="invite-item-box step-box-center"><span class="white">'+res.data.list[i].gold+'元</span><span class="gray">/'+res.data.average+'元</span></div>\
+                                                <div class="invite-item-box step-box-center">'+(res.data.list[i].status == 1 ? "<span class='gray'>已完成</span>" : "<span class='remind'>提醒ta</span>")+'</div>\
+                                            </div>');
+                }else{
+                    $('.invite-box').append('<div class="invite-item invite-more box-isHide">\
+                                                <div class="invite-item-box step-box-start step-box-info"><div class="nickName white">'+usernameHidden(res.data.list[i].nickname)+'</div><div class="phone gray">'+res.data.list[i].username+'</div></div>\
+                                                <div class="invite-item-box step-box-center"><span class="white">'+res.data.list[i].gold+'元</span><span class="gray">/'+res.data.average+'元</span></div>\
+                                                <div class="invite-item-box step-box-center">'+(res.data.list[i].status == 1 ? "<span class='gray'>已完成</span>" : "<span class='remind'>提醒ta</span>")+'</div>\
+                                            </div>');
+                }
+            }
+            if(res.data.list.length > 5){
+                $('.invite-box').append('<div class="more invite-more-btn"><img src="img/invite-more.png"/> </div>');
+                $('.invite-more-btn').click(function () {
+                    var more = $('.invite-more').hasClass('box-isHide');
+                    if(more){
+                        $('.invite-more').removeClass('box-isHide');
+                        $('.invite-more-btn img')[0].style.transform = 'rotate(180deg)';
+                        goTop();
+                    }else{
+                        $('.invite-more').addClass('box-isHide');
+                        $('.invite-more-btn img')[0].style.transform = 'rotate(360deg)';
+                    }
+                });
+            }
+
+            $('.remind').click(function () {
+                $('.invitation').addClass('isShow');
+            });
+        });
+
+        RequsetHttp(config.listUrl , config.type, config.token, {},function (res) {
+            var str,list = res.data.list;
+            $('.invite-num').text(res.data.invite_total);
+            $('.invite-money').text(res.data.money);
+            for(var i=0; i< list.length; i++){
+                if(i <= 2){
+                    str = '<div  class="flex-1"  style=" flex-direction: column;">\
+                              <div class="flex-box">\
+                                  <div class="flex-box" style="background: url(img/invite-champion-'+(i+1)+'.png) no-repeat;background-size: contain;width: 50px; height: 50px ;">\
+                                      <img class="photo-1" src='+list[i].avatar+'  />\
+                                  </div>\
+                              </div>\
+                              <div class="flex-box gray" style="margin-bottom: 2px;"><span>'+usernameHidden(list[i].nickname)+'</span></div>\
+                              <div class="flex-box white" style="margin-bottom: 2px;"><span>已邀'+list[i].users+'人</span></div>\
+                              <div class="flex-box" style="margin-bottom: 2px;"><span class="may">'+list[i].income+'元</span></div>\
+                        </div>';
+                    if(i==1){
+                        $('.list-top').prepend(str);
+                    }else{
+                        $('.list-top').append(str);
+                    }
+                }else {
+                    if(i >= 5){
+                        $('.list-box').append('<div class="invite-item list-more box-isHide">\
+                                                    <div class="invite-item-box step-box-start step-box-info white flex-1"><span>'+(i+1)+'</span></div>\
+                                                    <div class="invite-item-box step-box-center flex-2 gray"><span>'+usernameHidden(list[i].nickname)+'</span></div>\
+                                                    <div class="invite-item-box step-box-center flex-2 white"><span>'+list[i].users+'</span></div>\
+                                                    <div class="invite-item-box step-box-center flex-2 white"><span>'+list[i].income+'元</span></div>\
+                                                </div>');
+
+                    }else{
+                        $('.list-box').append('<div class="invite-item">\
+                                                    <div class="invite-item-box step-box-start step-box-info white flex-1"><span>'+(i+1)+'</span></div>\
+                                                    <div class="invite-item-box step-box-center flex-2 gray"><span>'+usernameHidden(list[i].nickname)+'</span></div>\
+                                                    <div class="invite-item-box step-box-center flex-2 white"><span>'+list[i].users+'</span></div>\
+                                                    <div class="invite-item-box step-box-center flex-2 white"><span>'+list[i].income+'元</span></div>\
+                                                </div>');
+                    }
+                }
+            }
+            if(list.length > 5 ){
+                $('.list-box').append('<div class="more list-more-btn"><img src="img/invite-more.png"/></div>');
+                $('.list-more-btn').click(function () {
+                    var more = $('.list-more').hasClass('box-isHide');
+                    if(more){
+                        $('.list-more').removeClass('box-isHide');
+                        $('.list-more-btn img')[0].style.transform = 'rotate(180deg)';
+                        goTop();
+                    }else{
+                        $('.list-more').addClass('box-isHide');
+                        $('.list-more-btn img')[0].style.transform = 'rotate(360deg)';
+                    }
+                });
+            }
+        });
+
+        RequsetHttp(config.shareUrl , config.type, config.token, config.shareData,function (res) {
+            $('.current-reward-num span').text(res.data.total_reward);
+            $('.decs span').text(res.data.nickname);
+            var reward =  res.data.reward;
+            var status = true;
+            var end_time = res.data.activity.end_time.split(" ")[0].replace( /-/g ,"/");
+            countdown(end_time);
+            if(reward.length > 3){
+                //大于3天
+                status = true;
+                $('.sign').append('<div class="demo-ticket ticket-1"></div><div class="demo-ticket ticket-2"></div>');
+            }else{
+                //小于3天
+                status = false;
+                $('.sign').append('<div class="demo-ticket ticket-1"></div>');
+            }
+
+            var str = '',str1 = '', str2 = '';
+            for(var i=0; i<reward.length; i++){
+                //现金奖励
+                if(status){//两行
+                    if(i <= 1 ){
+                        if(reward[i].coupon_total != 0){//有券
+                            if(reward[i].gold != 0){//有券有金币
+                                str1+= getRewardList.getStr1(reward[i]);
+                            }else{//只有券
+                                str1+= getRewardList.getStr2(reward[i]);
+                            }
+                        }else{//只有金币
+                            str1+=  getRewardList.getStr3(reward[i]);
+                        }
+                    }else{
+                        if(reward[i].coupon_total != 0){//有券
+                            if(reward[i].gold != 0){//有券有金币
+                                str2+= getRewardList.getStr1(reward[i]);
+                            }else{//只有券
+                                str2+= getRewardList.getStr2(reward[i]);
+                            }
+                        }else{//只有金币
+                            str2+=  getRewardList.getStr3(reward[i]);
+                        }
+                    }
+                }else{//单行
+                    if(reward[i].coupon_total != 0){//有券
+                        if(reward[i].gold != 0){//券+金币
+                            str+= getRewardList.getStr1(reward[i]);
+                        }else{//只有券
+                            str+= getRewardList.getStr2(reward[i]);
+                        }
+                    }else{//只有金币
+                        str+=  getRewardList.getStr3(reward[i]);
+                    }
+                }
+            }
+            if(status){
+                $('.ticket-1').append(str1);
+                $('.ticket-2').append(str2);
+            }else{
+                $('.ticket-1').append(str);
+            }
+
+            var  notice = res.data.user_reward_notice;
+            for(var i=0; i< notice.length; i++){
+                $('#h1').append('<li><a href="#">用户'+usernameHidden(notice[i].nickname)+'刚刚邀请了一位好友获得'+notice[i].money+'元现金</a></li>');
+            }
+            setNotice();
+
+            $('.ticket-btn').click(function () {
+                RequsetHttp(config.giftUrl, config.type, config.token, {gift_bag_id: $(this).attr('data-id')}).then(function (res) {
+                    $('.gift-content').html('');
+                    $('.gift-demo').addClass('isShow');
+                    for(var i=0; i< res.data.length; i++){
+                        $('.gift-content').append('<div class="gift">\
+                            <div class="flex-1 flex-box column">\
+                                <span class="flex-box gift-left-top">'+res.data[i].name.substring(0,4)+'</span>\
+                                <span class="flex-box gift-left-down">'+getCouponsDescript(res.data[i])+'</span>\
+                            </div>\
+                            <div class="flex-2 flex-box column">\
+                                <span class="flex-box gift-right-top">'+res.data[i].desc+'</span>\
+                                <span class="flex-box gift-right-down">有效期至： '+timestampTotime(res.data[i].end_time)+'</span>\
+                            </div>\
+                        </div>');
+                    }
+                });
+            });
+
+            $('.share').click(function () {
+                var obj = {
+                    shareUrl : res.data.url + '?user_id=' + config.user_id,
+                    title : '玩游戏就能赚钱！！！' ,
+                    desc: '不但有各种游戏、赛事模式，参加游戏还能赚钱，新手更有12元红包（可提现）',
+                    img: config.imgUrl,
+                    type: $(this).index()
+                };
+                if(browser.versions.android){
+                    window.titi_js.callShare(JSON.stringify(obj));
+                }else{
+                    window.webkit.messageHandlers.callShare.postMessage(JSON.stringify(obj));
+                }
+            });
+
+            $('.amount-button .invitation-btn').click(function () {
+                var obj = {
+                    shareUrl : config.shareRemindUrl,
+                    title : '【TiTi电竞】您有现金红包未领取(可提现)' ,
+                    desc: '您的好友'+config.nickname+'邀请您领取今日现金奖励',
+                    img: config.imgUrl,
+                    type: $(this).index()
+                };
+                if(obj.type){ obj.type = 2 }
+                if(YDUI.device.isAndroid){
+                    window.titi_js.callShare(JSON.stringify(obj));
+                }else{
+                    window.webkit.messageHandlers.callShare.postMessage(JSON.stringify(obj));
+                }
+            });
+        });
+
+        $('.invitation .modal-close').click(function () {
+            $('.invitation').removeClass('isShow');
+        });
+
+        $('.gift-demo .modal-close').click(function () {
+            $('.gift-demo').removeClass('isShow');
+        });
+
+        $('.switch span').click(function () {
+           var index = $(this).index();
+           if(index) {
+               $('.switch-list').addClass('switch-isShow');
+               $('.switch-invite').removeClass('switch-isShow');
+               $('.invite-box').addClass('box-isHide');
+               $('.list-box').removeClass('box-isHide');
+           }else{
+               $('.switch-invite').addClass('switch-isShow');
+               $('.switch-list').removeClass('switch-isShow');
+               $('.list-box').addClass('box-isHide');
+               $('.invite-box').removeClass('box-isHide');
+           }
+            goTop();
+        });
+
+        $('.step-top-right').click(function () {
+            $('.rule').addClass('isShow');
+        });
+        $('.modal-cancel span').click(function () {
+            $('.rule').removeClass('isShow');
+        });
+
+        /**
+         * 倒计时
+         * @param date 结束时间
+         */
+        function countdown(date) {
+            var time = date || '2018/10/03';
+            var format = '{%d天} {%h时} {%m分} {%s秒}';
+            var endTime = new Date(time).getTime();
+            var startTime = new Date().getTime();
+            if(startTime > endTime){
+                $('.remaining-time').text('活动已结束');
+            }else{
+                YDUI.util.countdown(format,endTime, 1000, function (ret) {
+                    $('.countdown').text(ret);
+                })
+            }
+        }
+
+        /**
+         * 跳转底部
+         */
+        function goTop() {
+            $(window).scrollTop($('footer').offset().top);
+        }
+
+        /**
+         * 折扣换算
+         * @param obj
+         * @returns {string}
+         */
+        function getCouponsDescript(obj) {
+            var desc = '';
+            var thr = parseFloat(obj.threshold);
+            var den = parseFloat(obj.denomination);
+            if( obj.type == 1){
+                desc = '满'+thr+'减'+den+'';
+            }else if ( obj.type  == 2 ){
+                desc = '减'+den+'元';
+            }else if ( obj.type  == 3 ){
+                var dis = obj.discount;
+                desc = dis * 10 + "折";
+            }
+            return desc;
+        }
+
+        /**
+         * 时间格式转换
+         * @param time 时间
+         * @returns {string}
+         */
+        function timestampTotime(time) {
+            var t = time.split(" ")[0];
+            return t.replace(/-/, "年").replace(/-/, "月") + "日";
+        }
+
+        /**
+         * 奖励通知滚动设置
+         */
+
+        var speed=150;
+        var h2=document.getElementById("h2");
+        var h1=document.getElementById("h1");
+        var h=document.getElementById("h");
+
+        function setNotice() {
+            h2.innerHTML=h1.innerHTML;
+            var MyMar=setInterval(Marquee,speed);
+        }
+
+        function Marquee(){
+            if(h2.offsetTop-h.scrollTop<=0){
+                h.scrollTop-=h1.offsetHeight;
+            }
+            else{
+                h.scrollTop++;
+            }
+        }
+
+        /**
+         * @param str 需要隐藏的用户名字
+         * @returns {string}
+         */
+        function usernameHidden(str) {
+            var xing = '***';
+            var name = '';
+            if(str.length > 2) name = str.charAt(0) + xing +  str.charAt(str.length - 1);
+            else name = str;
+            return name;
+        }
+    </script>
+
+</body>
+</html>

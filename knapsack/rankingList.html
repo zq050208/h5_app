@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title>排行榜</title>
+    <link rel="stylesheet" href="css/iconfont.css">
+    <link rel="stylesheet" href="css/mescroll.min.css">
+</head>
+<style>
+    *{
+        padding: 0;
+        margin: 0
+    }
+    li{
+        list-style: none;
+    }
+    html,body{
+        width: 100%;
+        height: 100%;
+        font-size: 14px;
+        background:url("https://cdn.tinytiger.cn/icon-luckyDrawback1.jpg") repeat 100%/100%;
+        background-size: cover;
+        background-attachment: fixed;
+        font-family:PingFangSC-Regular
+    }
+    .main{
+        padding: 0 13px;
+    }
+    .title{
+        text-align: center;
+        padding: 14px 0;
+        color: #fff;
+        border-bottom: 1px solid rgba(183, 183, 210, 0.1)
+    }
+    .title-close{
+        float: left;
+        color: #fff;
+        text-decoration:none;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        padding: 5px 10px
+    }
+    .ranking{
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap; 
+    }
+    .ranking-list{
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        justify-content:space-between;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap; 
+        position: relative;
+        color: #fff;
+        padding-right: 20px
+    }
+    .ranking-list img{
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        background-color: #FFF;
+    }
+    .ranking-list .ranking-name{
+        flex: 4;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+        margin-left: 18px;
+        margin-right: 35px;
+        color:rgba(255,255,255,1);
+        opacity:0.5
+    }
+    .ranking-prize{
+        flex:6;
+        justify-content: flex-start;
+        padding-left: 20px;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+    }
+    .ranking-num{
+        position: absolute;
+        top: 20px;
+        left: 0;
+        color: #feee00;
+        font-size: 16px;
+        font-family:DINAlternate-Bold
+    }
+    .lucky-noticket{
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+        margin-top: 65px;
+        color: #fff
+    }
+    .lucky-noticket img{
+        width: 74px;
+        height: 84px;
+        margin-bottom: 16px;
+    }
+    .mescroll{
+			position: fixed;
+			top: 64px;
+			bottom: 0;
+			height: auto; 
+            padding: 0;
+	}
+
+</style>
+<body>
+    <div class="main">
+        <div class="title">
+                <a href="#" class="title-close " onClick="javascript :window.history.back(); return false;"><i class="iconfont icon-weibiaoti--"></i></a>
+            <span>排行榜</span>
+        </div>
+        <!-- 排行 -->
+        <div id="mescroll" class="mescroll">
+            <div class="mescroll-content">
+                    <ul class="ranking">
+                        <!-- 排行榜列表 -->
+                    </ul>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/service.js"></script>
+<script src="../public/config.js"></script>
+<script src="js/mescroll.min.js"></script>
+<script src="js/iconfont.js"></script>
+<script>
+        var config = {
+        url:"LiveLotteryController/list",
+        type:'post', 
+        token:Request('token'),
+        data:{page:1},
+        mescroll: initMescroll(),
+        up: 'up',
+        flush: 'flush'
+    }
+    var load = {
+        init:function(type){
+            if(type == 'flush'){
+                config.data.page = 1;
+            }
+        requsetHttp(config.url,config.type,config.data,config.token,(res)=>{
+        var list = res.data.list;
+        var str = ''
+        if(!list.length && config.data.page == 1){
+                    config.mescroll.endSuccess();
+                   $(".ranking").html(`<div class="lucky-noticket">
+                                    <img src="image/rankingList-no.png" alt="">
+                                    <span>暂无排行榜~</span> </div>`);
+                    config.mescroll.endByPage(res.data.list.length, res.data.page.totalPage);
+                    config.mescroll.hideUpScroll(true);
+                    return false;
+                }
+        for(var i = 0; i <list.length; i++){
+            var rank = i+1+(config.data.page-1)*10
+            str +=`<li class="ranking-list">
+                    <img src="`+list[i].avatar+`" alt="">
+                    <span class="ranking-name">`+list[i].nickname+`</span>
+                    <span class="ranking-prize">`+list[i].title+`</span>
+                    <span class="ranking-num">#`+rank+`</span>
+                </li>`
+        }
+        if(type == 'flush'){
+                    config.mescroll.endSuccess();
+                    config.mescroll.optUp.page.num = 1;
+                    config.mescroll.endByPage(res.data.list.length, res.data.page.totalPage);
+                    $(".ranking").html(str);
+        }else{
+                    config.mescroll.endByPage(res.data.list.length, res.data.page.totalPage);
+                    $(".ranking").append(str);
+        }
+        config.data.page ++;
+       
+        })
+
+        }
+    }
+
+     /**
+     * mescroll 配置
+     */
+     function initMescroll() {
+        var mescroll  =  new MeScroll("mescroll", {
+            up: {
+                callback: upCallback,
+                isBounce: false,
+                noMoreSize: 5,
+                auto: false,
+                htmlNodata: '<p class="upwarp-nodata">没有更多了</p>'
+            },
+            down: { callback: downCallback }
+        });
+        return mescroll;
+    }
+
+    /**
+     * 下拉刷新的回调
+     */
+    function downCallback() {
+        load.init(config.flush);
+    }
+
+    /**
+     * 上拉加载的回调
+     */
+    function upCallback() {
+        load.init(config.up);
+    }
+
+
+
+
+    
+   
+
+</script>

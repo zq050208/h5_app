@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <link rel="stylesheet" href="css/index.css?v=Math.random()">
+    <title></title>
+</head>
+<body>
+    <style>
+
+    </style>
+    <div class="page">
+        <!--头部-->
+        <header></header>
+        <!--主题-->
+        <div class="flex-box theme"><img src="img/icon-theme.png" ></div>
+
+        <div class="s1">
+            <!--步骤标题1-->
+            <div class="flex-box steps"><img src="img/icon-steps-2.png"></div>
+            <!--奖励-->
+            <section class="flex-box award-main"></section>
+        </div>
+
+        <!--步骤标题2-->
+        <div class="flex-box steps"><img src="img/icon-steps-1.png" ></div>
+        <section class="flex-box manner">
+            <div class="flex-box manner-title">
+                <div class="flex-box manner-title-image"><img src="img/icon-diamond.png" ></div>
+                <div class="manner-title-txt flex-9">赛程分为<span class="course-num"></span>场</div>
+            </div>
+            <div class="flex-box manner-content course-list"></div>
+            <div class="flex-box manner-title">
+                <div class="flex-box manner-title-image"><img src="img/icon-diamond.png" ></div>
+                <div class="manner-title-txt flex-9"><div>比赛规则：</div></div>
+            </div>
+            <div class="flex-box manner-content">
+                <div class="flex-box flex-1"></div>
+                <div class="flex-box flex-9 decs"></div>
+            </div>
+            <div class="flex-box manner-title">
+                <div class="flex-box manner-title-image"><img src="img/icon-diamond.png" ></div>
+                <div class="manner-title-txt flex-9"><div>赢得比赛后，自动发放奖励，请在<span class="orange">我的金币</span>查看</div></div>
+            </div>
+        </section>
+
+        <div class="s2">
+            <!--步骤3-->
+            <div class="flex-box steps"><img src="img/icon-steps-3.png" ></div>
+            <section class="flex-box enter">
+                <div class="flex-box enter-content enter-user">
+                    <div class="flex-box flex-ratio">
+                        <div><img src="img/icon-head.jpg" ></div>
+                    </div>
+                </div>
+                <div class="more"><img width="10" src="img/icon-more.png"></div>
+            </section>
+        </div>
+
+        <footer class="flex-box">
+            <div class="flex-box black bold apply">报名</div>
+            <div class="orange text">新用户报名参赛立即获得现金红包</div>
+        </footer>
+    </div>
+
+    <script src="../public/jquery.min.js"></script>
+    <script src="../public/config.js"></script>
+    <script src="../public/service.js"></script>
+    <script>
+
+        var config = {
+            gameInfoUrl: 'MatchController/getMatchInfo',
+            downloadUrl: 'https://h5.tinytiger.cn/web_app/knapsack/download.html',
+            type: 'post',
+            token: Request('token'),
+            data: {
+                match_id:Request("match_id")
+            }
+        };
+
+        var load ={
+            init: function () {
+                requsetHttp(config.gameInfoUrl, config.type, config.data, config.token ,(res)=>{
+                    var game_info = res.data.match_info,
+                        reward_list = res.data.match_info.reward_list,
+                        game_enter_user = res.data.match_enter_user || res.data.match_enter_team;
+                    var Screening = function(n){
+                        var array = ['一','二', '三', '四', '五', '六', '七', '八', '九'];
+                        if( n > 8) return array[8];
+                        return array[n];
+                    };
+                    $('title').text(game_info.match_name);
+                    $('.course-num').text(Screening(game_info.course_list.length-1));
+                    $('.decs').html(game_info.match_rule);
+                    /**
+                     * 报名玩家
+                     */
+                    if(game_enter_user.length){
+                        game_enter_user.forEach(function(val){
+                            $('.enter-user').append('<div class="flex-box flex-ratio"><div><img src='+(val.avatar)+' ></div> </div>');
+                        });
+                    }else{
+                        $('.s2').css('display','none');
+                    }
+                    /**
+                     * 奖励规则
+                     */
+                    var rewardHtml = '';
+                    if(reward_list.length){
+                        reward_list.forEach(function (val,i) {
+                            rewardHtml += '<div class="flex-box award-wrap">\
+                                            <div class="flex-box flex-1 award-left">\
+                                                <div class="liver award-name">'+val.reward+'</div>\
+                                                <div class="bold award-num">第'+Screening(i)+'名</div>\
+                                            </div>\
+                                            <div class="flex-box flex-2 bold award-right">\
+                                                <div class="orange">价值<span>'+val.content+'</span></div>\
+                                            </div>\
+                                        </div>';
+
+                        });
+                        $('.award-main').append(rewardHtml);
+                    }else{
+                        $('.s2').css('display','none');
+                    }
+                    /**
+                     * 赛程安排
+                     */
+                    var courseHtml = '';
+                    var toTime = function (time){
+                        var t1 = time.substring(5);
+                        var t2 = t1.substring(0,t1.length - 3).replace(/-/g,"月").replace(/\ /g,"日 ");
+                        return t2;
+                    };
+                    game_info.course_list.forEach(function (val,i) {
+                        courseHtml += '<div class="flex-box manner-item">\
+                                            <div class="flex-box flex-1"></div>\
+                                            <div class="flex-box flex-9">\
+                                                <div class="flex-box flex-3 manner-item-box">\
+                                                    <span class="flex-box flex-1 liver">第'+(Screening(i))+'场</span>\
+                                                    <span class="flex-box flex-2 orange">'+toTime(val.time)+'</span>\
+                                                </div>\
+                                                <div class="flex-2"></div>\
+                                            </div>\
+                                        </div>';
+                    });
+                    $('.course-list').append(courseHtml);
+                    $('.more, .apply').click(function () {
+                        location.href = config.downloadUrl;
+                    })
+                });
+            }
+        };
+
+        load.init();
+    </script>
+
+</body>
+</html>

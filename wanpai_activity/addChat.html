@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <title>瞎聊什么</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vant@2.2/lib/index.css">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            font-size: 14px;
+            color: rgba(153, 153, 153, 1);
+            font-family: PingFang-SC-Medium, PingFang-SC;
+            background:rgba(255,255,255,1);
+        }
+
+        .main {
+            padding: 20px;
+        }
+
+        textarea {
+            outline: none;
+            border: 0;
+            width: 100%;
+            box-sizing: border-box;
+            height: 90px;
+            color:rgba(77,77,77,1);
+        }
+
+        .imgContent img,
+        .add {
+            width: 62px;
+            height: 62px;
+            margin-right: 10px;
+        }
+
+        .bottom {
+            width: 100%;
+            margin-top: 30px;
+        }
+
+        .bottomContnet {
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bottomContnet img {
+            width: 128px;
+            height: 40px;
+            box-sizing: border-box;
+        }
+
+        .bottomContnet img:last-child {
+            height: 44px;
+        }
+        .van-uploader__upload{
+            width: 62px;
+            height: 62px;
+            background:rgba(250,250,250,1);
+            box-shadow:1px 3px 4px 0px rgba(222,222,222,0.5);
+            border-radius:4px;
+            border: none !important;
+        }
+        .van-uploader__preview-image{
+            width: 62px;
+            height: 62px;
+        }
+        .van-uploader__upload-icon{
+            color: rgba(195,195,195,1);
+            font-size: 28px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="main">
+            <textarea cols="30" rows="10" placeholder="请输入……" v-model="desc" ></textarea>
+            <div style="display: flex;">
+                <div class="imgContent"></div>
+                <div>
+                    <van-uploader v-model="fileList" :after-read="onRead" :max-count="8" 
+                        :preview-image="true" :deletable="true" @delete="deleteFile" accept="image/*" />
+                </div>
+            </div>
+            <!-- <div>
+                <div style=" padding-bottom: 20px;">1、聊一聊字数：800字以内，允许数字、中英文、字符、微信或输入法自带表情；</div>
+                <div>2、热门：按喜爱次数正序排序；<div style="padding-left: 20px;">最新：按发表时间倒叙排序；</div>
+                    </divcla>
+                    <div style=" padding: 20px 0">3、往期话题，按话题时间倒叙展示；</div>
+                </div>
+            </div> -->
+            <div class="bottom">
+                <div class="bottomContnet">
+                    <img src="image/icon-cancle.png" @click="goBack">
+                    <img src="image/icon-publish.png" @click="confirmClick">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vant@2.2/lib/vant.min.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+<script>
+    // baseUrl = 'http://192.168.1.241/wanpai_api/public/index.php/'   // 测试
+    // baseUrl = 'https://wanpai.titipa.cn/xhdj/wanpai_api/public/index.php/'   // 预发
+    baseUrl = 'https://fenz.tinytiger.cn/xhdj/wanpai_api/public/index.php/'   // 正式
+    var config = {
+        url: 'Common/getUptoken',
+        addComment: 'Topic/addComment',
+        type: 'get',
+        postType: 'post',
+        domain: "https://upload-z2.qiniup.com",
+        data: {
+            topic_id: Request("topic_id") ,
+            comment_content: '',
+            images: []
+        },
+        token: Request('token')
+    }
+    new Vue({
+        el: '#app',
+        data: {
+            fileList: [],
+            imgUrlList: [],
+            imgBaseUrl: 'https://cdn.tinytiger.cn/',
+            qiniuToken: '',
+            desc: '',
+           
+        },
+        mounted() {
+            this.getToken()
+            
+        },
+        methods: {
+            // 获取七牛云token
+            getToken: function () {
+                requsetHttp(config.url, config.type, {}, null, (res) => {
+                    if (res.code == 200) {
+                        this.qiniuToken = res.data.uptoken
+                    }
+                })
+            },
+            onRead: function (file) {
+                var files = file.file
+                console.log(files)
+                this.uploadImgToQiniu(files)
+            },
+            uploadImgToQiniu(file) {
+                const axiosInstance = axios.create({ withCredentials: false });    //withCredentials 禁止携带cookie，带cookie在七牛上有可能出现跨域问题
+                let data = new FormData();
+                data.append('token', this.qiniuToken);     //七牛需要的token，叫后台给，是七牛账号密码等组成的hash
+                data.append('file', file);
+                axiosInstance({
+                    method: 'POST',
+                    url: 'https://upload-z2.qiniup.com',  //上传地址
+                    data: data,
+                    timeout: 30000,      //超时时间，因为图片上传有可能需要很久
+                }).then(data => {
+                    var url = this.imgBaseUrl+data.data.key
+                    this.imgUrlList.push(url)
+                }).catch(function (err) {
+                    //上传失败
+                });
+            },
+            deleteFile (file, index) {
+                var indexs = index.index
+                this.imgUrlList.splice(indexs, 1)
+                
+            },
+            // 确定点击事件
+            confirmClick () {
+                if (this.desc === '') {
+                    vant.Toast('请输入发布内容')
+                    return
+                }
+                config.data.comment_content = this.desc
+                config.data.images = JSON.stringify(this.imgUrlList)
+                requsetHttp(config.addComment, config.postType, config.data, config.token, (res) => {
+                    if (res.code == 200) {
+                        vant.Toast('发表成功');
+                        this.desc = ''
+                        this.imgUrlList = []
+                        if (config.data.topic_id) {
+                            window.location.href = 'chat.html?token='+config.token+"&topic_id="+config.data.topic_id+"&diftype=1"+"&tab=2"
+                        } else {
+                            window.location.href = 'chat.html?token='+config.token+"&tab=2"
+                        }
+                        
+                    } else {
+                        vant.Toast(res.msg);
+                    }
+                })
+            },
+            // 返回上一页
+            goBack () {
+                window.history.go(-1)
+            }
+        }
+    });
+
+</script>

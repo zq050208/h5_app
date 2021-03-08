@@ -1,0 +1,219 @@
+html,body{
+    font-family: PingFangSC-Regular;
+    background: #F9F8F8;
+    color: #333333 ;
+}
+
+.confirm-hd{
+    text-align: center;
+}
+
+.header{
+    display: block;
+    height: 4.4rem;
+    width: 100%;
+}
+.tab-nav-item{
+    font-size: 16px;
+    color: #999999;
+}
+.tab-active{
+    font-family: PingFangSC-Medium !important;
+    color: #333333 !important;
+}
+.tab-nav-item.tab-active:before{
+    background: #FFDA21 !important;
+}
+.tab-nav:after,.tab-nav-item:after{
+    width: 0!important;
+    height: 0!important;
+}
+
+.num{
+    padding-left: 0.2rem;
+    font-family: PingFangSC-Medium;
+}
+
+.num:before{
+    position: absolute;
+    content: '';
+    width: 1px;
+    height: 14px;
+    margin-top: 1px;
+    margin-left: -0.2rem;
+    -webkit-transform: scaleX(0.5);
+    transform: scaleX(0.5);
+    border-right: 5px solid #FFDA21;
+    border-radius: 20px;
+}
+
+.comd{
+    border-radius: 6px;
+    background-size: cover;
+}
+
+.m-cell{
+    margin-bottom: 0.3rem !important;
+}
+.m-cell:after{
+    width: 0!important;
+}
+
+.tab-bg{
+    background: #F9F8F8;
+}
+
+.comd .cell-left{
+    min-height: 2rem;
+    flex-wrap: wrap;
+}
+.comd .cell-left span{
+    width: 100%;
+}
+.comd .left-top{
+    font-family: PingFangSC-Medium;
+    font-size: 12px;
+    padding: 0.1rem 0.2rem;
+    background: #FFDA21;
+    border-radius: 4px;
+    color: #905900;
+}
+.comd .left-mid{
+    color: #F1F1F1;
+    margin-top: -0.2rem;
+    font-size: 12px;
+}
+.comd .left-down{
+    font-family: PingFangSC-Medium;
+    font-size: 16px;
+    margin-top: -0.5rem;
+    color: #FFFFFF;
+}
+
+.comd .cell-right .report{
+    padding: 0.1rem 0.4rem;
+    border: 1px solid #FFFFFF;
+    border-radius: 20px;
+    color: #FFFFFF;
+    background: rgba(255,255,255,0.20);
+}
+
+.rule,.award{
+    border-radius: 6px;
+}
+.rule .cell-left{
+    font-size: 14px;
+    color: #AAAAAA;
+}
+.rule .cell-right{
+    min-height: 0.8rem
+}
+
+.award .cell-left{
+    flex-wrap: wrap;
+}
+.award .cell-left .text{
+    width: 100%;
+}
+.award .cell-right{
+    min-height: 1.94rem;
+}
+
+.grids-item{
+    padding: 0 0 0.32rem 0 !important;
+}
+.m-grids-4:before, .grids-item:after{
+    height: 0 !important;
+    border-bottom: 0;
+}
+.m-grids-4 .grids-item:before{
+    height: 0 !important;
+    border-right: 0;
+}
+
+.m-grids-4 .team-img{
+    height: 1.3rem;
+    background: #3c763d;
+    display: block;
+    margin: 0.2rem;
+    border-radius: 50%;
+}
+
+.text-one{
+    font-family: PingFangSC-Regular !important;
+    color: #666666;
+}
+.text-two{
+    font-family: PingFangSC-Medium;
+    color: #333333;
+}
+.text-three img{
+    width: 1.658rem;
+    height: 0.44rem;
+}
+.award-img{
+    width: 1.4rem;
+    height: 1.4rem;
+    display: block;
+    background: url("../img/icon-redpacket.jpg") no-repeat;
+    background-size: cover;
+}
+
+.cell-right img{
+    width: 1.4rem;
+    height: 1.4rem;
+}
+
+.comd {
+    padding: 0 !important;
+}
+.comd .cell-left{
+    padding-left: 0.24rem;
+}
+.comd span{
+    z-index: 2;
+}
+
+.cell-opacity::before{
+    position: absolute;
+    background-color: rgba(0,0,0,0.5);
+    content: "";
+    z-index: 1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+.my-button{
+    width: 100%;
+    position: fixed;
+    padding: 0.24rem;
+    bottom: 0;
+}
+.btn-apply{
+    background-image: linear-gradient(124deg, #FFDA21 0%, #FFBE00 100%);
+    border-radius: 100px;
+    font-family: PingFangSC-Medium;
+    font-size: 16px;
+    color: #905900;
+}
+#J_Tab{
+    padding-bottom: 1rem;
+}
+.confirm-bd{
+    white-space: pre-wrap;
+}
+
+.header::after{
+    width: 100%;
+    height: 100%;
+    display: block;
+    background-color: rgba(0,0,0,0.35);
+    content: "";
+    z-index: 1;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}

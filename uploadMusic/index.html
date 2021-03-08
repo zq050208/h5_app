@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <title>音乐上传</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://unpkg.com/view-design/dist/styles/iview.css"
+    />
+  </head>
+  <style>
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+    }
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    .uploadBox {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 200px 0 100px 0;
+    }
+    .uploadBox .ivu-btn {
+      width: 400px !important;
+    }
+  </style>
+
+  <body>
+    <div id="app">
+      <div class="uploadBox" @click="loadingClick">
+        <Upload
+          multiple
+          action="https://upload-z2.qiniup.com/"
+          ref="upload"
+          :data="{ token: qiniuToken }"
+          :on-progress="handleProgress"
+          :on-success="handleSuccess"
+          :before-upload="handleUpload"
+          :show-upload-list="false"
+          :format="['wma','mp3','ogg']"
+          :disabled="uploading"
+          ref="upload"
+        >
+          <i-button icon="ios-cloud-upload-outline">选择音乐文件</i-button>
+        </Upload>
+      </div>
+      <p style="border-bottom: 1px solid #e8eaec; padding: 10px 20px;">
+        待上传列表
+      </p>
+      <i-table
+        :show-header="false"
+        :columns="columns"
+        :data="dataList"
+        ref="selection"
+        @on-selection-change="handleSelectChange"
+      ></i-table>
+      <form inline style="padding: 20px ">
+        <FormItem style="margin-right: 50px">
+          <Checkbox
+            v-model="ifSelectAll"
+            :indeterminate="indeterminate"
+            @on-change="handleSelectAll"
+            >全选</Checkbox
+          >
+        </FormItem>
+        <FormItem>
+          <i-button
+            @click="handleDeleteAll"
+            :disabled="selected.length === 0 || uploading === true"
+            type="primary"
+            >上传</i-button
+          >
+        </FormItem>
+        <FormItem
+          style="margin: 0 50px"
+          v-if="selected.length !== 0 && allPrecent > 0"
+        >
+          <span>{{allPrecent}}%</span>
+        </FormItem>
+        <FormItem v-if="selected.length !== 0 && allPrecent > 0">
+          <i-button type="success"
+            >{{allPrecent === 100 ? '上传完成': '正在上传'}}</i-button
+          >
+        </FormItem>
+      </form>
+    </div>
+  </body>
+</html>
+<script src="../public/jquery.min.js"></script>
+<script type="text/javascript" src="https://vuejs.org/js/vue.min.js"></script>
+<script
+  type="text/javascript"
+  src="https://unpkg.com/view-design/dist/iview.min.js"
+></script>
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+<script>
+  window.selfs = {};
+  var config = {
+    url: "wanpai_admin/public/index.php/common/qiniu/uptoken",
+    type: "get",
+    addUrl: "wanpai_admin/public/index.php/PartyMusic/addMusics",
+    postType: "post"
+  };
+  // baseUrl = "http://192.168.1.241/";  // 测试环境
+  // baseUrl = "http://wanpai_admin.titipa.cn/xhdj/";  // 预发环境
+  baseUrl = 'https://wanpai_admin.tinytiger.cn/xhdj/'
+
+  new Vue({
+    el: "#app",
+    data: {
+      ifSelectAll: false,    // 是否全选
+      selected: [],
+      qiniuToken: "",
+      uploadList: [],       // 上传的文件
+      dataList: [],         // 保存未上传文件
+      allPrecent: 0,        // 总百分比
+      musicBaseUrl: "https://cdn.tinytiger.cn/",
+      musicDatas: [],       // 传到后台的数据
+      uploadStatus: 0,      // 标记上传完成的次数
+      uploading: false,     // 是否上传
+      selectFileIndex: null, // 单选index
+      indeterminate: false,
+      // tiponece: true,       // 超过100首的提示标识
+      columns: [
+        {
+          type: "selection",
+          width: 60,
+          align: "center"
+        },
+        {
+          title: "index",
+          key: "index",
+          align: "center",
+          width: "200px",
+          render: (h, params) => {
+            return h("div", {}, params.index + 1);
+          }
+        },
+        {
+          title: "名字",
+          key: "name",
+          align: "center",
+          render: (h, params) => {
+            return h("div", {}, params.row.file.name);
+          }
+        },
+        {
+          title: "时长",
+          key: "length",
+          align: "center",
+          width: "200px",
+          render: (h, params) => {
+            return h(
+              "div",
+              {},
+              window.selfs.returnTime(params.row.file.length) + "s"
+            );
+          }
+        },
+        {
+          title: "操作",
+          key: "operation",
+          align: "center",
+          render: (h, params) => {
+            return h("div", [
+              h("span", {}, params.row.percent + "%"),
+              h(
+                "i-button",
+                {
+                  props: {
+                    type:
+                      params.row.percent === 0
+                        ? "primary"
+                        : params.row.percent > 0 && params.row.percent !== 100
+                        ? "info"
+                        : "success"
+                  },
+                  style: { margin: "0px 0px 0px 50px" },
+                  on: {
+                    click: () => {
+                      if (params.row.percent === 0)
+                        window.selfs.uploadClick(params.index);
+                    }
+                  }
+                },
+                params.row.percent === 0
+                  ? "上传"
+                  : params.row.percent > 0 && params.row.percent !== 100
+                  ? "正在上传"
+                  : "上传完成"
+              )
+            ]);
+          }
+        }
+      ]
+    },
+    created() {
+      selfs = this;
+    },
+    mounted() {
+      this.getToken();
+    },
+    methods: {
+      // 获取七牛云token
+      getToken: function() {
+        requsetHttp(config.url, config.type, {}, null, res => {
+          if (res.code == 200) {
+            this.qiniuToken = res.data.uptoken;
+          }
+        });
+      },
+      loadingClick() {
+        this.$refs.upload.clearFiles();
+        this.selected = []
+        // this.tiponece = true;
+        this.ifSelectAll = false
+        this.allPrecent = 0
+        if (this.uploading === true) {
+          this.$Message.error("请等待当前歌曲上传完成");
+        }
+      },
+      // 选择框改变
+      handleSelectChange: function(selected) {
+        this.selected = selected;
+      },
+      // 全选
+      handleSelectAll: function() {
+        if (this.uploading === true) {
+          this.indeterminate = true;
+          this.$Message.error("请等待当前歌曲上传完成");
+        } else {
+          this.$refs.selection.selectAll(this.ifSelectAll);
+        }
+      },
+      // 批量上传
+      handleDeleteAll: function () {
+        this.musicDatas = [];
+        this.uploadStatus = 0;
+        if (this.selected.length == 0) {
+          return false;
+        }
+        for (let index = 0; index < this.selected.length; index++) {
+          let selectItem = this.selected[index];
+          for (let i = 0; i < this.uploadList.length; i++) {
+            const file = this.uploadList[i];
+            if (file.name == selectItem.name && file.hasOwnProperty("uid") === false) {
+              this.$refs.upload.post(file);
+            }
+          }
+        }
+      },
+      // 获取时间
+      getTimes: function(file) {
+        if (!(file.type ==='audio/mp3' || file.type === 'audio/x-ms-wma')) {
+          this.$Notice.warning({
+            title: '文件格式不正确',
+            desc: '文件 ' + file.name + ' 格式不正确，请上传 mp3 或 wma 格式的音乐。'
+          })
+          return false
+        }
+        var content = file;
+        var url = URL.createObjectURL(content);
+        var audioElement = new Audio(url);
+        audioElement.addEventListener("loadedmetadata", _event => {
+          console.log(audioElement.duration)
+          var hour = parseInt((audioElement.duration / 3600))
+          console.log(hour)
+          var minute = parseInt((audioElement.duration % 3600) / 60) + hour * 60;
+          console.log(minute)
+          var second = parseInt(audioElement.duration % 60);
+          console.log(second)
+          var time = minute + "." + second;
+          file.length = time;
+          file.percentage = 0;
+          var obj = {
+            name: file.name,
+            length: time,
+            file: file,
+            percent: 0,
+            isSuccessed: false,
+            _disabled: false,
+          };
+          // if (this.dataList.length >= 100) {
+          //   if (this.tiponece) {
+          //     this.$Message.error("单次最多上传100首歌曲哦~");
+          //     this.tiponece = false;
+          //   }
+          //   return;
+          // }
+          this.dataList.push(obj);
+          this.uploadList.push(file);
+        });
+      },
+      // 上传之前
+      handleUpload: function(file) {
+        this.getTimes(file);
+        return false;
+      },
+      // 点击上传
+      uploadClick(index) {
+        this.selectFileIndex = index;
+        let item = this.uploadList[index];
+        this.selected = []
+        this.ifSelectAll = false
+        this.$refs.upload.post(item);  
+      },
+      // 上传成功
+      handleSuccess: function(res, file, fileList) {
+        console.log("上传成功");
+
+        file.url = this.musicBaseUrl + res.key;
+        var length = 0;
+        for (var index = 0; index < this.dataList.length; index++) {
+          let obj = this.dataList[index];
+          if (obj.name == file.name && obj.file.uid === file.uid) {
+            if (this.ifSelectAll) {
+              length = this.dataList[index].length;
+            } else {
+              length = this.dataList[this.selectFileIndex].length;
+            }
+          }
+        }
+        var name = "";
+        var artist = "";
+        if (file.name.indexOf("-") != -1) {
+          name = file.name.substring(
+            file.name.indexOf("-") + 1,
+            file.name.indexOf(".")
+          );
+          artist = file.name.substring(0, file.name.indexOf("-"));
+        } else {
+          name = file.name.substring(0, file.name.indexOf(".mp3"));
+          artist = "未知";
+        }
+        var min = String(length).split(".")[0] || 0;
+        var sec = String(length).split(".")[1] || 0;
+        sec = this.PrefixZero(sec, 2)
+        length = min + "." + sec;
+        var obj = {
+          music_url: file.url,
+          music_name: name,
+          singer: artist,
+          music_length: length
+        };
+
+        for (var index = 0; index < this.dataList.length; index++) {
+          let item = this.dataList[index];
+          var obj_current = this.ifSelectAll
+            ? this.dataList[index]
+            : this.dataList[this.selectFileIndex];
+          if (item.name == file.name && obj_current._disabled == false) {
+            this.musicDatas.push(obj);
+            obj_current._disabled = true;
+          }
+        }
+
+        var data = JSON.stringify(this.musicDatas);
+        if ( (this.uploadStatus == this.selected.length - 1 || this.selected.length == 0 ) && this.musicDatas.length > 0) {
+          requsetHttp( config.addUrl, config.postType, { musics: data }, null, res => {
+              if (res.code === 200) {
+                this.selected = [];
+                this.musicDatas = [];
+                this.allPrecent = 0;
+              } else {
+                this.$Notice.warning({
+                  title: res.msg,
+                  desc: '音乐实录后台失败!'
+                })
+              }
+            }
+          );
+        }
+        if (!this.ifSelectAll) {
+          this.selected = []
+          this.ifSelectAll = false;
+        }
+        this.uploadStatus += 1;
+        this.uploading = false;
+        this.indeterminate = false;
+      },
+
+      // 上传时
+      handleProgress: function(event, file, fileList) {
+        this.uploading = true
+        for (let index_data = 0; index_data < this.dataList.length; index_data++) {
+          const dataFile = this.dataList[index_data].file;
+          if (dataFile.hasOwnProperty('uid') && file.uid === dataFile.uid) {
+              this.dataList[index_data].percent = parseInt(event.percent);
+          }
+        }
+        
+        if (this.selected.length > 0) {
+          var totalnum = 0;
+          for (let i = 0; i < this.selected.length; i++) {
+            const item = this.selected[i];
+            if (item.name == file.name) {
+              this.selected[i].percent = parseInt(event.percent);
+            }
+            totalnum = totalnum + parseInt(item.percent);
+          }
+          this.allPrecent = parseInt(totalnum / this.selected.length);
+        }
+        // console.log(file.name + "上传时打印结束");
+      },
+      // 时间格式
+      returnTime(time) {
+        console.log(time)
+        var t;
+        var min = String(time).split(".")[0];
+        var sec = String(time).split(".")[1];
+        if (Number(min) < 10) {
+          t = sec < 10 ? "0" + min + ":" + "0" + sec : "0" + min + ":" + sec;
+        } else {
+          t = sec < 10 ? min + ":" + "0" + sec : min + ":" + sec;
+        }
+        return t;
+      },
+      PrefixZero (num, n) {
+        return (Array(n).join(0) + num).slice(-n);
+      }
+    }
+  });
+</script>

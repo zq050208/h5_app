@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>派对排位</title>
+    <link rel="stylesheet" href="../public/ydui.css">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+            font-size: 12px;
+            font-family: PingFang SC;
+            color: rgba(255, 255, 255, 1);
+            background: url('image/icon-idol_bg.png') repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            position: fixed;
+            overflow-y: scroll;
+        }
+        html::before,
+        body:before {
+            content: "";
+            position: fixed;
+            z-index: -1;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: url('image/icon-idol_bg.png') center 0 repeat;
+            background-size: cover;
+        }
+
+        .center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        .flex {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .main {
+            width: 100%;
+            height: 100%;
+ 
+        }
+
+        .top {
+            padding-top: 34px;
+            margin-bottom: 29px;
+        }
+
+        .topimg {
+            width: 91.6vw;
+            height: 52vw;
+            background: url('image/icon-grear_life.png') no-repeat 100%/ 100%;
+            margin: 0 auto;
+            /* border: 1px solid red; */
+
+        }
+
+        .topimg img {
+            width: 80vw;
+            height: 38.5vw;
+            margin: 20.5px 15.5px 26px 27px;
+        }
+
+        .rulesBox {
+            position: relative;
+        }
+
+        .spark {
+            width: 67.5px;
+            height: 88.5px;
+            /* border: 1px solid red; */
+            background: url('image/icon-spark.png') no-repeat 100%/100%;
+            position: absolute;
+        }
+
+        .title {
+            margin-left: 24.5px;
+            padding-top: 30px;
+        }
+
+        .content {
+            padding-left: 10px;
+            position: relative;
+        }
+
+        .first {
+            position: relative;
+            z-index: 99;
+        }
+
+        .strip {
+            position: absolute;
+            width: 41px;
+            height: 7px;
+            bottom: 0;
+        }
+
+        .pink {
+            color: #FF7398;
+        }
+
+        .explain {
+            padding-left: 10px;
+            padding-top: 6.5px;
+        }
+
+        .tab {
+            padding: 0 20px;
+            margin-top: 17px;
+        }
+
+        .tab img {
+            width: 42.9vw;
+            height: 11.6vw;
+            /* border: 1px solid red; */
+        }
+
+        .tabConetnt,
+        .hotContnet {
+            padding: 0 20px;
+            margin-top: 8px;
+        }
+
+        .tabTitle {
+            display: flex;
+        }
+
+        .flex7 {
+            flex: 7;
+            display: flex;
+        }
+
+        .flex3 {
+            flex: 3;
+            justify-content: flex-end;
+            display: flex;
+            align-items: center;
+        }
+
+        .flex2 {
+            flex: 2;
+            margin-right: 24px;
+
+        }
+
+        .flex8 {
+            flex: 8;
+            display: flex;
+            align-items: center;
+        }
+
+        .partyImg {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            margin-right: 10.5px;
+            /* border: 1px solid red; */
+        }
+
+        .rankingList {
+            padding: 10px 0;
+        }
+
+        .topTitle {
+            font-family: PingFang SC;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .hotContnet{
+            display: none;
+        }
+        .hotItem{
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            background:#fff;
+            box-shadow:0px 2px 3px 0px rgba(0, 0, 0, 0.21);
+            border-radius:8px;
+            color:rgba(51,51,51,1);
+            position: relative;
+        }
+        .hotAvator{
+            width:49px;
+            height:49px;
+            border-radius:8px;
+            /* border: 1px solid red; */
+            margin-right: 10.5px;
+        }
+        .schedule{
+            display: flex;
+            align-items: center;
+        }
+        .status{
+            width: 52.5px;
+            height: 43px;
+            /* border: 1px solid red; */
+            position: absolute;
+            top: 0;
+            right: 0;
+        }
+        
+        .circle {
+            width: 17px;
+            height: 17px;
+            background: rgba(229,136,136,1);
+            opacity: 0.56;
+            border-radius: 50%;
+            text-align: center;
+            font-weight: bold;
+            font-size: 10px;
+            font-family: DIN;
+        }
+        
+        .myProgress {
+            width: 100%;
+            background-color: #FFD73C;
+            height: 11.5px;
+            width:52.2vw;
+            border-radius: 6px;
+            padding: 1.5px
+        }
+
+        .myBar {
+            border-radius: 6px;
+            width: 50%;
+            height: 8.5px;
+            background-color: #FF7362;
+            text-align: right;
+            color: white;
+            font-size: 7px;
+            line-height: 9px;
+            padding-right: 3.5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main">
+        <div class="top">
+            <div class="topimg"><img src="image/icon-idol_title.png"></div>
+        </div>
+        <div class="center">
+            <img src="image/icon-time.png" style="width: 100px;height: 35px;">
+            <span class="time">XX月XX日-XX月XX日</span>
+        </div>
+        <div class="rules">
+            <div class="rulesBox">
+                <div class="spark"></div>
+                <div class="title">
+                    <img src="image/icon-rules.png" style="width: 110.5px;height: 37.5px;">
+                    <div class="content">搜索喜爱的派对，在派对右上角点击热爱按钮！</div>
+                </div>
+            </div>
+            <div class="rulesBox">
+                <div class="spark"></div>
+                <div class="title">
+                    <img src="image/icon-award.png" style="width: 110.5px;height: 37.5px;">
+                    <div class="content">
+                        <div class="first">奖励NO.1 </div><img src="image/icon-strip.png" class="strip">
+                    </div>
+                    <div class="explain">合作站所属派对热爱人数1 : 1奖金，最高获得<span class="pink">1000</span>元奖金！</div>
+                    <div class="content" style="padding-top: 10px;">
+                        <div class="first">奖励NO.2 </div><img src="image/icon-strip.png" class="strip">
+                    </div>
+                    <div class="explain">活动结束，偶像专属派对热爱数榜单奖励如下：</div>
+                    <div class="explain">热爱数TOP 1 获得<span class="pink">4000</span>元奖金+超高曝光启动页资源位<span
+                            class="pink">3</span>天！</div>
+                    <div class="explain">热爱数TOP 2 获得<span class="pink">3000</span>元奖金+超高曝光启动页资源位<span
+                            class="pink">2</span>天！</div>
+                    <div class="explain">热爱数TOP 3 获得<span class="pink">2000</span>元奖金+超高曝光启动页资源位<span
+                                class="pink">1</span>天！</div>
+                    <div class="explain">热爱数TOP 4-5 获得<span class="pink">500</span>元奖金+超高曝光启动页资源位<span
+                            class="pink">1</span>天！</div>
+                    <div class="explain">热爱数TOP 6-20 获得高曝光banner页资源位<span class="pink">1</span>天！</div>
+                </div>
+            </div>
+            <div class="tab flex">
+                <img id="rank" src="image/icon-tab1-active.png">
+                <img id="love" src="image/icon-tab2-default.png">
+            </div>
+            <div class="tabConetnt">
+                <div class="tabTitle topTitle">
+                    <div class="flex7">
+                        <div class="flex2 center">排名</div>
+                        <div class="flex8">派对</div>
+                    </div>
+                    <div class="flex3">派对收藏</div>
+                </div>
+                <div class="party-list"></div>
+            </div>
+            <!-- 排行 -->
+            <div class="love-list" style="padding-bottom: 8px"></div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script src="../public/jweixin-1.3.2.js"></script>
+<script src="../public/template-web.js"></script>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/service.js"></script>
+<script src="../public/config.js"></script>
+<script type="text/html" id="rankList">
+{{each item v i}}
+    <div class="item">
+        <div class="tabTitle rankingList">
+            <div class="flex7">
+                <div class="flex2 center">
+                    {{if i === 0}}
+                        <img src="image/icon-first.png" alt="" class="rank-icon">
+                    {{else if i === 1}}
+                        <img src="image/icon-second.png" alt="" class="rank-icon">
+                    {{else if i === 2}}
+                        <img src="image/icon-third.png" alt="" class="rank-icon">
+                    {{else}}
+                       <div class="circle">
+                        {{ i + 1 }}
+                       </div>
+                    {{/if}}
+                </div>
+                <div class="flex8" onclick="goDetail({{v}})">
+                    <img src="{{ v.party_img }}" class="partyImg"><span>{{ v.party_name }}</span>
+                </div>
+            </div>
+            <div class="flex3">{{ v.love_user }}人</div>
+        </div>
+    </div>
+{{/each}}
+</script>
+<script>
+    function goDetail(item) {
+        // wx.miniProgram.navigateTo({url: `/pages/party-details/party-details?party_id=${item.party_id}&user_id=${Request("user_id")}&token=${Request("token")}`})
+        wx.miniProgram.navigateTo({url: `/pages/indexSeach/indexSeach?party_no=${item.party_no}`})
+    }
+    $(".tab img").click(function () {
+        if ($(this).index() == 0) {
+            $(".tabConetnt").show()
+            $(".hotContnet").hide()
+            $("#rank").attr('src', 'image/icon-tab1-active.png')
+            $("#love").attr('src', 'image/icon-tab2-default.png')
+        } else {
+            $(".hotContnet").show()
+            $(".tabConetnt").hide()
+            $("#rank").attr('src', 'image/icon-tab1-default.png')
+            $("#love").attr('src', 'image/icon-tab2-active.png')
+        }
+    })
+    // baseUrl = 'http://192.168.1.241/wanpai_api/public/index.php/'   // 测试
+    // baseUrl = 'https://wanpai.titipa.cn/xhdj/wanpai_api/public/index.php/'   // 预发
+    baseUrl = 'https://fenz.tinytiger.cn/xhdj/wanpai_api/public/index.php/'   // 正式
+    var config = {
+        url: 'PartySuperPopularity/index',
+        timeUrl: 'PartySuperPopularity/getTime',
+        data: {},
+        type: 'get',
+        token: Request('token')
+    }
+    getData()
+    getTime()
+    function getData() {
+        requsetHttp(config.url, config.type, config.data, config.token, (res) => {
+            if (res.code == 200) {
+                var partyList = template('rankList', { item: res.data })
+                $(".party-list").html(partyList)
+                let loveList = ''
+                res.data.forEach((item, index) => {
+                    loveList += `
+                    <div class="hotContnet">
+                        <div class="hotItem">
+                            <img src=${item.party_img}  class="hotAvator">
+                            <div>
+                                <div style="font-size: 11.13px; color: #333; font-weight: Bold; font-family: PingFang SC;">${item.party_name}</div>
+                                <div style="font-size: 8px; color: rgba(51,51,51,1); font-weight: 400; font-family: PingFang SC;">收藏目标</div>
+                                <div class="schedule">
+                                    <div class="myProgress" id=${'myProgress' + index}>
+                                        ${item.love_user / 1000 >= 0.5
+                                            ? `<div class="myBar" id=${'myBar' + index}>${item.love_user >= 1000 ? '100%' : (item.love_user / 1000 * 100).toFixed(2) + '%'}</div>`
+
+                                            : `<div style="display: flex; justify-content: start">
+                                                <div class="myBar" id=${'myBar' + index}></div>
+                                                <span style="color: #fff; line-height: 9px; margin-left: 3px">${item.love_user >= 1000 ? '100%' : (item.love_user / 1000 * 100).toFixed(2) + '%'}</span>
+                                            </div>`
+                                        }
+                                    </div>
+                                    <img src='image/icon-hot.png' style="width:10px; height: 15px; margin-left: 6.5px; display: ${item.love_user >= 1000 ? 'block' : 'none'}">
+                                </div>
+                                <img src=${item.love_user >= 1000 ? 'image/icon-finish.png' : 'image/icon-having.png'} class="status">
+                            </div>
+                        </div>
+                    </div>
+                    `
+                })
+                $(".love-list").html(loveList)
+                res.data.forEach((item, index) => {
+                    let elem = document.getElementById(`${'myBar' + index}`);
+                    elem.style.width = item.love_user >= 1000 ? '100%' : (item.love_user / 1000 * 100).toFixed() + '%'
+                })
+            }
+        })
+    }
+    function getTime() {
+        requsetHttp(config.timeUrl, config.type, config.data, config.token, (res) => {
+            if (res.code === 200) {
+                const start = res.data.start_time.replace(/-/g, '.')
+                const end = res.data.end_time.replace(/-/g, '.')
+                $(".time").html(`${start} — ${end}`)
+            }
+        })
+    }
+</script>

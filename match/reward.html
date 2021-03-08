@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <link rel="stylesheet" href="css/ydui.css">
+    <link rel="stylesheet" href="css/reward.css?v=Math.random()">
+    <title></title>
+</head>
+<body>
+
+<div class="header"></div>
+<div id="J_Tab" class="m-tab">
+    <ul class="tab-nav">
+        <li class="tab-nav-item tab-active"><a href="javascript:;">赛程安排</a></li>
+        <li class="tab-nav-item"><a href="javascript:;">奖励规则</a></li>
+        <li class="tab-nav-item"><a class="zd" href="javascript:;">报名玩家</a></li>
+    </ul>
+    <div class="tab-panel tab-bg">
+
+        <div class="tab-panel-item course-list tab-active"></div>
+        <div class="tab-panel-item reward-list">
+            <div class="m-cell">
+                <div class="cell-item rule">
+                    <div class="cell-left">比赛规则</div>
+                    <div class="cell-right cell-arrow"></div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-panel-item">
+            <div style="margin-bottom: 0.32rem"><span class="num">已报名玩家（<span>80</span>）</span></div>
+            <div class="m-grids-4 tab-bg enter-user"></div>
+        </div>
+    </div>
+</div>
+<div class="my-button">
+    <button type="submit" class="btn-block btn-apply">报名</button>
+</div>
+
+<script src="../public/jquery.min.js"></script>
+<script src="../public/ydui.flexible.js"></script>
+<script src="../public/ydui.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+
+<script>
+
+    var $tab = $('#J_Tab');
+    var config = {
+        gameInfoUrl: 'GameController/getGameInfo',
+        downloadUrl: 'https://h5.tinytiger.cn/web_app/knapsack/download.html',
+        type: 'post',
+        token: Request('token'),
+        data: {
+            game_id: Request('game_id'),
+            type: Request('type'),
+            netcafe_id: Request('netcafe_id'),
+        }
+    };
+    var load ={
+        init: function () {
+            $tab.tab({
+                nav: '.tab-nav-item',
+                panel: '.tab-panel-item',
+                activeClass: 'tab-active'
+            });
+            requsetHttp(config.gameInfoUrl, config.type, config.data, config.token ,(res)=>{
+                console.log(res);
+                var game_info = res.data.game_info,
+                     reward_list = res.data.game_info.reward_list,
+                     game_enter_user = res.data.game_enter_user || res.data.game_enter_team;
+                console.log(game_enter_user);
+                /**
+                 * 报名玩家
+                 */
+                $('title').text(game_info.game_name);
+                $('.header').css('background','url('+game_info.game_desc_image+')');
+                $('.header').css('background-size','cover');
+                if( config.data.type == 3 ){
+                    $('.num').html('已报名战队（' + game_enter_user.length +'）');
+                    $('.zd').text('报名战队');
+                }else{
+                    $('.num span').text(game_enter_user.length);
+                }
+
+                if(game_enter_user.length){
+                    game_enter_user.forEach(function(val){
+                        $('.enter-user').append('\
+                        <a href="#" class="grids-item">\
+                            <div class="grids-txt team-img" style="background: url('+(val.avatar || val.team_logo)+') no-repeat;background-size: cover"></div>\
+                            <div class="grids-txt"><span>'+(val.nickname || val.team_name)+'</span></div>\
+                        </a>'
+                        );
+                    });
+                }
+                /**
+                 * 奖励规则
+                 */
+                var rewardHtml = '';
+                reward_list.forEach(function (val,i) {
+                    rewardHtml += '<div class="m-cell"><div class="cell-item award"><div class="cell-left"><span class="text text-one">奖品：<span>'+val.reward+'</span></span><span class="text text-two">价值：<span>'+val.content+'</span></span>';
+                    if(i == 0){
+                        rewardHtml +='<span class="text-three award-first"><img src="img/icon-award-first.png" /></span></div><div class="cell-right"><span class="award-img"></span></div></div></div>';
+                    }else if( i == 1){
+                        rewardHtml +='<span class="text-three award-first"><img src="img/icon-award-second.png" /></span></div><div class="cell-right"><span class="award-img"></span></div></div></div>';
+                    }else if( i == 2){
+                        rewardHtml +='<span class="text-three award-first"><img src="img/icon-award-third.png" /></span></div><div class="cell-right"><span class="award-img"></span></div></div></div>';
+                    }
+                });
+                $('.reward-list').append(rewardHtml);
+                $('.rule').on('click',function () {
+                    YDUI.dialog.confirm("比赛规则",game_info.game_rule,[{
+                        txt:'知道了',
+                        color: true,
+                        callback: function () { /* 按钮回调 */}
+                    }] );
+                });
+                /**
+                 * 赛程安排
+                 */
+                var courseHtml = '';
+                var Screening = function(n){
+                    var array = ['一','二', '三', '四', '五', '六', '七', '八', '九'];
+                    if( n > 8) return array[8];
+                    return array[n];
+                };
+                var toTime = function (time){
+                    var t1 = time.substring(5);
+                    var t2 = t1.substring(0,t1.length - 3).replace(/-/g,"月").replace(/\ /g,"日 ");
+                    return t2;
+                };
+                game_info.course_list.forEach(function (val,i) {
+                    if(val.is_release){
+                        courseHtml += '<div class="m-cell">\
+                            <div class="cell-item comd cell-opacity" style="background: url('+val.images+') no-repeat;background-size: cover;">\
+                                <div class="cell-left">\
+                                    <span><span class="left-top">第'+(Screening(i))+'场</span></span>\
+                                    <span class="left-mid">比赛时间</span>\
+                                    <span class="left-down">'+toTime(val.time)+'</span>\
+                                </div>\
+                                <div class="cell-right">\
+                                    <span class="report">查看战报</span>\
+                                </div>\
+                            </div>\
+                        </div>';
+                    }else{
+                        courseHtml += '<div class="m-cell">\
+                            <div class="cell-item comd cell-opacity" style="background: url('+val.images+') no-repeat;background-size: cover;">\
+                                <div class="cell-left">\
+                                    <span><span class="left-top">第'+(Screening(i))+'场</span></span>\
+                                    <span class="left-mid">比赛时间</span>\
+                                    <span class="left-down">'+toTime(val.time)+'</span>\
+                                </div>\
+                                <div class="cell-right"></div>\
+                            </div>\
+                        </div>';
+                    }
+                });
+                $('.course-list').append(courseHtml);
+                $('.report, .btn-apply, .team-img').click(function () {
+                    location.href = config.downloadUrl;
+                })
+            });
+        }
+    };
+
+    load.init();
+</script>
+</body>
+</html>

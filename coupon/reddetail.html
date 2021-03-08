@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title>红包详情</title>
+    <link rel="stylesheet" href="css/reddetail.css?v=Math.random()">
+</head>
+
+<body>
+    <header></header>
+    <div class="share-img"></div>
+    <div class="contain">
+        <div class="details">
+            <div class="details-list">
+                <p class="des-txt"></p>
+                <div class="des-money">
+                    <img src="image/icon-successshare.png">
+                    <div class="des-withdraw">可提现</div>
+                    <div style="display: flex; flex-wrap: wrap;">
+                        <span class="money-num"></span>
+                        <span class="money-txt"></span>
+                    </div>
+
+                </div>
+                <div class="button sharreGet">分享领取</div>
+                <div class="button goLook">去查看</div>
+                <div class="button pasted">已过期</div>
+
+                <div class="des-time"></div>
+            </div>
+        </div>
+    </div>
+    <div class="line"></div>
+    <div class="contain-txt">
+        <p>分享后金币到账</p>
+        <span>金币领取记录可在我的金币查看</span>
+    </div>
+    <div class="share-msg">
+        <div class="mask"></div>
+        <div class="popup">
+            <div class="pop-share">
+                <div class="pop-txt">分享APP领取奖励</div>
+                <div class="pop-line"></div>
+            </div>
+            <div class="pop-chart">
+                <div class="chart-weixin share">
+                    <img src="image/icon-detail-wechart.png" alt="">
+                    <p>微信</p>
+                </div>
+                <div class="pop-qq share">
+                    <img src="image/icon-detail-qq.png" alt="">
+                    <p>QQ</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+<script src="js/utils.js?v=Math.random()"></script>
+<script>
+
+    var config = {
+        couponListUrl: 'RedPacketController/redPacketInfo',
+        type: 'post',
+        token: Request('token'),
+        data: { red_packet_id: Request('redid') }
+    };
+
+    requsetHttp(config.couponListUrl, config.type, config.data, config.token,(res)=>{
+        console.log(res);
+        var awardType = function (type) {
+            var str = '';
+            if (type == 1) str = '积分';
+            if (type == 2) str = '金币';
+            return str;
+        };
+
+        $('.des-txt').text(res.data.desc);
+        $('.money-num').text(parseFloat(res.data.amount));
+        $('.money-txt').text(awardType(res.data.type));
+        $('.des-time').text('有效期至：' + simpleDateFormat(res.data.end_time));
+
+        if (res.data.status == -1) { //已过期
+            $('.pasted').show()
+        } else if (res.data.status == 1) { //未领取未过期
+            $('.sharreGet').show()
+
+        } else if (res.data.status == 2) { //已领取
+            $('.goLook').show()
+            $(".des-money img").show();
+        }
+
+        $(".sharreGet").click(function () {
+            $(".share-msg").show();
+        });
+        $('.share-msg').click(function () {
+            $(".share-msg").hide();
+        });
+        $('.goLook').click(function () {
+            if (browser.versions.android) {
+                window.titi_js.callGold();
+            } else {
+                window.webkit.messageHandlers.callGold.postMessage(null);
+            }
+        });
+        $('.share').click(function () {
+            var obj = {
+                type: $(this).index(),
+                shareUrl: res.data.share_url,
+                title: res.data.share_title,
+                desc: res.data.share_content,
+                img: res.data.share_image,
+                share_key: 'redPacket',
+                redid: Request('redid')
+            };
+            if (obj.type == 1) {
+                obj.type = 2;
+            }
+            if (browser.versions.android) {
+                window.titi_js.callShareRed(JSON.stringify(obj));
+            } else {
+                window.webkit.messageHandlers.callShareRed.postMessage(JSON.stringify(obj));
+            }
+        });
+    });
+
+    function getRedPacket() {
+        $('.share-msg').hide();
+        $('.sharreGet,.pasted').hide();
+        $(".des-money img").show();
+        $('.goLook').show();
+    }
+</script>

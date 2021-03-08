@@ -1,0 +1,43 @@
+/*弹窗*/
+*,html,body{
+    padding: 0;
+    margin: 0;
+    font-family:PingFangSC-Medium;
+    font-size: 16px;
+}
+
+.myNews div {
+    padding: 22px 15px;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.myNews div span {
+    display: inline-block;
+
+}
+
+.conten_right{
+    float: right;
+    vertical-align: bottom;
+    color: #EB2828;
+}
+.clocr{
+    color: #333333 !important;
+    font-family:PingFangSC-Regular;
+    font-weight: normal;
+}
+footer{
+    position: absolute;
+    bottom: 10px;
+    display: block;
+    padding:0 2%;
+    width:96%;
+    text-align: center;
+}
+footer span{
+    width: 100%;
+    padding: 15px 0;
+    display: block;
+    background: #FDC247;
+    border-radius: 5px;
+}

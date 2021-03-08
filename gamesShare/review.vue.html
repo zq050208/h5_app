@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1, maximum-scale=1,user-scalable=no">
+    <title>我要点评</title>
+    <link rel="stylesheet" href="./css/iview.css">
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        font-size: 14px;
+        background: rgba(251, 249, 249, 1);
+        border-radius: 10px 10px 0px 0px;
+        position: relative;
+        font-family: PingFangSC-Medium, PingFang SC;
+      }
+      .header {
+        width: 100%;
+        height: 44px;
+        background: rgba(255, 255, 255, 1);
+        border-radius: 10px 10px 0px 0px;
+      }
+      .headerMain {
+        padding: 0 12px;
+        height: 44px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .callBackBtn {
+        width: 22px;
+        height: 22px;
+        cursor: pointer;
+      }
+      .release {
+        color: rgba(255, 204, 3, 1);
+        width: 60px;
+        height: 30px;
+        background: rgba(248, 247, 241, 1);
+        border-radius: 15px;
+        line-height: 30px;
+        text-align: center;
+      }
+      .main {
+        margin: 8px 16px;
+        background: rgba(255, 255, 255, 1);
+        box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        min-height: calc(100% - 115px);
+      }
+      .mainAbout {
+        padding: 0 14px;
+      }
+      .logo {
+        width: 80px;
+        height: 80px;
+        box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        margin-right: 10px;
+      }
+      .aboutName {
+        flex: 8;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .team {
+        padding: 22px 0 20px 0;
+        display: flex;
+        align-items: center;
+      }
+      .team_name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 3px;
+      }
+      .tagTitle {
+        color: rgba(119, 119, 119, 1);
+        font-size: 12px;
+        font-weight: 400;
+      }
+      .tagContnet {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 15px 0;
+      }
+      .tagText {
+        font-size: 12px;
+      }
+      .tagItem {
+        color: rgba(170, 170, 170, 1);
+        font-size: 14px;
+        padding: 4.5px 15px;
+        border-radius: 15px;
+        border: 1px solid rgba(204, 204, 204, 1);
+        margin-right: 10px;
+        margin-bottom: 5px;
+      }
+      .tagItem.active{
+        color:rgba(215,171,0,1);
+        background:rgba(245,243,236,1);
+        border: none;
+      }
+      .buttonContent {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .comment {
+        padding: 0 15px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        border-radius: 15px;
+        border: 1px solid rgba(255, 204, 3, 1);
+        color: rgba(255, 204, 3, 1);
+        font-size: 12px;
+      }
+      .startsContet {
+        display: flex;
+        margin-right: 12px;
+      }
+      .starts {
+        width: 22px;
+        height: 22px;
+        margin-right: 3px;
+      }
+      /* 弹框 */
+      .pup {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 999;
+        display: none;
+      }
+      /* 弹框 */
+      .tip {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 999;
+        display: none;
+      }
+      /* 弹框 */
+      .link {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 999;
+        display: none;
+      }
+      .tipContent {
+        width: 80%;
+        z-index: 99999;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(255, 255, 255, 1);
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.24);
+        border-radius: 12px;
+        padding: 20px 0 15px 0;
+      }
+
+      .mask {
+        width: 100%;
+        height: 100%;
+        background: rgba(51, 51, 51, 0.3);
+        z-index: 999999;
+      }
+
+      .pupContent {
+        width: 80%;
+        z-index: 99999;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(255, 255, 255, 1);
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.24);
+        border-radius: 12px;
+        padding: 20px 0 15px 0;
+      }
+      .tag-title {
+        font-size:16px;
+        font-family:PingFangSC-Regular,PingFang SC;
+        font-weight:400;
+        color:rgba(40,40,40,1);
+        line-height:16px;
+      }
+      .tag-content {
+        margin: 10px 0 20px 0;
+        text-align: center;
+        font-size:14px;
+        font-family:PingFangSC-Regular,PingFang SC;
+        font-weight:400;
+        color:rgba(119,119,119,1);
+        line-height:20px;
+      }
+      #input {
+        /* outline: none; */
+        width: 277px;
+        height: 33px;
+        border-radius:17px;
+        border:1px solid rgba(119,119,119,1);
+        padding-left: 15px;
+      }
+      .link-input {
+        /* width: 277px; */
+        height: 33px;
+        border-radius:17px;
+        border:1px solid rgba(119,119,119,1);
+        padding-left: 15px;
+      }
+      .button {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 10px;
+      }
+      .cancleClick,
+      .addClick {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size:16px;
+        font-family:PingFangSC-Regular,PingFang SC;
+        font-weight:400;
+        color:rgba(40,40,40,1);
+        line-height:22px;
+      }
+      .addClick {
+        width:90px;
+        height:38px;
+        background:linear-gradient(126deg,rgba(255,232,7,1) 0%,rgba(255,204,3,1) 100%);
+        border-radius:19px;
+      }
+      .cancleClick {
+        width:90px;
+        height:38px;
+        background:rgba(234,234,234,1);
+        border-radius:19px;
+      }
+      .title-input {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 2px 15px;
+        border: none;
+        border-bottom: 0.5px #F2F2F2 solid;
+        height: 32px;
+        font-size:16px;
+        font-family:PingFangSC-Regular,PingFang SC;
+        font-weight:400;
+        color:rgba(170,170,170,1);
+        line-height:16px;
+      }
+      .editor {
+        box-sizing: border-box;
+        width:100%;
+        line-height:24px;
+        padding: 15px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        outline:0;
+
+        font-size:16px;
+        font-family:PingFangSC-Regular,PingFang SC;
+        font-weight:400;
+        color:rgba(170,170,170,1);
+      }
+      .editor:empty::before {
+        content: attr(placeholder);
+      }
+      .editor img {
+        display: block;
+        max-width: 300px;
+      }
+      .bottom {
+        width: 100%;
+        height: 53px;
+        line-height: 53px;
+        background-color: #fff;
+        /* text-align: center; */
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app" style="height: 100%; width: 100%">
+      <div class="header">
+        <div class="headerMain">
+          <img src="img/icon-arrow_left.png" alt="" class="callBackBtn" @click="handleGoBack()" />
+          <span style="color:rgba(51,51,51,1);font-weight:500;">写评论</span>
+          <div class="release" @click="handleSubmit()">发布</div>
+        </div>
+      </div>
+      <!-- 主要部分 -->
+      <div class="main" id="main">
+        <div class="mainAbout">
+          <div class="team">
+            <img src="" alt="" class="logo" />
+            <div class="aboutName">
+              <div class="team_name">王者荣耀</div>
+              <div style="display: flex;align-items: center;">
+                <div class="startsContet">
+                </div>
+                <span style="color: rgba(255, 204, 3, 1)">推荐</span>
+              </div>
+            </div>
+          </div>
+          <!-- 标签 -->
+          <div class="tag">
+            <div class="tagTitle">为游戏打标签</div>
+            <div class="tagContnet"></div>
+
+            <div class="buttonContent">
+              <div class="change comment" @click="changeTag()">换一换</div>
+              <div class="addTag comment">
+                <img src="img/icon-plus.png" style="width: 10px;height: 10px;margin-right: 5px;" alt="" />新标签
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 30px">
+          <input id="title" class="title-input" type="text" placeholder="快设置一个吸引人的标题吧~" maxlength="20" />
+          <div id="editor" class='editor' contenteditable placeholder='来评价评价这个游戏吧~'></div>
+        </div>
+      </div>
+
+      <div class="bottom">
+        <Upload
+          ref="upload"
+          :data="{ token: qiniuToken }"
+          action="https://upload-z2.qiniup.com/"
+          :show-upload-list="false"
+          :format="['jpg','jpeg','png']"
+          :on-success="handleSuccess"
+          :on-format-error="handleFormatError"
+          style="display: inline-block;width:58px;">
+          <div>
+            <img @click="handleSelectImg" id="uploadImage" class="upload" src="img/icon-pic.png" alt="" style="width: 25px; height: 25px; vertical-align: middle; margin-left: 15px;" />
+          </div>
+        </Upload>
+        <img class="link-btn" src="img/icon-link.png" alt="" style="width: 25px; height: 25px; vertical-align: middle; margin-left: 35px;" />
+      </div>
+      <!-- 添加标签弹框 -->
+      <div class="pup">
+        <div class="mask"></div>
+        <div class="pupContent">
+          <div style="display: flex;justify-content: center;flex-direction: column;align-items: center;">
+            <p class="tag-title">添加标签</p>
+            <div class="tag-content">请输入你想添加的标签名称<br />最多10个字</div>
+            <input id="input" type="text" placeholder="标签" maxlength="10" />
+          </div>
+          <div class="button">
+            <span class="cancleClick" @click="handleCloseTag()">取消</span>
+            <span class="addClick" @click="handleAddTag()">确定</span>
+          </div>
+        </div>
+      </div>
+      <!-- 添加链接弹框 -->
+      <div class="link">
+        <div class="mask"></div>
+        <div class="pupContent">
+          <div style="display: flex;justify-content: center;flex-direction: column;align-items: center;">
+            <p class="tag-title">添加标签</p>
+            <div style="box-sizing: content-box; display: flex; justify-content: space-around; margin: 15px 0 0">
+              <span style="line-height: 35px;">链接名称：</span>
+              <input class="link-input link-name" type="text" placeholder="名称会替代链接展示" maxlength="10" />
+            </div>
+            <div style="box-sizing: content-box; display: flex; justify-content: space-between; margin: 15px 0">
+              <span style="line-height: 35px;">链接地址：</span>
+              <input class="link-input link-address" type="text" placeholder="请输入链接地址" />
+            </div>
+          </div>
+          <div class="button">
+            <span class="cancleClick" @click="handleCloseLink()">取消</span>
+            <span class="addClick" @click="handleAddLink()">确定</span>
+          </div>
+        </div>
+      </div>
+      <!-- 错误提示框 -->
+      <div class="tip">
+        <div class="mask"></div>
+        <div class="tipContent">
+          <div style="display: flex;justify-content: center;flex-direction: column;align-items: center;">
+            <p class="tipWord"></p>
+          </div>
+          <div class="button">
+            <span class="addClick" @click="closeModal()">确定</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+<script src="./js/vue.min.js"></script>
+<script src="./js/iview.min.js"></script>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/service.js"></script>
+<script src="../public/config.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script>
+    var baseUrl = 'http://192.168.1.241/tinytiger_app/public/index.php/'
+    var baseImgUrl =  "https://cdn.tinytiger.cn/"
+
+    var config = {
+      token: Request('token') || '4131141c2bebbcd4f45d3aef1e81082f',
+      qiniuUrl: 'Common/getQiniuToken',
+      tagUrl: 'GameAssess/addView',
+      addAssessUrl: 'GameAssess/addAssess',
+      type: 'get',
+      tags: [],
+      allTags: [],
+      newTags: [],
+      qiniuToken: '',
+      addAssessData: {
+        game_id: Request('id') || 2
+      }
+    }
+    
+    var lastEditRange
+
+    new Vue({
+      el: "#app",
+      data: {
+        qiniuToken: '',
+      },
+      mounted() {
+        this.getQiniuToken()
+        this.getTagList()
+      },
+      methods: {
+        handleSelectImg() {
+          alert('click')
+          if (browser.versions.android) {
+            window.titi_js.callAlbum()
+          } 
+        },
+        handleSubmit() {
+          if(this.checkWords(document.getElementById('editor').innerHTML)) {
+            this.addAssess()
+          }
+        },
+        handleSuccess(res) {
+          var editor = document.getElementById('editor')
+          if(editor.innerHTML.split('<img').length - 1 >= 9) {
+            $('.tip').show()
+            $('.tipWord').html('最多上传9张图片')
+            return false
+          }
+          editor.focus()
+          // 获取选定对象
+          var selection = getSelection()
+          // 判断是否有最后光标对象存在
+          if (lastEditRange) {
+            // 存在最后光标对象，选定对象清除所有光标并添加最后光标还原之前的状态
+            selection.removeAllRanges()
+            selection.addRange(lastEditRange)
+          }
+          document.execCommand('insertHTML', false, `<img src=${baseImgUrl + res.key} /><p>&nbsp;&nbsp;</p>`)
+          lastEditRange = selection.getRangeAt(0)
+          // var ele = document.getElementById('main')
+          // ele.scrollTop = ele.scrollHeight
+        },
+        handleFormatError() {
+          $('.tip').show()
+          $('.tipWord').html('请选择图片')
+        },
+        checkWords(description) {
+          description = description.replace(/(\n)/g, "")
+          description = description.replace(/(\t)/g, "")
+          description = description.replace(/(\r)/g, "")
+          description = description.replace(/<\/?[^>]*>/g, "")
+          description = description.replace(/\s*/g, "")
+          description = description.replace(/&nbsp;/g, "")
+          if(description.length < 100 || description.length > 1000) {
+            $('.tip').show()
+            $('.tipWord').html('请输入100到1000个文字')
+            return false
+          }
+          return true
+        },
+        changeTag() {
+          config.tags = this.makeRandomArr(config.allTags, 10)
+          this.renderTagHtml()
+        },
+        tagClick(data) {
+          if(document.getElementsByClassName('active').length >= 5 && !data.selected) {
+            $('.tip').show()
+            $('.tipWord').html('最多选择5个')
+            return
+          }
+          config.tags.forEach(i => {
+            if(i.name === data.name) {
+              i.selected = !i.selected
+            }
+          })
+          config.newTags.forEach(i => {
+            if(i.name === data.name) {
+              i.selected = !i.selected
+            }
+          })
+          this.renderTagHtml()
+        },
+        renderTagHtml() {
+          var list = ''
+          var tags = config.tags.concat(config.newTags)
+          tags.forEach((item, index) => {
+            list += `<div class="tagItem ${'tagItem' + index} ${item.selected ? 'active' : ''}"># <span class="tagText">${item.name}</span></div>`
+          })
+          $(".tagContnet").html(list)
+          tags.forEach((item, index) => {
+            $(".tagItem" + index).on('click', () => {
+              this.tagClick(item)
+            })
+          })
+        },
+
+        addAssess() {
+          var tagData = {
+            new_tag: [],
+            old_tag: []
+          }
+          config.allTags.forEach(i => {
+            if(i.selected) tagData.old_tag.push(i.id)
+          })
+          config.newTags.forEach(i => {
+            if(i.selected) tagData.new_tag.push(i.name)
+          })
+          const data = {
+            tag_info: JSON.stringify(tagData),
+            title: $('#title').val(),
+            content: document.getElementById('editor').innerHTML,
+            ...config.addAssessData
+          }
+          requsetHttp(config.addAssessUrl, 'post', data, config.token, (res) => {
+            if (res.code == 200) {
+              // callComplete()
+              if (browser.versions.android) {
+                window.titi_js.callComplete();
+              } else if (browser.versions.iPhone || browser.versions.iPad) {
+                window.webkit.messageHandlers.callComplete.postMessage(null);
+              }
+            } else {
+              $('.tip').show()
+              $('.tipWord').html(res.msg)
+            }
+          })
+        },
+        makeRandomArr(arrList, num){
+          // var tempArr = arrList.concat()
+          var tempArr = arrList.slice(0)
+          var newArrList = []
+          if(num > arrList.length){
+            return tempArr
+          }
+          for(var i = 0; i < num; i++){
+            var random = Math.floor(Math.random()*(tempArr.length-1))
+            var arr = tempArr[random]
+            tempArr.splice(random, 1)
+            newArrList.push(arr)
+          }
+          return newArrList
+        },
+        handleAddLink() {
+          var editor = document.getElementById('editor')
+          const name = $('.link-name').val()
+          const address = $('.link-address').val()
+          if(name && address) {
+            if(address.indexOf('tinytiger.cn') > -1) {
+              editor.focus()
+              // 获取选定对象
+              var selection = getSelection()
+              // 判断是否有最后光标对象存在
+              if (lastEditRange) {
+                // 存在最后光标对象，选定对象清除所有光标并添加最后光标还原之前的状态
+                selection.removeAllRanges()
+                selection.addRange(lastEditRange)
+              }
+              document.execCommand('insertHTML', false, `<a href=${address}>${name}</a>`)
+              lastEditRange = selection.getRangeAt(0)
+              $('.link').hide()
+            } else {
+              $('.tip').show()
+              $('.tipWord').html('网址错误')
+            }
+          } else {
+            $('.tip').show()
+            $('.tipWord').html('请输入链接名称和链接地址')
+          }
+        },
+        handleAddTag() {
+          if(config.newTags.length >= 5) {
+            $('.tip').show()
+            $('.tipWord').html('最多添加5个标签')
+            return
+          }
+          var ifHas = false
+          const newTagName = $("#input").val()
+          if(newTagName.trim() === '') {
+            $('.tip').show()
+            $('.tipWord').html('请输入')
+            return
+          }
+          config.allTags.forEach(i => {
+            if(i.name === newTagName) {
+              ifHas = true
+              return
+            }
+          })
+          if(ifHas) {
+            $('.tip').show()
+            $('.tipWord').html('已存在的标签')
+            return
+          }
+          $(".pup").hide()
+          config.newTags.push({name: newTagName, selected: false})
+          $("#input").val('')
+          this.renderTagHtml()
+        },
+        handleGoBack() {
+          alert(0)
+          // callBack()
+          if (browser.versions.android) {
+            window.titi_js.callBack();
+          } else if (browser.versions.iPhone || browser.versions.iPad) {
+            window.webkit.messageHandlers.callBack.postMessage(null);
+          }
+        },
+        getTagList() {
+          requsetHttp(config.tagUrl, config.type, {game_id: Request('id')|| 2}, config.token, (res) => {
+            if (res.code == 200) {
+              $('.logo').attr("src", res.data.logo)
+              config.allTags = res.data.game_tag.map(item => {
+                return {
+                  ...item,
+                  selected: false
+                }
+              })
+              config.tags = this.makeRandomArr(config.allTags, 10)
+              this.renderTagHtml()
+            }
+          })
+        },
+        getQiniuToken() {
+          requsetHttp(config.qiniuUrl, config.type, {}, config.token, (res) => {
+            if (res.code == 200) {
+              this.qiniuToken = res.data.qiniu_token
+            }
+          })
+        }
+      }
+    })
+    grade()
+    function grade(score = 5) {
+      config.addAssessData.score = score
+      var starts = ''
+      for (let i = 0; i < 5; i++) {
+        if(i < score) {
+          starts += `<img class="starts star${i}" src="img/icon-start_active.png" alt="" onclick="grade(${i+1})" />`
+        } else {
+          starts += `<img class="starts star${i}" src="img/icon-star_default.png" alt="" onclick="grade(${i+1})" />`
+        }   
+      }
+      $('.startsContet').html(starts)
+    }
+
+    $('.link-btn').click(function() {
+      $('.link').show()
+    })
+
+    // 编辑框点击事件
+    document.getElementById('editor').onclick = function() {
+      // 获取选定对象
+      var selection = getSelection()
+      // 设置最后光标对象
+      lastEditRange = selection.getRangeAt(0)
+    }
+    document.getElementById('editor').onkeyup = function() {
+      // 获取选定对象
+      var selection = getSelection()
+      // 设置最后光标对象
+      lastEditRange = selection.getRangeAt(0)
+    }
+
+    function closeModal() {
+      $(".tip").hide()
+    }
+
+    function handleCloseTag() {
+      $(".pup").hide()
+    }
+
+    function handleCloseLink() {
+      $(".link").hide()
+    }
+    
+    $(".addTag").click(function () {
+      $(".pup").show()
+    })
+    function getImgUrl(data) {
+      var editor = document.getElementById('editor')
+      if(editor.innerHTML.split('<img').length - 1 >= 9) {
+        $('.tip').show()
+        $('.tipWord').html('最多上传9张图片')
+        return false
+      }
+      editor.focus()
+      // 获取选定对象
+      var selection = getSelection()
+      // 判断是否有最后光标对象存在
+      if (lastEditRange) {
+        // 存在最后光标对象，选定对象清除所有光标并添加最后光标还原之前的状态
+        selection.removeAllRanges()
+        selection.addRange(lastEditRange)
+      }
+      document.execCommand('insertHTML', false, `<img src=${baseImgUrl + data.img} /><p>&nbsp;&nbsp;</p>`)
+      lastEditRange = selection.getRangeAt(0)
+    }
+</script>

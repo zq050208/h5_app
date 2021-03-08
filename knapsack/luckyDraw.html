@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title></title>
+    <link href="css/luckyDraw.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="drawBack">
+        <div class="drawTop">
+            <img class="close" style="height:11px; width:11px;" src="https://cdn.tinytiger.cn/icon-grayClose.png" />
+            <div style="width:80%; height:27px; overflow:hidden;">
+                <div class="drawTabOpacity">
+                </div>
+                <div class="drawTab">
+                    <div class="luxuryOrLucky" data-tab="1" style="width:50%; height:27px; overflow:hidden;">
+                        <div id="luxuryOpacity" class="drawSelectItem"></div>
+                        <div id="luxuryText" class="selectItem">豪华转盘</div>
+                    </div>
+                    <div class="luxuryOrLucky" data-tab="2" style="width:50%; height:27px; overflow:hidden;">
+                        <div id="luckyOpacity" class="drawitem"></div>
+                        <div id="luckyText" class="draw">幸运转盘</div>
+                    </div>
+                </div>
+            </div>
+            <img class="refresh" style="height:13px; width:13px;" src="https://cdn.tinytiger.cn/icon-refresh.png" />
+        </div>
+        <div class="inform">
+            <div class="notices">
+                <img style="width:12px;height:10px;margin-right: 10px;" src="https://cdn.tinytiger.cn/icon-inform.png" />
+                <div class="notice">
+
+                </div>
+            </div>
+            <div class="rules" style="padding: 10px 0;">
+
+            </div>
+        </div>
+
+        <div class="wheelDisc">
+
+        </div>
+        <div class="footer" style="width: 100%;position:absolute;bottom:0px;">
+            <div class="numberSecurities"></div>
+
+            <div style="margin:0 4%;width:92%;height:1px;background:rgba(183,183,210,1);opacity:0.1;"></div>
+            <div class="bottom">
+                <div class="navigation" data-bottomtab="1">
+                    <img style="width:13px;height:15px;margin-right:7px;" src="https://cdn.tinytiger.cn/icon-myBackpack.png" /><span>我的背包</span>
+                </div>
+                <div class="navigation" data-bottomtab="2">
+                    <img style="width:15px;height:15px;margin-right:7px;" src="https://cdn.tinytiger.cn/icon-ranking.png" /><span>排行榜</span>
+                </div>
+                <div class="navigation" data-bottomtab="3">
+                    <img style="width:17px;height:17px;margin-right:7px;" src="https://cdn.tinytiger.cn/icon-invite.png" /><span>邀请好友</span>
+                </div>
+            </div>
+        </div>
+
+
+        <div id="showModel">
+        </div>
+
+
+        <!--底部分享栏-->
+        <div id="shareType" class="share-mask">
+            <footer>
+                <div class="share" data-sharetype="WeChat"><img src="image/invite-WeChat.png" /><span>微信</span></div>
+                <div class="share" data-sharetype="discover"><img src="image/invite-discover.png" /><span>朋友圈</span></div>
+                <div class="share" data-sharetype="QQ"><img src="image/invite-QQ.png" /><span>QQ</span></div>
+                <div class="share copylink" data-sharetype="link"><img src="image/invite-link.png" /><span>复制链接</span></div>
+            </footer>
+            <div class="footer_mask"></div>;
+
+        </div>
+        <div class="draw_mask"></div>;
+    </div>
+</body>
+</html>
+
+
+<script src="../public/jquery.min.js"></script>
+
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+<script src="js/jquery-1.11.0.js"></script>
+<script src="js/jQueryRotate.2.2.js"></script>
+<script src="js/jquery.easing.min.js"></script>
+<!--<script src="js/jquery.rotate.min.js"></script>-->
+<script src="js/luckyDraw.js"></script>

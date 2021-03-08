@@ -1,0 +1,162 @@
+html,body{
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    font-family: PingFangSC;
+    background: #0A0100;
+    color: #ffffff;
+}
+.page{
+    width: 100%;
+    position: relative;
+}
+header{
+    position: absolute;
+    width: 100%;
+    height: 110vw;
+    background: url('../img/icon-header-bg.png') no-repeat center/cover;
+}
+.flex-box{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.flex-1{
+    flex: 1;
+}
+.flex-2{
+    flex: 2;
+}
+.flex-3{
+    flex: 3;
+}
+.flex-9{
+    flex: 9;
+}
+.black{
+    color: #000000!important;
+}
+.orange{
+    color: #D5B480!important;
+}
+.liver{
+    color: #BDB687!important;
+}
+.bold{
+    font-family: PingFangSC-Medium;
+}
+
+.theme img{
+    width: 100%;
+}
+
+.steps img{
+    margin-top: 35px;
+    margin-bottom: 20px;
+    width: 50%;
+}
+
+.award-main{
+    flex-direction: column;
+}
+.award-wrap{
+    background: url('../img/icon-frame-big.png')no-repeat;
+    background-size: contain;
+    width: 90%;
+    height: 21vw;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+.award-left{
+    flex-direction: column;
+}
+.award-right span{
+    font-size: 18px;
+}
+.award-name{
+    font-size: 12px;
+}
+.award-num{
+    font-size: 16px;
+}
+.manner{
+    flex-wrap: wrap;
+}
+.manner-title{
+    width: 100%;
+    align-items: flex-start;
+}
+.manner-title-image{
+    flex: 1;
+    flex-direction: column;
+}
+.manner-title-image img{
+    width: 50%;
+}
+.manner-title-txt{
+
+}
+.manner-content{
+    width: 100%;
+    flex-wrap: wrap;
+    margin: 10px 0;
+}
+.manner-content:before{
+    content: '';
+    height: 100%;
+    border-left: 1px dashed #F8E5BA;
+    position: absolute;
+    left: 5%;
+}
+.manner-item{
+    width: 100%;
+    flex-wrap: wrap;
+}
+.manner-item-box{
+    height: 10vw;
+    background: url('../img/icon-frame-small.png') no-repeat;
+    background-size: contain;
+}
+.decs{
+    /*max-height: 200px;*/
+    overflow: auto;
+    padding-right: 5%;
+    white-space: pre-wrap;
+    justify-content: flex-start !important;
+}
+.enter-user{
+    overflow: auto;
+}
+.enter-content{
+    width: 85%;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    justify-content: flex-start !important;
+}
+.enter-content img{
+    width: 100%;
+    border-radius: 50%;
+}
+.flex-ratio{
+    flex: 0 0 16.67%;
+    margin-right: 2px;
+}
+.more{
+    position:absolute;
+    right: 3%;
+}
+footer{
+    flex-direction: column;
+    margin-top: 35px;
+}
+footer .text{
+    margin: 10px 0 40px 0
+}
+.apply{
+    width: 90%;
+    height:13vw;
+    background: url('../img/icon-btn.png')no-repeat;
+    background-size: contain;
+    font-size: 20px;
+}

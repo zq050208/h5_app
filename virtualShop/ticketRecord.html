@@ -1,0 +1,363 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,viewport-fit=cover, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title>兑换记录</title>
+    <link rel="stylesheet" href="../public/mescroll.min.css">
+    <style>
+        body {
+            padding-left: 4vw;
+            padding-right: 4vw;
+            padding-bottom: constant(safe-area-inset-bottom);
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        .mescroll {
+            position: fixed;
+            width: 92vw;
+            top: 24px;
+            bottom: 0;
+            height: auto; /*如设置bottom:50px,则需height:auto才能生效*/
+        }
+
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .main {
+        }
+
+        .item {
+            margin-top: 4vw;
+            width: 92vw;
+            box-shadow: 0px 1px 0px 0px rgba(221,221,221,1);
+            padding-bottom: 13px;
+        }
+
+        .itemtop {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            flex-direction: row;
+        }
+
+        .itemtopimg img {
+            width: 26.6vw;
+            height: 18.9vw;
+            background: rgba(245,246,247,1);
+            border: 1px solid rgba(245,246,247,1);
+        }
+
+        .itemtopimg {
+            width: 26.6vw;
+            height: 18.9vw;
+        }
+
+        .itemtoptitle {
+            width: 62vw;
+        }
+
+            .itemtoptitle > p {
+                font-size: 14px;
+                font-family: PingFangSC-Medium;
+                font-weight: 500;
+                color: rgba(37,39,42,1);
+                line-height: 16px;
+            }
+
+        .pricenum {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            flex-direction: row;
+        }
+
+        .font {
+            font-size: 12px;
+            font-family: PingFangSC-Regular;
+            font-weight: 400;
+            color: rgba(153,153,153,1);
+            line-height: 16px;
+            margin: 5px 0;
+        }
+
+        .price {
+            margin-left: 5px;
+            font-size: 14px;
+            font-family: PingFangSC-Medium;
+            font-weight: 500;
+            color: rgba(242,79,79,1);
+        }
+
+        .redeemcode {
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            flex-direction: row;
+            font-size: 14px;
+            font-family: PingFangSC-Regular;
+            color: #25272A;
+        }
+
+        .memo {
+            font-size: 14px;
+            font-family: PingFangSC-Regular;
+            font-weight: 400;
+            color: rgba(153,153,153,1);
+            line-height: 21px;
+            padding-bottom: 15px;
+        }
+
+        .copy {
+            color: #006BBB;
+            margin-right: 15px;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+
+        .downwarp-tip, upwarp-tip {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .statediv {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            flex-direction: row;
+            font-size: 14px;
+            font-family: PingFangSC-Medium;
+            font-weight: 500;
+            color: rgba(37,39,42,1);
+            line-height: 16px;
+        }
+
+        .statediv1 {
+            width: 65%;
+        }
+
+        .statediv2 {
+            width: 32%;
+            text-align: center;
+            font-size: 14px;
+            font-family: PingFangSC-Medium;
+            font-weight: 500;
+            color: rgba(255,148,0,1);
+            line-height: 16px;
+        }
+
+        .statediv3 {
+            width: 32%;
+            text-align: center;
+            font-size: 14px;
+            font-family: PingFangSC-Regular;
+            font-weight: 400;
+            color: rgba(153,153,153,1);
+            line-height: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div id="mescroll" class="mescroll">
+        <div>
+            <div class="main">
+            </div>
+        </div>
+    </div>
+
+    <script src="../public/jquery.min.js"></script>
+    <script src="../public/mescroll.min.js"></script>
+    <script src="../public/config.js"></script>
+    <script src="../public/service.js"></script>
+    <script>
+        var token = '';
+        var shopping_type = '';
+        var currentPage = 1;
+        var mescroll = new MeScroll("mescroll", { //第一个参数"mescroll"对应上面布局结构div的id
+            //如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考第一个基础案例
+            //解析: down.callback默认调用mescroll.resetUpScroll(),而resetUpScroll会将page.num=1,再触发up.callback
+            down: {
+                auto: false,
+                callback: downCallback //下拉刷新的回调,别写成downCallback(),多了括号就自动执行方法了
+            },
+            up: {
+                isBounce: false,
+                callback: upCallback //上拉加载的回调
+            }
+        });
+        window.onload = function () {
+            var argsFromPageA = args();
+            console.log(argsFromPageA);
+            // 打印a页面传递来的参数
+            if (argsFromPageA) {
+                if (argsFromPageA.token) {
+                    token = argsFromPageA.token;
+                }
+                if (argsFromPageA.shopping_type) {
+                    shopping_type = argsFromPageA.shopping_type;
+                }
+            }
+            var config = {
+                gameInfoUrl: 'VirtualMallController/exchangeList',
+                type: 'post',
+                token: token,
+                data: {
+                    page: currentPage,
+                    is_send: 0,
+                }
+            };
+            RequsetHttp(config.gameInfoUrl, config.type, config.token, config.data, function (res) {
+
+                if (res.code == 200) {
+                    var prizecount = res.data.list.length;
+                    var html = '';
+                    for (var i = 0; i < prizecount; i++) {
+                        var state = res.data.list[i].order_status == "未兑奖" ? 'statediv2' : 'statediv3'
+                        html += ` <div class="item">
+                                                                <div class="itemtop">
+                                                                    <div class="itemtopimg"><img src='`+ res.data.list[i].cover_map + `' /></div>
+                                                                    <div class="itemtoptitle">
+                                                                        <div class=statediv>
+                                                                          <div class='statediv1'>`+ res.data.list[i].goods_name + `</div>`
+                        html += `<div  class='` + state + `'>` + res.data.list[i].order_status + `</div>`
+                        html += ` </div>
+                                                                        <div class="pricenum font">
+                                                                            <div>价格</div> <div class="price">`+ parseInt(res.data.list[i].amount) + `铜钱</div>  <div style="margin-left:20px;">数量</div> <div style="margin-left:5px;">` + parseInt(res.data.list[i].pay_number) + `</div>
+                                                                        </div>
+                                                                        <div class="font">申请时间：`+ res.data.list[i].pay_time + `</div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>`;
+                    }
+                    //mescroll.endSuccess(); //无参
+                    mescroll.endByPage(res.data.list.length, res.data.page.totalPage);
+
+                    $('.main').html(html);
+                } else {
+                    mescroll.endErr();
+                }
+            });
+        };
+
+        function args(params) {
+            var a = {};
+            params = params || location.search;
+            if (!params) return {};
+            params = decodeURI(params);
+            params.replace(/(?:^\?|&)([^=&]+)(?:\=)([^=&]+)(?=&|$)/g, function (m, k, v) { a[k] = v; });
+            return a;
+        };
+
+
+
+        //下拉刷新的回调
+        function downCallback() {
+
+            if (token) {
+                currentPage = 1;
+                var config = {
+                    gameInfoUrl: 'VirtualMallController/exchangeList',
+                    type: 'post',
+                    token: token,
+                    data: {
+                        page: currentPage,
+                        is_send: 0,
+                    }
+                };
+                RequsetHttp(config.gameInfoUrl, config.type, config.token, config.data, function (res) {
+                    if (res.code == 200) {
+
+                        var prizecount = res.data.list.length;
+                        var html = '';
+
+                        for (var i = 0; i < prizecount; i++) {
+                            var state = res.data.list[i].order_status == "未兑奖" ? 'statediv2' : 'statediv3'
+                            html += ` <div class="item">
+                                                                <div class="itemtop">
+                                                                    <div class="itemtopimg"><img src='`+ res.data.list[i].cover_map + `' /></div>
+                                                                    <div class="itemtoptitle">
+                                                                        <div class=statediv>
+                                                                          <div class='statediv1'>`+ res.data.list[i].goods_name + `</div>`
+                            html += `<div  class='` + state + `'>` + res.data.list[i].order_status + `</div>`
+                            html += ` </div>
+                                                                        <div class="pricenum font">
+                                                                            <div>价格</div> <div class="price">`+ parseInt(res.data.list[i].amount) + `铜钱</div>  <div style="margin-left:20px;">数量</div> <div style="margin-left:5px;">` + parseInt(res.data.list[i].pay_number) + `</div>
+                                                                        </div>
+                                                                        <div class="font">申请时间：`+ res.data.list[i].pay_time + `</div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>`;
+                        }
+                        mescroll.endSuccess(); //无参
+                        mescroll.optUp.page.num = 1;
+                        mescroll.endByPage(prizecount, res.data.page.totalPage);
+
+                        $('.main').html(html);
+                    } else {
+                        mescroll.endErr();
+                    }
+                });
+            }
+        }
+
+        //上拉加载的回调 page = {num:1, size:10}; num:当前页 默认从1开始, size:每页数据条数,默认10
+        function upCallback(page) {
+            if (token) {
+                if (page.num > currentPage) {
+                    var config = {
+                        gameInfoUrl: 'VirtualMallController/exchangeList',
+                        type: 'post',
+                        token: token,
+                        data: {
+                            page: page.num,
+                            is_send: 0,
+                        }
+                    };
+                    RequsetHttp(config.gameInfoUrl, config.type, config.token, config.data, function (res) {
+                        if (res.code == 200) {
+                            var prizecount = res.data.list.length;
+                            var html = '';
+                            var codehtml = '';
+                            currentPage = res.data.page.page;
+
+                            for (var i = 0; i < prizecount; i++) {
+                                var state = res.data.list[i].order_status == "未兑奖" ? 'statediv2' : 'statediv3'
+                                html += ` <div class="item">
+                                                                <div class="itemtop">
+                                                                    <div class="itemtopimg"><img src='`+ res.data.list[i].cover_map + `' /></div>
+                                                                    <div class="itemtoptitle">
+                                                                        <div class=statediv>
+                                                                          <div class='statediv1'>`+ res.data.list[i].goods_name + `</div>`
+                                html += `<div  class='` + state + `'>` + res.data.list[i].order_status + `</div>`
+                                html += ` </div>
+                                                                        <div class="pricenum font">
+                                                                            <div>价格</div> <div class="price">`+ parseInt(res.data.list[i].amount) + `铜钱</div>  <div style="margin-left:20px;">数量</div> <div style="margin-left:5px;">` + parseInt(res.data.list[i].pay_number) + `</div>
+                                                                        </div>
+                                                                        <div class="font">申请时间：`+ res.data.list[i].pay_time + `</div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>`;
+                            }
+                            //mescroll.endSuccess(res.data.list.length);
+                            mescroll.endByPage(res.data.list.length, res.data.page.totalPage);
+                            $('.main').append(html);
+                        } else {
+                            mescroll.endErr();
+                        }
+                    });
+                }
+
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,301 @@
+*,html,body{
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+}
+p{
+    margin: 0 !important;
+}
+.page{
+    width: 100%;
+    min-height: 100%;
+    position: absolute;
+    background:url('../img/icon-bg.jpg') repeat;
+    background-size: 10px 11px;
+}
+.steps{
+    text-align: center;
+    margin: 0 7px;
+    background-image: url("../img/icon-crown-bg.png");
+    background-size: 100%;
+    background-position: 0 95px;
+    background-position-x: 0;
+    background-position-y: 95px;
+    background-repeat: no-repeat;
+    color: #ffffff;
+}
+.steps .lump{
+    display: inline-block;
+    margin-right: -3px;
+}
+
+.list img{
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+    border-radius: 100%;
+    vertical-align:middle;
+}
+.axis{
+    padding: 10px 0;
+    border-bottom: .5px solid #DA4D49;
+}
+
+.axis span{
+    vertical-align: middle;
+}
+
+.axis:last-child{
+    border-bottom: none;
+}
+.footer{
+    position: fixed;
+    width: 100%;
+    height: 60px;
+    bottom: 0;
+    padding: 10px 15px;
+    background: #E56865;
+    color: #ffffff;
+    box-shadow: 0 0 10px 0 #D54745;
+}
+.footer img{
+    width: 40px;
+    height: 40px;
+    display: block;
+    border-radius: 100%;
+    vertical-align:middle;
+}
+.footer p{
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+.flower{
+    position: relative;
+}
+#step1{
+    width: 70px;
+    height: 70px;
+    border-radius: 100%;
+    border:3px solid #F9A7A4;
+    box-shadow: 1px 1px 2px 1px #D54745;
+}
+#step2, #step3{
+    width: 57.5px;
+    height: 57.5px;
+    border-radius: 100%;
+    border:3px solid #F9A7A4;
+    box-shadow: 1px 1px 2px 1px #D54745;
+}
+
+#lump1{
+    width: 35%;
+    height:300px;
+}
+#lump2{
+    width: 32.5%;
+    top: 60px;
+    position: relative;
+}
+#lump3{
+    width: 32.5%;
+    top: 90px;
+    position: relative;
+}
+
+.flower-left{
+    left: -3px;
+}
+.flower-right{
+    right: -3px;
+}
+.name{
+    position: relative;
+    max-width: 100px;
+    top: 5px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    vertical-align: middle;
+    top: 2px;
+}
+.time{
+    font-size: 12px;
+    color: #F9A7A4;
+}
+.time span{
+    color: #ffffff;
+}
+.send-btn{
+    float: right;
+}
+.send-btn,.apply{
+    padding: 8px 20px;
+    margin-top: 2px;
+    background: #FFD61E;
+    border-radius: 20px;
+    color: #9C580E;
+}
+.sum{
+    font-weight: bold;
+}
+.apply{
+    display: inline-block;
+    text-align: center;
+}
+.ranking-list{
+    padding: 15px;
+    margin-top: -70px;
+    color: #ffffff;
+    display: none;
+}
+.list{
+    padding: 15px ;
+    border-radius: 20px;
+    background: #E76C69;
+    box-shadow: 0 0 10px 0 #D54745;
+}
+.fake{
+    display: none;
+    height: 65px;
+    width: 100%
+}
+.num{
+    padding-left: 5px;
+    padding-right: 10px;
+    width: 35px;
+    display: inline-block;
+}
+.axis-name{
+    max-width: 120px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    margin-left: 5px;
+}
+.axis-time{
+    position: relative;
+    float: right;
+    top: 10px;
+}
+
+.know-btn{
+    background: #FFD61E;
+    color: #9C580E;
+}
+
+.modal-body img{
+    width: 56px;
+    margin: 30px 0 20px 0;
+}
+
+.text{
+    color: #999999;
+}
+
+.rule{
+    float: right;
+    margin-right: 15px;
+    margin-top: 15px;
+}
+
+.ruletext{
+    margin-bottom: 5px!important;
+    color: #999999;
+}
+
+.modal-dialog{
+    margin: 30px 20px;
+}
+
+#meetGroup .modal-dialog, #alipayGroup .modal-dialog{
+    top: 25%;
+    bottom: 0;
+}
+
+#ruleGroup .modal-header,#ruleGroup .modal-footer,#meetGroup .modal-footer{
+    text-align: center;
+}
+
+#ruleGroup .modal-body{
+    overflow: auto;
+}
+#ruleGroup .modal-body p{
+    font-size: 12px !important;
+}
+
+#meetGroup .modal-content,#alipayGroup .modal-content{
+    text-align: center;
+}
+
+.modal-footer div{
+    display:inline-block;
+    width: 49%;
+    text-align: center;
+}
+.cancel{
+    background: #ffffff;
+    color: #999999;
+}
+.idCard,.bindAlipay{
+    width: 80%;
+}
+.alipay,card{
+    display: none;
+}
+
+.modal-content{
+    border-radius: 20px !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+}
+
+@media screen and (min-width: 360px) and (max-width: 374px){
+    .flower{
+        width: 15px;
+    }
+    #step1 {
+        width: 65px;
+        height: 65px;
+    }
+    .axis-name{
+        max-width: 80px;
+    }
+}
+@media screen and (min-width: 320px)and (max-width: 330px){
+    *{
+        font-size: 12px;
+    }
+    .flower{
+        width: 15px;
+    }
+    #step1 {
+        width: 65px;
+        height: 65px;
+    }
+    .axis-name{
+        max-width: 80px;
+    }
+    #ruleGroup .modal-body p {
+        font-size: 10px !important;
+    }
+    #ruleGroup .modal-header{
+        font-size: 16px;
+        padding: 10px;
+    }
+    #ruleGroup .modal-footer{
+        padding: 10px !important;
+    }
+    #ruleGroup .modal-dialog{
+        margin: 10px !important;
+    }
+}
+
+@media (min-width: 768px) {
+    .modal-dialog {
+        margin: 30px auto;
+    }
+}

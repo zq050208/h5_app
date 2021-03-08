@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title>获取幸运券</title>
+    <link rel="stylesheet" href="css/iconfont.css">
+</head>
+<style>
+    * {
+        padding: 0;
+        margin: 0
+    }
+    html{
+        width: 100%;
+        height: 100%;
+    }
+
+    body {
+        width: 100%;
+        height: 100%;
+        font-size: 14px;
+        color: #fff;
+        background:url("https://cdn.tinytiger.cn/icon-luckyDrawback1.jpg") no-repeat center center;
+        background-size: cover
+       
+    }
+
+    .main {
+        height: 100%;
+        width: 100%;
+        position: relative;
+    }
+
+    .title {
+        text-align: center;
+        padding: 14px 10px;
+        border-bottom: 1px solid rgba(183, 183, 210, 0.1);
+    }
+
+    .title-close {
+        float: left;
+        color: #fff;
+        text-decoration:none;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        padding: 5px 10px
+    }
+
+    .luck-list {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 10px;
+        border-bottom: 1px solid rgba(183, 183, 210, 0.1);
+    }
+
+    .button {
+        background: linear-gradient(90deg, rgba(255, 229, 37, 1) 0%, rgba(255, 136, 2, 1) 98%);
+        padding: 8px 15px;
+        color: rgba(120, 50, 19, 1);
+        border-radius: 20px;
+        font-size: 12px
+    }
+
+    .actived {
+        background: #5b5b5b;
+        color: #fff
+    }
+
+    .share-button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 15px;
+    }
+
+    .share-num {
+        font-size: 10px !important
+    }
+    .share-mask{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        display: none
+    }
+    .mask{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 1;
+        top: 0;
+    }
+
+    footer {
+        position: fixed;
+        bottom: 0;
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        background: #FFFFFF;
+        z-index: 99999;
+        color: black;
+    }
+
+    footer .share {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 12px 0 8px 0;
+    }
+
+    footer .share>span {
+        padding-top: 5px; 
+    }
+    
+    footer img {
+        height: 30px;
+    }
+</style>
+
+<body>
+    <div class="main">
+        <div class="main-msg">
+                <div class="title">
+                        <a href="#" class="title-close" onClick="javascript :window.history.back(); return false;"><i class=" iconfont icon-weibiaoti--"></i></a>
+                        <span>获取幸运券</span>
+                    </div>
+                    <ul class="luckLotteryTasks">
+                        <!-- 获取幸运券列表 -->
+                    </ul>
+        </div>
+         <!--底部分享栏-->
+        <div class="share-mask">
+                <div class="mask"></div>
+                    <footer>
+                            <div class="share"><img src="image/invite-WeChat.png" /><span>微信</span></div>
+                            <div class="share"><img src="image/invite-discover.png" /><span>朋友圈</span></div>
+                            <div class="share"><img src="image/invite-QQ.png" /><span>QQ</span></div>
+                            <div class="share copylink"><img src="image/invite-link.png" /><span>复制链接</span></div>
+                    </footer>
+            </div>
+        </div>
+</body>
+
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/service.js"></script>
+<script src="../public/config.js"></script>
+<script src="js/iconfont.js"></script>
+<script>
+
+    var config = {
+        url:"LiveLotteryController/luckLotteryTasks",
+        type:'post', 
+        token: Request('token'),
+        data:{},
+    }
+    requsetHttp(config.url,config.type,config.data,config.token,(res)=>{
+        var list = res.data.list; 
+        var str = '';
+        for(var i = 0; i <list.length; i ++){
+            str += `<li class="luck-list"> <span>`+list[i].task_name+`</span>`
+                if(list[i].num != list[i].complete){
+                    if(list[i].type == 5){
+                    str+= `<div class="button share-button"><span>去邀请</span><span class="share-num">`+list[i].complete+`/`+list[i].num+`</span></div></li>`
+                    }else if(list[i].type == 1){
+                        str +=`<div class="button">去登录</div></li>`
+                    }else if(list[i].type == 2){
+                        str +=`<div class="button watchVideo">看直播</div></li>`
+                    }else if(list[i].type == 3){
+                        str +=`<div class="button givePacket">去完成</div></li>`
+                    }else if(list[i].type == 4){
+                        str +=`<div class="button goPlay">去约玩</div></li>`
+                    }
+                }else{
+                    str +=`<div class="button actived">已完成</div></li>`
+                }
+        }
+        $(".luckLotteryTasks").append(str)
+
+          // 登陆app
+        $(".log-in").click(function () {
+             if (browser.versions.android) {
+                 window.titi_js.callLogin();
+             } else {
+                 window.webkit.messageHandlers.callLogin.postMessage(null);
+             }
+        })
+
+         // 看直播
+        $(".watchVideo").click(function () {
+             if (browser.versions.android) {
+                 window.titi_js.callFinish();
+             } else {
+                 window.webkit.messageHandlers.callFinish.postMessage(null);
+             }
+        })
+
+         // 发红包
+        $(".givePacket").click(function () {
+             if (browser.versions.android) {
+                 window.titi_js.callFinish();
+             } else {
+                 window.webkit.messageHandlers.callFinish.postMessage(null);
+             }
+         })
+
+         // 去约玩
+         $(".goPlay").click(function () {
+             if (browser.versions.android) {
+                 window.titi_js.callPlayHome();
+             } else {
+                 window.webkit.messageHandlers.callPlayHome.postMessage(null);
+             }
+         })
+
+         // 去分享
+        $(".share-button").click(function () {
+             $(".share-mask").show()   
+         })
+         $(".mask").click(function(){
+             $(".share-mask").hide()  
+         })
+
+        // 点击分享类型
+        $(".share").click(function(){
+            var user_id = Request('user_id');
+            var obj = { 
+                type:$(this).index(),
+                shareUrl: res.data.share.url+"?user_id="+user_id+"&appversion=4.0.0", 
+                title : res.data.share.title,
+                desc:res.data.share.content,
+                img:res.data.share.image
+            }
+            if(browser.versions.android){
+                window.titi_js.callShare(JSON.stringify(obj));
+            }else{
+                window.webkit.messageHandlers.callShare.postMessage(JSON.stringify(obj));
+            }
+            $(".share-mask").hide()  
+        })
+     
+    })
+    
+    function refresh(){
+        location.reload()
+    }
+    function onLoad(){
+        refresh()
+    }
+
+
+</script>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport"
+        content="width=device-width,viewport-fit=cover, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <!-- <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> -->
+    <title>查看编辑者</title>
+    <link rel="stylesheet" href="../public/mescroll.min.css">
+    <link rel="stylesheet" href="css/index.css">
+    <style>
+        html,
+        body {
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        }
+        .callBackBtn {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="mescroll" class="mescroll" style="top:24px;">
+        <div>
+            <div class="headerWrap" style='padding-bottom: 10px;'>
+                <div style="width: 60px;display: flex;justify-content:start;align-items: center;">
+                    <img src="image/icon-arrow_left.png" alt="" class="callBackBtn" onclick="handleGoBack()" />
+                </div>
+                <span>词条编辑者</span>
+                <div style="width: 60px;"></div>
+            </div>
+            <div  class="centerWrap">
+                <div class="tabTitle" >
+                    <span>编辑者昵称</span>
+                    <span>更新时间</span>
+                </div>
+                <div class="listItem">
+                    
+                </div>
+            </div>
+            <div class="centercenterrow gamefooter" style=" padding: 20px 0 0px 0;">
+
+            </div>
+        </div>
+    </div>
+    <script src="../public/template-web.js"></script>
+    <script src="../public/tool.js"></script>
+    <script src="../public/jquery.min.js"></script>
+    <script src="../public/mescroll.min.js"></script>
+    <script src="../public/module/msgDialog.js"></script>
+    <script src="../public/config.js"></script>
+    <script src="../public/service.js"></script>
+
+    
+
+    <script type="text/html" id="listItem">
+        {{each item v i}}
+            <div class='listWrap'>
+                <div class='listWrap_name' style='margin-left:15px'>{{v.nickname}}</div>
+                <div class='listWrap_time' style='margin-right:15px;text-align: right;'>{{v.create_time}}</div>
+            </div>
+        {{/each}}
+    </script>
+   
+<!-- 请求数据 -->
+    <script>
+        // 防止一下请求多次
+        var isGetData=false
+        // 当前页
+        var currentPage = 1
+        // 总页数
+        var last_page = 1
+        // 类型标识 0: 最新 1:最热
+        var type = 2
+        var mescroll = new MeScroll("mescroll", { //第一个参数"mescroll"对应上面布局结构div的id
+            //如果您的下拉刷新是重置列表数据,那么down完全可以不用配置,具体用法参考第一个基础案例
+            //解析: down.callback默认调用mescroll.resetUpScroll(),而resetUpScroll会将page.num=1,再触发up.callback
+            down: {
+                auto: false,
+                callback: downCallback //下拉刷新的回调,别写成downCallback(),多了括号就自动执行方法了
+            },
+            up: {
+                use: true,
+                isBounce: false,
+                callback: upCallback //上拉加载的回调
+            }
+        });
+      
+        indexComment()
+        // 评价下的评论列表
+        function indexComment(refresh) {
+            var config = {
+                gameInfoUrl: 'GameWiki/wikiUpdateUserList',
+                type: 'get',
+                token: Request('token'),//'3242e967170efb88b776787ab8bfa91f'
+                data: {
+                    content_id: Request('content_id'),
+                    page: currentPage,
+                    per_page: 20,
+                } 
+            };
+            RequsetHttp(config.gameInfoUrl, config.type,config.token, config.data, function (res) {
+                if (res.code == 200) {
+                    last_page = res.data.last_page
+                    var listItemData = res.data.data
+                    var listItemDataItem = template('listItem', { item: listItemData })
+                    if (refresh) {
+                        $(".listItem").append(listItemDataItem)
+                    } else {
+                        $(".listItem").html(listItemDataItem)
+                    }
+                    if (last_page <= currentPage) {
+                        var footerhtml = `  <div class="gamefooter-left"></div>
+                                          <div class="gamefooter-msg" style="padding: 0 10px;">人家是一只有底线的小脑斧</div>
+                                          <div class="gamefooter-right"></div>`
+                        $(".gamefooter").html(footerhtml)
+                    }
+                    setTimeout(function(){
+                        isGetData=false
+                    },1000)
+                } else {
+                    setTimeout(function(){
+                        isGetData=false
+                    },1000)
+                    mescroll.endErr();
+                }
+            })
+        }
+        function handleGoBack() {
+            if (browser.versions.android) {
+                window.titi_js.callFinish();
+            } else if (browser.versions.iPhone || browser.versions.iPad) {
+                window.webkit.messageHandlers.callFinish.postMessage(null);
+            }
+        }
+        //下拉刷新的回调
+        function downCallback() {
+            currentPage = 1;
+            console.log('下拉刷新的回调')
+            indexComment(false)
+            mescroll.endErr();
+        }
+        //上拉加载的回调 page = {num:1, size:10}; num:当前页 默认从1开始, size:每页数据条数,默认10
+        function upCallback(page) {
+            console.log('上拉加载的回调')
+            if(!isGetData){
+                 isGetData=true
+                if (last_page > currentPage) {
+                    currentPage++
+                    indexComment(true)
+                }
+            }
+            mescroll.endErr();
+        }
+    </script>
+
+</body>
+
+</html>

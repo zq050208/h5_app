@@ -1,0 +1,198 @@
+*{
+    padding: 0;
+    margin: 0;
+
+}
+ul, li{
+    list-style: none;
+
+}
+html,body{
+    width: 100%;
+    height: 100%;
+    font-size: 14px
+}
+.header{
+    padding: 15px
+}
+.title{
+    font-family:PingFangSC-Medium;
+    font-weight:500;
+    color:rgba(37,39,42,1);
+    padding-bottom: 8px
+}
+video,source,.vjs-poster,#example_video_1_html5_api,.example_video_1-dimensions,.video-js{
+    width: 100%;
+    height: 56vw;
+}
+.like{
+    padding: 0 54px;
+    display: flex;
+    justify-content: space-between
+
+
+}
+.like img{
+    width: 18px;
+    height: 18px;
+}
+.like-up,
+.like-down{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 16px 38px;
+}
+.line{
+    width: 100%;
+    height: 6px;
+    background:rgba(245,246,247,1)
+}
+.comment{
+    padding: 10px 15px 0 15px;
+}
+.comment-title{
+    font-family:PingFangSC-Semibold;
+    font-weight:600;
+    color:rgba(48,51,53,1)
+}
+.reply-item{
+    padding: 10px 15px
+}
+.publish-main{
+    display: flex;
+    align-items: center;
+    justify-content: space-between
+}
+.publish-header{
+    display: flex
+}
+.publish-header img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+.publish-name {
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+    color: rgba(37, 39, 42, 0.5)
+}
+.publish-like{
+    display: flex;
+}
+.likeSign{
+    display: flex;
+    align-items: center
+}
+.likeSign span{
+    padding: 0 15px 0 5px
+
+}
+
+.likeSign img{
+    width: 18px;
+    height: 15px;
+}
+.like-report{
+    width: 20px ;
+    height: 20px;
+}
+.publish-msg {
+    padding-left: 50px;
+    padding-bottom: 15px;
+    color: rgba(37, 39, 42, 1)
+}
+.reply-info,
+.publish-info {
+    overflow: hidden;
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    white-space: normal
+}
+.reply-message {
+    background: rgba(237, 238, 240, 1);
+    padding: 15px 10px;
+    margin-top: 10px;
+    border-radius: 4px
+}
+.repla-name {
+    color: rgba(37, 39, 42, 1)
+}
+.reply-info {
+    color: rgba(37, 39, 42, 0.5)
+}
+.total-reply {
+    font-size: 12px;
+    font-family: PingFangSC-Regular;
+    font-weight: 400;
+    color: rgba(0, 107, 187, 1);
+    display: flex;
+    align-items: center
+}
+.suspension{
+    position: fixed;
+    right: 15px;
+    bottom: 200px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background:linear-gradient(126deg,rgba(255,153,0,1) 0%,rgba(255,123,0,1) 100%);
+    font-weight:500;
+    color:rgba(255,254,254,1);
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column
+}
+.look{
+    display: none
+
+}
+.lookmore{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:rgba(35,159,255,1);
+    padding: 12px 0 15px 0;
+    background:linear-gradient(180deg,rgba(255,255,255,0) 0%,rgba(255,253,253,1) 100%);
+}
+.lookmore img{
+    width: 9px;
+    height: 7px;
+}
+.lookmore span{
+    padding-right: 3px
+}
+.reply-nomessage {
+    display: none
+}
+
+.video-js .vjs-big-play-button{
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    border: none;
+    background-color: transparent;
+    font-size: 5em;
+}
+.video-js .vjs-tech{
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+
+}
+.vjs-poster{
+    background: transparent no-repeat;
+    background-size:100% 100%
+}
+.nocomment{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 100px
+}

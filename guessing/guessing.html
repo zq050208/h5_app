@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title>竞猜活动</title>
+    <link rel="stylesheet" href="css/ydui.css">
+    <link rel="stylesheet" href="css/guessing.css?v=Math.random()">
+</head>
+<body>
+
+    <div class="default-member">
+        <img src="image/icon-default-member.png" />
+        <span>请在“小虎电竞-会员”绑定会员后再来参与竞猜</span>
+    </div>
+
+    <div class="loading">
+        <div class="spinner">
+            <div class="spinner-container container1">
+                <div class="circle1"></div>
+                <div class="circle2"></div>
+                <div class="circle3"></div>
+                <div class="circle4"></div>
+            </div>
+            <div class="spinner-container container2">
+                <div class="circle1"></div>
+                <div class="circle2"></div>
+                <div class="circle3"></div>
+                <div class="circle4"></div>
+            </div>
+            <div class="spinner-container container3">
+                <div class="circle1"></div>
+                <div class="circle2"></div>
+                <div class="circle3"></div>
+                <div class="circle4"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="gold">
+            <div class="give-gold">
+                <div class="gold-money">
+                    <span>0</span>
+                    <div class="gold-money-txt">赠送金额</div>
+                </div>
+                <div class="gold-mine">
+                    <span>0</span>
+                    <div class="gold-mine-txt">预测结果</div>
+                </div>
+                <div class="gold-award">
+                    <span>0</span>
+                    <div class="gold-award-txt">获得奖励</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="J_Tab" class="m-tab">
+            <ul class="tab-nav">
+                <li class="tab-nav-item tab-active" ><a href="javascript:;">绝地求生</a></li>
+                <li class="tab-nav-item" ><a href="javascript:;">英雄联盟</a></li>
+            </ul>
+            <div id="mescroll" class="mescroll">
+                <div class="mescroll-content">
+                    <ul class="table-view">
+                        <div class="tab-panel">
+                            <div class="tab-panel-item tab-active game-pubg"></div>
+                            <div class="tab-panel-item game-lol"></div>
+                            <div class="lookMore"><span>点击查看更多竞猜</span></div>
+                        </div>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 竞猜详情弹框 -->
+    <div class="showModel takeGuessing_cat">
+        <div class="out-modals ">
+            <div class="out-modals-content">
+                <div class='modal-content-title'>
+                    <img src='image/icon-close.png' class='close' />
+                    <span class='content-title-txt'>确认竞猜</span>
+                </div>
+                <div class='modal-content-msg'>
+                    <div class='content-msg-title'>
+                        <div class='msg-title-txt'>标题</div>
+                        <div class='msg-title-time'><span></span>截止竞猜</div>
+                    </div>
+                </div>
+                <!-- 单双 -->
+                <div class='sigle_double'>
+                    <div class="sigle sigle_active">
+                        <span class="sigle-num ">单数</span>
+                        <span class='sigle-people'><span></span>人选择</span>
+                        <img src='image/icon-true.png' class="active_img" />
+                    </div>
+                    <div class="sigle">
+                        <span class='double-num '>双数</span>
+                        <span class='double-people'><span>0</span>人选择</span>
+                        <img src='image/icon-true.png'/>
+                    </div>
+                </div>
+                <!-- 投注 -->
+                <ul class="modal-content-money"></ul>
+                <div class="modal-content-button">
+                    <div class="guessing">竞猜</div>
+                    <div class="guessinged">待开奖</div>
+                    <div class="guessinged">停止竞猜</div>
+                    <div class="guessinged">流局</div>
+                    <div class="guessinged">已开奖</div>
+                </div>
+            </div>
+        </div>
+        <div class="mask"></div>
+    </div>
+
+    <!-- 确定竞猜弹框 -->
+    <div class="showModel cofirm_Guessing">
+        <div class="out-modals">
+            <div class="out-modals-content">
+                <div class='modal-content-title'>
+                    <img src='image/icon-close.png' class='close_confirm'/>
+                    <span class='content-title-txt'>确认竞猜</span>
+                </div>
+                <div class='content-main-pay'>
+                    <div class='guessing-msg'>
+                        <div>竞猜</div>
+                        <div class='guessing-txt-odd'></div>
+                    </div>
+                    <div class='pay-way'>
+                        <div>支付方式</div>
+                        <div class='guessing-txt'>赠送金额</div>
+                    </div>
+                    <div class='guessing-money'>
+                        <div>竞猜基金</div>
+                        <div class='guessing-txt-num'>-0</div>
+                    </div>
+                    <div class='pay-money'>
+                        <div>支付金额</div>
+                        <div class='guessing-txt-money'></div>
+                    </div>
+                    <span class='confirm-pay'>确定支付</span>
+                </div>
+            </div>
+        </div>
+        <div class="maskConfirm"></div>
+    </div>
+
+    <div class="showMsg">
+        <span class="text"></span>
+    </div>
+
+</body>
+</html>
+
+<script src="../public/jquery.min.js"></script>
+<script src="../public/ydui.flexible.js"></script>
+<script src="../public/ydui.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+<script src="js/guessing.js?v=Math.random()"></script>
+
+<script>
+
+    var config = {
+        $tab: $('#J_Tab'),                                                                          //tab对象
+        guessCompetitionUrl: 'ActivityController/guessCompetition',                       //活动详情
+        guessListUrl: 'GuessController/guessList',                                        //竞猜场次列表
+        guessInfoUrl: 'GuessController/guessInfo',                                        //竞猜详情
+        enterGuessUrl: 'GuessController/enterGuess',                                      //参与竞猜
+        checkTinyTigerUrl: 'IndexController/checkTinyTiger',                              //检测是否小虎电竞会员
+        type: 'post',                                                                               //请求方式
+        token: Request('token'),                                                                    //用户token
+        currentPage: 1,                                                                             //当前页
+        totalPage: 1,                                                                               //总页数
+        game_type: 1,                                                                               //游戏类型 1=绝地求生 2=英雄联盟
+        odd_evencurrenTab: 1,                                                                       //当前选择单双状态
+        guess_id: null,                                                                             //当前竞猜id
+        betcurrenTab: 0,                                                                             //当前选择的投注状态
+        amount: 0,                                                                                   //当前选择投注金额
+        first_guess:0,                                                                               //是否首次参与
+    };
+
+    var load = {
+        init: function () {//初始化
+            this.get();
+        },
+        get: function () {//用户是否绑定会员
+            RequsetHttp(config.checkTinyTigerUrl, config.type, config.token , {}, function (res) {
+                if(res.status){
+                    $('.main').show();
+                    load.getGuessCompetition();
+                    load.getGuessList();
+                }else{
+                    $('.default-member').css('display','flex');
+                }
+            });
+        },
+        getGuessCompetition: function (){//获取活动详情
+            RequsetHttp(config.guessCompetitionUrl, config.type, config.token , {}, function (res) {
+                $('.gold-money span').text(res.data.give_money);
+                $('.gold-mine span').text(res.data.guess);
+                $('.gold-award span').text(res.data.reward);
+            });
+        },
+        getGuessList:function () {//获取竞猜场次列表
+            var guessListData = { game_type: config.game_type,page: config.currentPage };
+            RequsetHttp(config.guessListUrl, config.type, config.token , guessListData, function (res) {
+                config.totalPage = res.data.page.totalPage;
+                var listHtml = '';
+                res.data.list.forEach(function (item ) {
+                    item.dat = datePast(item.end_time);
+                    item.end_time = item.end_time.substring(4, 16).replace(/-/g, "月").replace(/\s/g, "日 ").substr(1);
+                    listHtml += `<div class="consume">
+                        <div class="content-box">
+                           <div class="consumeMsg">
+                               <div class="consumeMsg-txt">
+                                  <div>`+item.title+`</div>
+                               </div>
+                              <div class="onsumeMsg-time">
+                                    <span class="month">`+item.end_time+` 截止竞赛</span>
+                                   <span> | `+item.guess_users+`人参与</span>
+                               </div>
+                           </div>`;
+                    if(item.status == 0){//进行中
+                        if(item.dat < 1){//已结束
+                            listHtml +=  `<div class="consumeNumed">停止竞猜</div></div></div>`;
+                        }else if (item.dat > 1){
+                            listHtml +=  `<div data-id="`+item.id+`" class="onGues `+(item.enter_status == 1 ? "consumeNumed" : "consumeNum")+` ">`+(item.enter_status == 1 ? "已竞猜" : "竞猜")+`</div></div></div>`;
+                        }
+                    }else if(item.status == 1){//已结束
+                        listHtml +=  `<div class="consumeNumed">停止竞猜</div></div></div>`;
+                    }else if(item.status == 2){//流局
+                        listHtml +=  `<div class="consumeNumed">流局</div></div></div>`;
+                    }
+                });
+                var currentDom;
+                //判断当前游戏类型，数据选择插入哪个DIV
+                if(config.game_type == 1) currentDom = $('.game-pubg');
+                else currentDom = $('.game-lol');
+                //判断当前是刷新或加载
+                if(config.currentPage == 1) currentDom.html(listHtml);
+                else currentDom.append(listHtml);
+
+                $('.onGues').unbind().click(function () {//点击竞猜
+                    config.guess_id = $(this).attr('data-id');
+                    load.getGuessInfo();
+                });
+
+            });
+        },
+        getGuessInfo:function () {//获取竞猜详情
+            $('.loading').show();
+            RequsetHttp(config.guessInfoUrl, config.type, config.token , { guess_id: config.guess_id }, function (res) {
+                setTimeout(function () {
+                    $('.loading').hide();
+                    $('.takeGuessing_cat').addClass('isShow');
+                },500);
+                res.data.dat = datePast(res.data.end_time);
+                res.data.end_time = res.data.end_time.substring(4, 16).replace(/-/g, "月").replace(/\s/g, "日 ").substr(1);
+                config.amount = res.data.guess_item[0];
+                config.first_guess = res.data.first_guess;
+                $('.msg-title-txt').text(res.data.title);
+                $('.msg-title-time span').text(res.data.end_time);
+                $('.sigle-people span').text(res.data.guess_single);
+                $('.double-people span').text(res.data.guess_double);
+
+                var listHtml = '';
+                var item = res.data.guess_item;
+                var getDiss = function (guess_amount) {
+                    var guess_item = res.data.guess_item;
+                    for (var i = 0; i < guess_item.length; i++) {
+                        if (parseInt(guess_amount) == parseInt(guess_item[i])) return i;
+                    }
+                };
+
+                for(var i =0 ; i < item.length; i++ ){
+                    listHtml += `<li class="content-money" data-first="`+res.data.first_guess+`" data-amount="`+item[i]+`" data-index="`+i+`">
+                        <span class="bet">投注`+(res.data.first_guess == 1 ? item[i] - 10 : item[i] )+`元</span>
+                        <span class="profit">赢`+( item[i] * 2 )+`元</span>
+                        <img src="image/icon-true.png" />
+                        <div class="discount ">首次优惠</div>
+                    </li>`;
+                }
+                //`+(res.data.first_guess == 1 ? "isShow" : "")+`
+                $('.modal-content-money').html(listHtml);
+                $('.sigle,.content-money').attr('data-stu',res.data.enter_status);
+                //竞猜按钮状态
+                if(res.data.result == 0){//未开奖
+                    if(res.data.dat  < 1){//已结束
+                        $('.modal-content-button div').siblings().removeClass('isShow').eq(2).addClass('isShow');
+                    }else if(res.data.dat  > 1 && res.data.enter_status == 0){//竞猜
+                        $('.modal-content-button div').siblings().removeClass('isShow').eq(0).addClass('isShow');
+                    }else if(res.data.dat > 1 && res.data.enter_status == 1){//待开奖
+                        $('.modal-content-button div').siblings().removeClass('isShow').eq(1).addClass('isShow');
+                    }
+                }else if(res.data.result == -1){//流局
+                    $('.modal-content-button div').siblings().removeClass('isShow').eq(3).addClass('isShow');
+                }else{//已开奖
+                    $('.modal-content-button div').siblings().removeClass('isShow').eq(4).addClass('isShow');
+                }
+
+                //已竞猜设置已猜项
+                if (res.data.enter_status == 1){
+                    //单双选择默认
+                    $('.sigle_double .sigle').find("img").removeClass("active_img");
+                    $('.sigle_double .sigle').eq(res.data.guess_type - 1).find("img").addClass("active_img");
+                    //单双背景默认
+                    $('.sigle_double .sigle').siblings().removeClass("sigle_active").eq(res.data.guess_type -1).addClass("sigle_active");
+                    //单双投注默认
+                    $('.modal-content-money li').find('img').removeClass('money_active');
+                    $('.modal-content-money li').eq(getDiss(res.data.guess_amount)).find('img').addClass('money_active');
+                    //首次优惠
+                    if(res.data.first_guess == 1){
+                        $('.modal-content-money li').eq(getDiss(res.data.guess_amount)).find('div').addClass('isShow');
+                    }
+                }else{
+                    //单双选择重置
+                    $('.sigle_double .sigle').find("img").removeClass("active_img");
+                    $('.sigle_double .sigle').eq(0).find("img").addClass("active_img");
+                    //单双背景重置
+                    $('.sigle_double .sigle').siblings().removeClass('sigle_active').eq(0).addClass("sigle_active");
+                    //投注选择重置
+                    $('.modal-content-money li').find('img').removeClass('money_active');
+                    $('.modal-content-money li').eq(0).find('img').addClass('money_active');
+                    //首次优惠
+                    if(res.data.first_guess == 1){
+                        $('.modal-content-money li').eq(0).find('div').addClass('isShow');
+                    }
+                }
+                $('.sigle_double .sigle').unbind().click(function(){//点击单双
+                    if ($(this).attr('data-stu') == 1){//已竞猜，不可点击
+                        return false
+                    }else{
+                        config.odd_evencurrenTab = $(this).index() + 1;
+                        $(this).addClass("sigle_active").siblings().removeClass("sigle_active");
+                        $(this).siblings().find("img").removeClass("active_img");
+                        $(this).find("img").addClass("active_img");
+                    }
+                });
+
+                $('.modal-content-money li').unbind().click(function () {//选择额度
+                    var index = $(this).index();
+                    var currenTab = $(this).attr('data-index');
+                    var first = $(this).attr('data-first');
+                    console.log(first)
+                    if ($(this).attr('data-stu') == 1){
+                        return false;//已竞猜不可点击
+                    }else{
+                        if( index == currenTab){
+                            $('.money_active').removeClass('money_active');
+                            $(this).find('img').addClass('money_active');
+                            config.amount = $(this).attr('data-amount');
+                        }
+                        if(index == currenTab && first == 1){//是否首次竞猜
+                            console.log('2-----')
+                            $('.discount').removeClass('isShow');
+                            $(this).find('div').addClass('isShow');
+                        }
+                    }
+                });
+
+            });
+        },
+        enterGuess: function () {
+            var obj = {
+                guess_id: config.guess_id,
+                guess_type: config.odd_evencurrenTab,
+                amount: config.amount
+            };
+            $('.loading').show();
+            RequsetHttp(config.enterGuessUrl, config.type, config.token , obj, function (res) {
+                $('.loading').hide();
+                if(res.status){
+                    location.href = 'guessingSuccess.html?token='+ config.token;
+                }else{
+                    toast(res.msg);
+                }
+            });
+        }
+    };
+
+    config.$tab.tab({
+        nav: '.tab-nav-item',
+        panel: '.tab-panel-item',
+        activeClass: 'tab-active'
+    });
+
+    config.$tab.find('.tab-nav-item').on('open.ydui.tab', function (e) {
+        $('.lookMore').find('span').text('点击查看更多竞猜');
+        config.game_type = e.index + 1;
+        config.currentPage = 1;
+        load.getGuessList();
+    });
+
+    $('.lookMore').click(function () {
+        config.currentPage++;
+        if (config.currentPage <= config.totalPage ){
+            load.getGuessList();
+        }else{
+            $(this).find('span').text('没有更多了');
+        }
+    });
+
+    $('.takeGuessing_cat .close, .takeGuessing_cat .mask').click(function () {
+        $('.takeGuessing_cat').removeClass('isShow');
+    });
+
+    $('.guessing').click(function () {
+        if(config.odd_evencurrenTab == 1){
+            $('.guessing-txt-odd').text('单数');
+        }else{
+            $('.guessing-txt-odd').text('双数');
+        }
+        if(config.first_guess == 1 ){
+            $('.guessing-txt-num').text( '-10');
+            $('.guessing-txt-money').text( '-' + (config.amount - 10));
+        }else {
+            $('.guessing-txt-money').text( '-' + config.amount );
+        }
+        $('.takeGuessing_cat').removeClass('isShow');
+        $('.cofirm_Guessing').addClass('isShow');
+    });
+
+    $('.close_confirm, .maskConfirm').click(function () {
+        $('.cofirm_Guessing').removeClass('isShow');
+    });
+
+    $('.confirm-pay').click(function () {
+        load.enterGuess();
+    });
+
+    $('.gold-mine').click(function () {
+        location.href = 'guessingResult.html?token=' + config.token;
+    });
+
+    $('.gold-award').click(function () {
+        location.href = 'receiveAward.html?token=' + config.token;
+    });
+
+    load.init();
+
+    /**
+     * 日期是否过期
+     * @author wangzhen
+     * @param endTime      日期
+     */
+    function datePast(endTime) {
+        var currentTime = new Date();
+        var nowTime = new Date((endTime).replace(/-/g, "/"));
+        var dat = ((nowTime - currentTime) / 1000).toFixed(0);
+        return dat;
+    }
+
+    /**
+     * 吐司弹窗
+     * @author wangzhen
+     * @param txt      弹窗文本
+     */
+    function toast(txt) {
+        $('.showMsg').text(txt).css('display','flex');
+        setTimeout(function () { $('.showMsg').hide(); },1500);
+    }
+</script>

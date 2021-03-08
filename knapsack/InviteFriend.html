@@ -1,0 +1,393 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <title>邀请好友</title>
+</head>
+<link rel="stylesheet" href="css/iconfont.css">
+<style>
+    * {
+        padding: 0;
+        margin: 0;
+    }
+    html,body{
+        width: 100%;
+        height: 100%;
+        background-color: #dff0ff
+    }
+    a {
+        text-decoration: none;
+        color: black;
+        -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+        -webkit-user-select: none;
+        -moz-user-focus: none;
+        -moz-user-select: none;
+    }
+    .title-close{
+        color: #fff;
+        position: absolute;
+        top: 15px;
+        left: 15px;
+        text-decoration:none;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        font-size: 18px
+    }
+
+
+    .inviter-bg {
+        width: 100%;
+        height: 100vw;
+        background: url('image/inviter-bg.png') no-repeat;
+        background-size: 100% 100%
+    }
+
+    .inviter-money {
+        width: 50vw;
+        height: 29vw;
+        background: url('image/inviter-money.png') no-repeat 100%/100%;
+        margin: 0 auto;
+        margin-top: -180px;
+        margin-bottom: 5px
+    }
+
+    .inviter-package {
+        width: 42vw;
+        height: 12vw;
+        background: url('image/inviter-package.png') no-repeat 100%/100%;
+        margin: 0 auto;
+
+    }
+
+    .inviter-txt {
+        color: rgba(131, 162, 188, 1);
+        font-size: 12px;
+        display: flex;
+        justify-content: center
+    }
+
+    .help {
+        padding: 0 25px;
+
+    }
+    .help .gold-list{
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end
+    }
+
+    .help-list {
+        display: flex;
+        flex-direction: column;
+        font-size: 12px;
+        justify-content: center;
+        align-items: center;
+        margin-top: 25px;
+    }
+
+    .help-list span{
+        color:rgba(66,148,255,1);
+        margin: 5px 0
+    }
+    .help-list div,
+    .get{
+        width: 50px;
+        height: 20px;
+        background:rgba(255,124,28,1);
+        color: #fff;
+        border-radius: 15px;
+        text-align: center;
+        line-height: 20px
+    }
+    .help-list .geted{
+        background:#cbdbe8;
+        color:rgba(142,162,178,1)
+    }
+    .help-list .goInvite{
+        background:rgba(66,148,255,1)
+    }
+
+    .help-list .inviter-box {
+        width: 38px;
+        height: 31px;
+    }
+   .help-list .inviter-box2{
+        width: 55px;
+        height: 50px;
+    }
+
+    .inviter-list{
+        width: 100%;
+        background-color: #fff;
+        margin: 0 auto;
+        margin-top: 30px;
+        border-radius: 13px;
+        padding: 10px 0;
+        display: none;
+    }
+    .invitered{
+        color:rgba(246,105,81,1);
+        display: flex;
+        justify-content: center;
+        font-size: 18px;
+        padding: 5px 0
+    }
+    .invited-list{
+        display: flex;
+        font-size: 12px;
+        margin-bottom: 20px;
+        align-items: center
+
+    }
+    .inviteList{
+        display: flex;
+        flex-direction: column;
+        padding: 0 20px
+    }
+    .invited-list img{
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+
+    }
+    .ranking-name{
+        flex: 4;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        white-space:nowrap;
+        margin-left: 12px;
+        margin-right: 35px
+    }
+    .ranking-prize{
+        flex:6;
+        display: flex;
+        justify-content: center 
+    }
+    /* 底部 */
+    .share-mask,
+    .rule-show{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        display: none
+    }
+    .mask,
+    .rule-mask{
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 1;
+        top: 0;
+    }
+
+    footer {
+        position: fixed;
+        bottom: 0;
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        background: #FFFFFF;
+        z-index: 99999;
+        color: black;
+    }
+
+    footer .share {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 12px 0 8px 0;
+    }
+
+    footer .share>span {
+        padding-top: 5px; 
+    }
+    
+    footer img {
+        height: 30px;
+    }
+    .rule{
+        position: absolute;
+        top: 15px;
+        right: 20px;
+        font-size: 12px; 
+        color: #fff   
+    }
+    .rule-msg{
+        width: 80%;
+        background-color: #fff;
+        margin-top: 50px;
+        font-size: 12px;
+        border-radius: 8px;
+        padding: 10px;
+        color: #666;
+        position: absolute;
+        top: 30%;
+        left: 8%;
+    }
+
+
+  
+</style>
+
+<body>
+    <div class="main">
+        <div class="inviter-bg"></div>
+        <span class="rule">活动规则</span>
+        <div class="inviter-money"></div>
+        <div class="inviter-package"></div>
+        <span class="inviter-txt"></span>
+        <div class="help">
+            <ul class="gold-list">
+                <!-- 助力列表 -->
+            </ul>
+            <div class="inviter-list">
+                <span class="invitered">已邀请好友</span>
+                <ul class="inviteList">
+                    <!-- 邀请列表 -->
+                </ul>
+            </div>
+        </div>
+        <!-- 底部 -->
+        <div class="share-mask">
+                <div class="mask"></div>
+                    <footer>
+                            <div class="share"><img src="image/invite-WeChat.png" /><span>微信</span></div>
+                            <div class="share"><img src="image/invite-discover.png" /><span>朋友圈</span></div>
+                            <div class="share"><img src="image/invite-QQ.png" /><span>QQ</span></div>
+                            <div class="share copylink"><img src="image/invite-link.png" /><span>复制链接</span></div>
+                    </footer>
+            </div>
+        </div> 
+        <!-- 规则 -->
+        <div class="rule-show">
+            <div class="rule-mask"></div>
+            <div class="rule-msg">
+                <div>用户邀请5位好友下载app，每日可获金币，最多可领价值76元人民币的金币</div><br/>
+                <div>金币可进行提现！</div><br/>
+                <div>兑换规则：</div>
+                <div>1.金币与人民币的默认兑换比例为1:0.5，若需提升兑换比例需使用积分，最高可1:1提现！</div>
+                <div>2.详情请查看“我的金币”</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<script src="../public/jquery.min.js"></script>
+<script src="../public/service.js"></script>
+<script src="../public/config.js"></script>
+<script src="js/iconfont.js"></script>
+<script>
+    var config = {
+        url:"LiveLotteryController/inviteList",
+        getUrl: 'LiveLotteryController/receiveReward',
+        type:'post', 
+        token: Request('token'),
+        data:{},
+    }
+
+    requsetHttp(config.url,config.type,config.data,config.token,(res)=>{
+        var list = res.data.list;
+        var invite_list = res.data.invite_list;
+        var length = list.length-invite_list.length;
+        $(".inviter-txt").text("还需"+length+"位好友助力");
+        var inviteList = '';
+        if(invite_list.length == 0){
+            $("div.inviter-list").hide();
+        }
+        for(var j = 0 ; j <invite_list.length; j ++){
+            $("div.inviter-list").show();
+            invite_list[j].create_time = invite_list[j].create_time.substring(0, 16);
+            inviteList += `<li class="invited-list">
+                                <img src="`+invite_list[j].avatar+`" alt="">
+                                <span class="ranking-name">`+invite_list[j].nickname+`</span>
+                                <span class="ranking-prize">`+invite_list[j].create_time+`</span>
+                            </li>`
+        }
+        $(".inviteList").append(inviteList);
+        var str= "";
+        for(var i = 0; i <list.length; i++){
+            str += `<li class="help-list">`
+                if(i != list.length - 1){
+                    str += `<img src="image/inviter-box.png" alt="" class='inviter-box'>`
+                }else{
+                    str += `<img src="image/inviter-box2.png" alt="" class='inviter-box2'>`
+                }
+                str += ` <span>`+list[i].gold+`金币</span>`
+                if(invite_list.length == 0 || i > invite_list.length-1){
+                            str += `<div class="goInvite">去邀请</div></li>`
+                        }else{
+                            if(list[i].status == 0){
+                                str += `<div class="get" data-index = '`+list[i].order_num+`'>领取</div></li>`
+                            }else{
+                                str += `<div class="geted">已领取</div></li>`
+                            }
+                        }
+        }
+        $(".gold-list").append(str);
+        $(".help-list .get").click(function(){
+            var index = $(this).attr('data-index');  
+            var data = { order_num : index}
+            requsetHttp(config.getUrl,config.type,data,config.token,(res)=>{
+                if(res.status == 1){
+                    $(this).removeClass("get").addClass("geted").html("已领取");
+                }
+            })
+        })
+
+        // 分享点击
+        $(".goInvite, .inviter-package").click(function(){
+        $(".share-mask").show();   
+        })
+        $(".mask").click(function(){
+            $(".share-mask").hide(); 
+        })
+
+        //  邀请用户
+        $(".share").click(function(){
+            var share = res.data.share;
+            var user_id = Request('user_id');
+            var obj = {
+                type:$(this).index(),
+                shareUrl: share.url+"?user_id="+user_id+"&appversion=4.0.0",
+                title : share.title,
+                desc:share.content,
+                img:share.image
+            }
+            if(browser.versions.android){
+                window.titi_js.callShare(JSON.stringify(obj));
+            }else{
+                window.webkit.messageHandlers.callShare.postMessage(JSON.stringify(obj));
+            }
+            $(".share-mask").hide() ;
+        })
+     
+    
+    })
+    $(".rule").click(function(){
+        $(".rule-show").show();
+    })
+    $(".rule-mask").click(function(){
+        $(".rule-show").hide();
+    })
+
+    function refresh(){
+        location.reload();
+    }
+
+
+
+
+
+    
+
+
+
+
+</script>

@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="stylesheet" href="css/swiper-4.3.3.min.css">
+    <title></title>
+</head>
+<body>
+<style>
+    html, body {
+        position: relative;
+        height: 100%;
+        -webkit-tap-highlight-color: transparent;
+        background-color: #ffffff;
+    }
+
+    body {
+        background: #eee;
+        font-family:  PingFangSC-Regular;
+        font-size: 14px;
+        color: #333333;
+        margin: 0;
+        padding: 0;
+    }
+
+    *{
+        margin:0 ;
+        padding:0 ;
+    }
+
+    img {
+        vertical-align: middle;
+    }
+
+    .photo{
+        width: 100%;
+        position: fixed;
+        z-index: 10;
+    }
+
+    #poster_img img{
+        width: 60px;
+        height: 60px;
+        margin: 0 auto; /*水平居中*/
+        position: relative;
+        top: 50%; /*偏移*/
+        transform: translateY(-50%);
+    }
+
+    .swiper-container {
+        width: 100%;
+        height: 100%;
+    }
+
+    .swiper-slide {
+        text-align: center;
+        font-size: 18px;
+        background: #fff;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+    }
+
+    .swiper-pagination-bullet{
+        margin: 2px;
+    }
+
+    .swiper-slide img,.swiper-slide video{
+        width: 100%;
+        height: 18rem;
+    }
+
+    .swiper-pagination{
+        width: 100%;
+        margin-top: -2rem;
+    }
+
+    .container{
+        width: 100%;
+        position: absolute;
+        margin-top: 17.5rem;
+        display: block;
+        border-radius: 10px;
+        z-index: 50;
+        background-color: #eee;
+    }
+
+    .container-wrapper {
+        padding: 15px;
+        background:#FFFFFF;
+    }
+
+    .avatar{
+        border-radius: 50%;
+    }
+
+    .pw-info-last-time{
+        font-size: 10px;
+        color: #C6C6C6;
+        margin-left: 10px;
+    }
+
+    #audioBtn{
+        width: 100px;
+        height: 19px;
+        padding: 2px 10px;
+        color: #C6C6C6;
+        font-size: 12px;
+        background: #F3F3F3;
+        border-radius: 50px;
+        border: .5px solid #D6D6D6;
+    }
+
+
+    .pw-evaluate-detail{
+        vertical-align: top;
+    }
+
+    .eve-left img{
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+    }
+
+    .eve-list{
+        border-bottom: none
+    }
+
+    .eve-info{
+        margin-top: 15px;
+    }
+
+    .eve-info .eve-left{
+        flex: 1;
+    }
+
+    .eve-info .eve-right{
+        flex: 6;
+        padding-left: 10px;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .pw-evaluate-detail-time{
+        justify-content: flex-end;
+    }
+
+    .pw-evaluate-detail-name{
+        width: 100%;
+        font-size: 12px;
+        color: #999999;
+    }
+
+    .pw-evaluate-detail-desc{
+        width: 100%;
+        padding-top: 5px;
+    }
+
+    .pw-evaluate-detail-tag span{
+        vertical-align:  middle;
+        margin-left: 5px;
+    }
+
+    .flex-box{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .flex-1{
+        flex: 1!important;
+    }
+    .flex-5{
+        flex: 5;
+    }
+    .start{
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+    }
+    .end{
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+    .pw-info-nickname{
+        font-size: 18px;
+        font-family: PingFangSC-Medium;
+        vertical-align: middle;
+        margin-bottom: 5px;
+        color: #000000;
+    }
+    .pw-info-nickname img{
+        width: 24px;
+        vertical-align: middle;
+    }
+    .gray{
+        color: #AAAAAA;
+    }
+    .eve-info{
+        padding-bottom: 15px;
+        border-bottom: .5px solid #DDDDDD ;
+    }
+
+    .comment-more span{
+        padding: 10px;
+        color: #999999;
+        border-radius: 4px;
+        border: 1px solid #CCCCCC;
+    }
+    .chunk{
+        height: 50px;
+        width: 100%;
+        display: block;
+    }
+    .footer{
+        height: 50px;
+        clear: both;
+        position: fixed;
+        display: block;
+        bottom: 0;
+        text-align: center;
+        z-index: 100;
+        margin: 0px auto;
+        width: 100%;
+        background: #FFFFFF;
+        box-shadow: -2px 0 5px 0 rgba(198,198,198,0.50);
+    }
+    .footer-left,.footer-right{
+        height: 50px;
+        line-height:50px;
+        float: left;
+    }
+    .footer-left{
+        width: 35%;
+        color: #000000;
+    }
+    .footer-right{
+        width: 65%;
+        font-family: PingFangSC-Medium;
+        background: #FFC648;
+        color: #905900;
+    }
+    .eve-title{
+        padding-bottom: 10px;
+        font-family: PingFangSC-Medium;
+    }
+    .eve-title:before{
+        content: "";
+        width: 5px;
+        height: 15px;
+        border-radius: 2px;
+        background-color: #FFC648;
+        display: inline-block;
+        margin-bottom: -2px;
+        margin-right: 5px;
+    }
+
+    .no-eve{
+        flex-direction: column;
+    }
+
+    .no-eve img{
+        width: 50%;
+    }
+
+    .no-eve p{
+        color: #AAAAAA;
+        margin-top: 10px;
+    }
+
+    @keyframes scaleDraw {
+        0%{
+            transform: scale(1);
+        }
+        25%{
+            transform: scale(0.95);
+        }
+        50%{
+            transform: scale(1);
+        }
+        75%{
+            transform: scale(0.95);
+        }
+    }
+    .suspend{
+        display: flex;
+        justify-content:center;
+        align-items: center;
+        bottom: 70px;
+        position: fixed;
+        padding: 0 15px;
+    }
+    .prize{
+        -webkit-animation-name: scaleDraw; /*关键帧名称*/
+        -webkit-animation-timing-function: ease-in-out; /*动画的速度曲线*/
+        -webkit-animation-iteration-count: infinite;  /*动画播放的次数*/
+        -webkit-animation-duration: 2s; /*动画所花费的时间*/
+    }
+</style>
+
+<div id="photo" class="photo">
+    <div class="swiper-container">
+        <div class="swiper-wrapper"></div>
+    </div>
+    <div class="swiper-pagination"></div>
+</div>
+
+<div class="container">
+    <div class="container-wrapper gray" style="margin-bottom: 15px;">
+        <div class="pw-info flex-box">
+            <div class="header-info flex-box flex-1">
+                <div class="flex-1 start"><img id="avatar" class="avatar" width="47" /></div>
+                <div class="flex-5 " style="flex-direction: column;padding-left: 10px;">
+                    <div class="pw-info-nickname flex-box start"><span></span><img src="img/icon-girls.png"/></div>
+                    <div>接单<span class="pw-header-num"></span>次</div>
+                </div>
+            </div>
+            <div class="flex-1">
+                <div class="end" style="margin-bottom: 5px;">
+                    <audio id="haorooms" controls="controls" preload="auto" hidden="true" ></audio>
+                    <div id="audioBtn">
+                        <img id="yuyin" height="100%" src="img/icon-yuyin-3.png" />
+                        <span style="float: right;margin-top: 2px"></span>
+                    </div>
+                </div>
+                <div class="end"><span class="pw-info-last-time"></span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-wrapper eve-list"><div><p class="eve-title">评价</p></div></div>
+    <div class="suspend"><img class="prize" width="100%" src="img/icon-tag.png" /></div>
+    <div class="chunk"></div>
+
+</div>
+
+<div class="footer">
+    <div class="footer-left">聊一聊</div>
+    <div class="footer-right">马上约ta玩游戏</div>
+</div>
+
+<script src="../public/jquery.min.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+<script src="js/swiper-4.3.3.min.js"></script>
+<script>
+
+
+    var config = {
+        // pwUrl: 'PeiwanController/getPeiwanInfo',
+        pwUrl: 'PartnerController/partnerInfo',
+        // eveURL: 'PeiwanController/getEvaluateList',
+        eveURL: 'PartnerController/getEvaluateList',
+        downloadUrl: 'https://h5.tinytiger.cn/web_app/knapsack/download.html',
+        type: 'post',
+        data: {
+            // peiwan_uid: Request('uid'),
+            partner_user_id: Request('uid'),
+            // type: Request('type'),
+            page: 1
+        },
+        dshiqi: null
+    };
+
+    requsetHttp(config.pwUrl,config.type,config.data,null,(res)=>{
+        var peiwan_info = res.data;
+        var audio = document.getElementById('haorooms');
+        $('title').text(peiwan_info.nickname);
+        //添加轮播图
+        for(var i=0; i< peiwan_info.images.length; i++){
+            $('.swiper-wrapper').append('<div class="swiper-slide"><img src='+peiwan_info.images[i]+' /></div>');
+        }
+        //初始化轮播图控件
+        var swiper = new Swiper('.swiper-container', {
+            slidesPerView: 'auto',
+            pagination: {
+                el: '.swiper-pagination',
+            }
+        });
+        //接单数
+        if(peiwan_info.peiwan_order_num){
+            $('.pw-header-num').text(peiwan_info.peiwan_order_num);
+            $('.pw-header-orders').show();
+        }
+        //头像
+        $('#avatar').attr('src',peiwan_info.avatar);
+        //名字
+        $('.pw-info-nickname span').text(peiwan_info.nickname);
+        //性别
+        if(peiwan_info.gender == 1 ) $('.pw-info-sex img').attr('src','img/icon-boy.png');
+        //登录时间
+        // var login_time = new Date(peiwan_info.login_time.replace(/-/g, "/"));
+        // $('.pw-info-last-time').text(DateDiff(login_time));
+        //语音
+        if(peiwan_info.audio){
+            var peiwan_audio_url = JSON.parse(peiwan_info.audio);
+        $('#haorooms').html('<source src='+peiwan_audio_url.path+' type="audio/mpeg">');
+        $('#audioBtn span').text(peiwan_audio_url.size + 'S');
+        audio.loop = false;
+        audio.addEventListener('ended', function () { resetAnimation(); }, false);
+        $('#audioBtn').click(function () {
+            if(audio!==null){
+                if(audio.paused){
+                    audio.play();
+                    setAnimation();
+                }else{
+                    audio.pause();
+                    audio.load();
+                    resetAnimation();
+                }
+            }
+        });
+
+        }
+
+
+        requsetHttp(config.eveURL,config.type,config.data,null,(res)=>{
+            // var eveList = res.data.evaluate_list.list;
+            var eveList = res.data.list;
+            if(!eveList.length){
+                $('.eve-list').append('<div class="flex-box no-eve"><img src="img/icon-noeve.png" ><p>暂无评价</p></div>');
+                return false;
+            }
+            for (var i=0; i< eveList.length; i++){
+                $('.eve-list').append('\
+                    <div class="pw-evaluate eve-info flex-box">\
+                        <div class="pw-evaluate-detail eve-left"><img src='+eveList[i].avatar+' /></div>\
+                        <div class="pw-evaluate-detail flex-box eve-right">\
+                            <div class="pw-evaluate-detail-name flex-box">\
+                                <span class="eve-name flex-1">'+eveList[i].nickname+'</span>\
+                                <span class="pw-evaluate-detail-time flex-box flex-1 end">'+eveList[i].user_create_time.substring(0,eveList[i].user_create_time.length-3).slice(5).replace(/-/,"月").replace(/\s/,"日 ")+'</span>\
+                            </div>\
+                            <div class="pw-evaluate-detail-desc flex-1">'+(eveList[i].user_content == null ? " " : eveList[i].user_content)+'</div>\
+                        </div>\
+                    </div>'
+                );
+            }
+        });
+    });
+
+    $('.prize,.footer').click(function () {
+       location.href = config.downloadUrl;
+    });
+
+    function resetAnimation() {
+        $('#yuyin').attr('src','img/icon-yuyin-3.png');
+        clearInterval(config.dshiqi);
+    }
+
+    function setAnimation() {
+        var is = 1;
+        config.dshiqi = setInterval(function () {
+            $('#yuyin').attr('src','img/icon-yuyin-'+is+'.png');
+            if(is == 3) is=1;
+            else is++;
+        },500);
+    }
+
+    function DateDiff(date1) { //时间相差天数计算
+        var str ;
+        var date3= new Date().getTime() - date1.getTime();
+        var days=Math.floor(date3/(24*3600*1000));
+        var leave1=date3%(24*3600*1000);
+        var hours=Math.floor(leave1/(3600*1000));
+        var leave2=leave1%(3600*1000);
+        var minutes=Math.floor(leave2/(60*1000));
+        var leave3=leave2%(60*1000);
+        var seconds=Math.round(leave3/1000);
+        if(days){
+            str = days + "天前";
+        }else if(hours){
+            str = hours + "小时前";
+        }else if(minutes){
+            str = minutes + "分钟前";
+        }else if(seconds){
+            str = seconds + "秒前";
+        }
+        return str;
+    }
+
+</script>
+</body>
+</html>

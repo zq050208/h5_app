@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1, maximum-scale=1,user-scalable=no">
+    <title>我要点评</title>
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+      }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        font-size: 14px;
+        background: rgba(251, 249, 249, 1);
+        position: relative;
+        font-family: PingFangSC-Medium, PingFang SC;
+      }
+      .header {
+        width: 100%;
+        height: 44px;
+        background: rgba(255, 255, 255, 1);
+        border-radius: 10px 10px 0px 0px;
+      }
+      .headerMain {
+        padding: 0 12px;
+        height: 44px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .callBackBtn {
+        width: 22px;
+        height: 22px;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+      }
+      .release {
+        color: rgba(255, 204, 3, 1);
+        width: 60px;
+        height: 30px;
+        background: rgba(248, 247, 241, 1);
+        border-radius: 15px;
+        line-height: 30px;
+        text-align: center;
+      }
+      .main {
+        margin: 8px 16px;
+        background: rgba(255, 255, 255, 1);
+        box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        min-height: calc(100% - 115px);
+        position: relative;
+      }
+      .comment_length{
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        color: #999999;
+      }
+      .mainAbout {
+        padding: 0 14px;
+      }
+      .logo {
+        width: 80px;
+        height: 80px;
+        box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        margin-right: 10px;
+      }
+      .aboutName {
+        flex: 8;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .team {
+        padding: 22px 0 20px 0;
+        display: flex;
+        align-items: center;
+      }
+      .team_name {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-bottom: 3px;
+      }
+      .tagTitle {
+        color: rgba(119, 119, 119, 1);
+        font-size: 12px;
+        font-weight: 400;
+      }
+      .tagContnet {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 15px 0;
+      }
+      .tagText {
+        font-size: 12px;
+      }
+      .tagItem {
+        color: rgba(170, 170, 170, 1);
+        font-size: 14px;
+        padding: 4.5px 15px;
+        border-radius: 15px;
+        border: 1px solid rgba(204, 204, 204, 1);
+        margin-right: 10px;
+        margin-bottom: 5px;
+      }
+      .tagItem.active{
+        color:rgba(215,171,0,1);
+        background:rgba(245,243,236,1);
+        border: none;
+      }
+      .buttonContent {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .comment {
+        padding: 0 15px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        border-radius: 15px;
+        border: 1px solid rgba(255, 204, 3, 1);
+        color: rgba(255, 204, 3, 1);
+        font-size: 12px;
+      }
+      .startsContet {
+        display: flex;
+        margin-right: 12px;
+      }
+      .starts {
+        width: 22px;
+        height: 22px;
+        margin-right: 3px;
+      }
+      /* 弹框 */
+      .pup {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 999;
+        display: none;
+      }
+      /* 弹框 */
+      .tip {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 999;
+        display: none;
+      }
+      /* 弹框 */
+      .link {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 999;
+        display: none;
+      }
+      .tipContent {
+        width: 80%;
+        z-index: 99999999;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(255, 255, 255, 1);
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.24);
+        border-radius: 12px;
+        padding: 20px 0 15px 0;
+      }
+
+      .mask {
+        width: 100%;
+        height: 100%;
+        background: rgba(51, 51, 51, 0.3);
+        z-index: 999999;
+        position: fixed;
+      }
+
+      .pupContent {
+        width: 80%;
+        z-index: 999999;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: rgba(255, 255, 255, 1);
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.24);
+        border-radius: 12px;
+        padding: 20px 0 15px 0;
+      }
+      .tag-title {
+        font-size:16px;
+        font-family:PingFangSC-Regular,PingFang SC;
+        font-weight:400;
+        color:rgba(40,40,40,1);
+        line-height:16px;
+      }
+      .tag-content {
+        margin: 10px 0 20px 0;
+        text-align: center;
+        font-size:14px;
+        font-family:PingFangSC-Regular,PingFang SC;
+        font-weight:400;
+        color:rgba(119,119,119,1);
+        line-height:20px;
+      }
+      input {
+        -webkit-appearance:none;/*去除阴影边框*/
+      }
+      #input {
+        /* outline: none; */
+        width: 100%;
+        height: 33px;
+        border-radius:17px;
+        border:1px solid rgba(119,119,119,1);
+        padding-left: 15px;
+        box-sizing: border-box;
+      }
+      .link-input {
+        width: 65%;
+        height: 33px;
+        border-radius:17px;
+        border:1px solid rgba(119,119,119,1);
+        padding-left: 15px;
+      }
+      .button {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 10px;
+        padding: 0 15px;
+      }
+      .cancleClick,
+      .addClick {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size:16px;
+        font-family:PingFangSC-Regular,PingFang SC;
+        font-weight:400;
+        color:rgba(40,40,40,1);
+        line-height:22px;
+      }
+      .addClick {
+        width:90px;
+        height:38px;
+        background:linear-gradient(126deg,rgba(255,232,7,1) 0%,rgba(255,204,3,1) 100%);
+        border-radius:19px;
+      }
+      .cancleClick {
+        width:90px;
+        height:38px;
+        background:rgba(234,234,234,1);
+        border-radius:19px;
+      }
+      .title-input::-webkit-input-placeholder {
+        color:rgba(170,170,170,1);
+      }
+      .title-input {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 2px 15px;
+        border: none;
+        border-bottom: 0.5px #F2F2F2 solid;
+        height: 32px;
+        font-size:16px;
+        font-family:PingFangSC-Regular,PingFang SC;
+        font-weight:400;
+        color:rgba(0,0,0,1);
+        line-height:16px;
+      }
+      .editor {
+        box-sizing: border-box;
+        width:100%;
+        line-height:24px;
+        padding: 15px;
+        overflow-x: hidden;
+        overflow-y: auto;
+        outline:0;
+        font-size:15px;
+        font-family:PingFangSC-Regular,PingFang SC;
+        font-weight:400;
+        color:rgba(0,0,0,1);
+      }
+      .editor:empty::before {
+        content: attr(placeholder);
+        color:rgba(170,170,170,1);
+      }
+      .editor img {
+        display: block;
+        max-width: 300px;
+      }
+      .bottom {
+        width: 100%;
+        height: 53px;
+        line-height: 53px;
+        background-color: #fff;
+        /* text-align: center; */
+      }
+    </style>
+  </head>
+  <body>
+    <div style="width: 100%; height: 100%; border-radius: 10px 10px 0px 0px;">
+      <div class="header">
+        <div class="headerMain">
+          <div style="width: 60px;">
+            <img src="img/icon-arrow_left.png" alt="" class="callBackBtn" onclick="handleGoBack()" />
+          </div>
+          <span style="color:rgba(51,51,51,1);font-weight:500;">写评论</span>
+          <div class="release" onclick="handleSubmit()">发布</div>
+        </div>
+      </div>
+      <!-- 主要部分 -->
+      <div class="main" id="main">
+        <div class="mainAbout">
+          <div class="team">
+            <img src="" alt="" class="logo" />
+            <div class="aboutName">
+              <div class="team_name"></div>
+              <div style="display: flex;align-items: center;">
+                <div class="startsContet">
+                </div>
+                <span class="star-word" style="color: rgba(255, 204, 3, 1)"></span>
+              </div>
+            </div>
+          </div>
+          <!-- 观点 -->
+          <div class="tag">
+            <div class="tagTitle">为游戏打观点</div>
+            <div class="tagContnet"></div>
+
+            <div class="buttonContent">
+              <div class="change comment" onclick="changeTag()">换一换</div>
+              <div class="addTag comment">
+                <img src="img/icon-plus.png" style="width: 10px;height: 10px;margin-right: 5px;" alt="" />新观点
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top: 30px">
+          <input id="title" class="title-input" type="text" placeholder="快设置一个吸引人的标题吧~" maxlength="20" />
+          <div id="editor" class='editor' max-legnth="1500" contenteditable='true' oninput="contentChange()" placeholder='来评价评价这个游戏吧~'></div>
+          <!-- <span class="comment_length"></span> -->
+          <input type="file" name="file" id="uploadFile" accept="image/*" onchange="uploadFile(event)" style="display: none;"/>
+        </div>
+      </div>
+
+      <div class="bottom">
+        <img id="uploadImage" class="upload" src="img/icon-pic.png" alt="" style="width: 25px; height: 25px; vertical-align: middle; margin-left: 15px;" />
+        <img class="link-btn" src="img/icon-link.png" alt="" style="width: 25px; height: 25px; vertical-align: middle; margin-left: 35px;" />
+      </div>
+      <!-- 添加观点弹框 -->
+      <div class="pup">
+        <div class="mask"></div>
+        <div class="pupContent">
+          <div style="display: flex;justify-content: center;flex-direction: column;align-items: center;padding: 0 15px;
+    box-sizing: border-box;">
+            <p class="tag-title">添加观点</p>
+            <div class="tag-content">请输入你想添加的观点名称<br />最多10个字</div>
+            <input id="input" type="text" placeholder="观点" maxlength="10" />
+          </div>
+          <div class="button">
+            <span class="cancleClick" onclick="handleCloseTag()">取消</span>
+            <span class="addClick" onclick="handleAddTag()">确定</span>
+          </div>
+        </div>
+      </div>
+      <!-- 添加链接弹框 -->
+      <div class="link">
+        <div class="mask"></div>
+        <div class="pupContent">
+          <div style="display: flex;justify-content: center;flex-direction: column;align-items: center;padding: 0 15px;box-sizing: content-box; ">
+            <p class="tag-title">添加链接</p>
+            <div style="box-sizing: content-box; display: flex; justify-content: space-around; margin: 15px 0 0;width: 100%">
+              <span style="line-height: 35px;">链接名称：</span>
+              <input class="link-input link-name" type="text" placeholder="名称会替代链接展示" maxlength="10" />
+            </div>
+            <div style="box-sizing: content-box; display: flex; justify-content: space-around; margin: 15px 0;width: 100%">
+              <span style="line-height: 35px;">链接地址：</span>
+              <input class="link-input link-address" type="text" placeholder="请输入链接地址" />
+            </div>
+          </div>
+          <div class="button">
+            <span class="cancleClick" onclick="handleCloseLink()">取消</span>
+            <span class="addClick" onclick="handleAddLink()">确定</span>
+          </div>
+        </div>
+      </div>
+      <!-- 错误提示框 -->
+      <div class="tip">
+        <div class="mask"></div>
+        <div class="tipContent">
+          <div style="display: flex;justify-content: center;flex-direction: column;align-items: center;">
+            <p class="tipWord"></p>
+          </div>
+          <div class="button" style="justify-content: center">
+            <span class="addClick" onclick="closeModal()">确定</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+<script src="../public/jquery.min.js"></script>
+<script src="../public/config.js"></script>
+<script src="../public/service.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+<script>
+    var baseImgUrl =  "https://cdn.tinytiger.cn/"
+
+    var config = {
+      token: Request('token') || '4131141c2bebbcd4f45d3aef1e81082f',
+      game_id: Request('id') || 2,
+      score: 0,
+      qiniuUrl: 'Common/getQiniuToken',
+      tagUrl: 'GameAssess/addView',
+      addAssessUrl: 'GameAssess/addAssess',
+      type: 'get',
+      tags: [],
+      allTags: [],
+      newTags: [],
+      qiniuToken: '',
+    }
+
+    const isIphonex = () => {
+      if (typeof window !== 'undefined' && window) {
+        return /iphone/gi.test(window.navigator.userAgent) && window.screen.height >= 812;
+      }
+      return false;
+    }
+    if (isIphonex()) {
+      $('.main').css('min-height', 'calc(100% - 149px)')
+      $('.bottom').css('padding-bottom', '34px')
+    }
+
+    getTagList()
+    getQiniuToken()
+    function getTagList() {
+      requsetHttp(config.tagUrl, config.type, {game_id: config.game_id || 2}, config.token, function(res) {
+        if (res.code == 200) {
+          $('.logo').attr("src", res.data.logo)
+          $('.team_name').html(res.data.name)
+          const tags = []
+          for (let i = 0; i < res.data.viewpoint_list.length; i++) {
+            const element = res.data.viewpoint_list[i]
+            tags.push({
+              name: element.viewpoint,
+              id: element.id,
+              selected: false
+            })
+          }
+          config.allTags = tags
+          config.tags = makeRandomArr(config.allTags, 10)
+          renderTagHtml()
+        }
+      })
+    }
+
+    function getQiniuToken() {
+      requsetHttp(config.qiniuUrl, config.type, {}, config.token, function(res) {
+        if (res.code == 200) {
+          config.qiniuToken = res.data.qiniu_token
+        }
+      })
+    }
+
+    function changeTag() {
+      config.tags = makeRandomArr(config.allTags, 10)
+      renderTagHtml()
+    }
+
+    function tagClick(data) {
+      if(document.getElementsByClassName('active').length >= 5 && !data.selected) {
+        $('.tip').show()
+        $('.tipWord').html('最多选择5个')
+        return
+      }
+      config.tags.forEach(i => {
+        if(i.name === data.name) {
+          i.selected = !i.selected
+        }
+      })
+      config.newTags.forEach(i => {
+        if(i.name === data.name) {
+          i.selected = !i.selected
+        }
+      })
+      renderTagHtml()
+    }
+
+    function renderTagHtml() {
+      var list = ''
+      var tags = config.tags.concat(config.newTags)
+      tags.forEach((item, index) => {
+        list += `<div class="tagItem ${'tagItem' + index} ${item.selected ? 'active' : ''}"># <span class="tagText">${item.name}</span></div>`
+      })
+      $(".tagContnet").html(list)
+      tags.forEach((item, index) => {
+        $(".tagItem" + index).on('click', function() {
+          tagClick(item)
+        })
+      })
+    }
+
+    function addAssess() {
+      var tagData = {
+        new_tag: [],
+        old_tag: []
+      }
+      config.allTags.forEach(i => {
+        if(i.selected) tagData.old_tag.push(i.id)
+      })
+      config.newTags.forEach(i => {
+        if(i.selected) tagData.new_tag.push(i.name)
+      })
+      const data = {
+        tag_info: JSON.stringify(tagData),
+        title: $('#title').val(),
+        content: document.getElementById('editor').innerHTML,
+        score: config.score,
+        game_id: config.game_id
+      }
+      requsetHttp(config.addAssessUrl, 'post', data, config.token, function(res) {
+        if (res.code == 200) {
+          callComplete()
+        } else {
+          $('.tip').show()
+          $('.tipWord').html(res.msg)
+        }
+      })
+    }
+
+    function handleAddTag() {
+      console.log("config.allTags:", config.allTags,$(".tagContnet .active").length)
+      if($(".tagContnet .active").length >= 5){
+        $('.tip').show()
+        $('.tipWord').html('最多只能选中5个观点')
+        return
+      }
+      if(config.newTags.length >= 5) {
+        $('.tip').show()
+        $('.tipWord').html('最多添加5个观点')
+        return
+      }
+      var ifHas = false
+      const newTagName = $("#input").val()
+      if(newTagName.trim() === '') {
+        $('.tip').show()
+        $('.tipWord').html('请输入')
+        return
+      }
+      config.allTags.forEach(i => {
+        if(i.name === newTagName) {
+          ifHas = true
+          return
+        }
+      })
+      if(ifHas) {
+        $('.tip').show()
+        $('.tipWord').html('已存在的观点')
+        return
+      }
+      $(".pup").hide()
+      config.newTags.push({name: newTagName, selected: true})
+      $("#input").val('')
+      renderTagHtml()
+    }
+
+    $('.upload').click(function() {
+      if (browser.versions.android) {
+        window.titi_js.callAlbum()
+      }
+      // else if (browser.versions.iPhone || browser.versions.iPad) {
+      //   window.webkit.messageHandlers.callAlbum.postMessage(null);
+      // }
+      else {
+        $('#uploadFile').trigger('click')
+      }
+    })
+
+    $('.link-btn').click(function() {
+      $('.link').show()
+    })
+
+    var lastEditRange;
+    // 编辑框点击事件
+    document.getElementById('editor').onclick = function() {
+      // 获取选定对象
+      var selection = getSelection()
+      // 设置最后光标对象
+      lastEditRange = selection.getRangeAt(0)
+    }
+    function contentChange() {
+      var _html = $("#editor").html()
+      console.log("html:", _html.length)
+      if(_html.length > 1500){
+        $("#editor").html(_html.substr(0,1500) + '...')
+        this.blur()
+        // $(".comment_length").html('1000/1000')
+      }
+      // 获取选定对象
+      var selection = getSelection()
+      // 设置最后光标对象
+      lastEditRange = selection.getRangeAt(0)
+    }
+    function cutstr(str, len) {
+      var str_length = 0;
+      var str_len = 0;
+      str_cut = new String();
+      str_len = str.length;
+      for (var i = 0; i < str_len; i++) {
+        a = str.charAt(i);
+        str_length++;
+        if (escape(a).length > 4) {
+          //中文字符的长度经编码之后大于4
+          str_length++;
+        }
+        str_cut = str_cut.concat(a);
+        if (str_length >= len) {
+          str_cut = str_cut.concat("...");
+          return str_cut;
+        }
+      }
+      //如果给定字符串小于指定长度，则返回源字符串；
+      if (str_length < len) {
+        return str;
+      }
+    }
+
+    function handleAddLink() {
+      var editor = document.getElementById('editor')
+      const name = $('.link-name').val()
+      const address = $('.link-address').val()
+      if(name && address) {
+        if(address.indexOf('tinytiger.cn') > -1) {
+          editor.focus()
+          // 获取选定对象
+          var selection = getSelection()
+          // 判断是否有最后光标对象存在
+          if (lastEditRange) {
+            // 存在最后光标对象，选定对象清除所有光标并添加最后光标还原之前的状态
+            selection.removeAllRanges()
+            selection.addRange(lastEditRange)
+          }
+          // keepLastIndex(editor)
+          document.execCommand('insertHTML', false, `<a href=${address}>${name}</a>`)
+          lastEditRange = selection.getRangeAt(0)
+          $('.link').hide()
+        } else {
+          $('.tip').show()
+          $('.tipWord').html('网址错误')
+        }
+      } else {
+        $('.tip').show()
+        $('.tipWord').html('请输入链接名称和链接地址')
+      }
+    }
+
+    function uploadImgToQiniu(file) {
+      const axiosInstance = axios.create({ withCredentials: false });    //withCredentials 禁止携带cookie，带cookie在七牛上有可能出现跨域问题
+      let data = new FormData();
+      data.append('token', config.qiniuToken);     //七牛需要的token，叫后台给，是七牛账号密码等组成的hash
+      data.append('file', file);
+      axiosInstance({
+        method: 'POST',
+        url: 'https://upload-z2.qiniup.com',  //上传地址
+        data: data,
+        timeout: 30000,      //超时时间，因为图片上传有可能需要很久
+      }).then(data => {
+        var url = baseImgUrl + data.data.key
+        var editor = document.getElementById('editor')
+        editor.focus()
+        // 获取选定对象
+        var selection = getSelection()
+        // 判断是否有最后光标对象存在
+        if (lastEditRange) {
+          // 存在最后光标对象，选定对象清除所有光标并添加最后光标还原之前的状态
+          selection.removeAllRanges()
+          selection.addRange(lastEditRange)
+        }
+        document.execCommand('insertHTML', false, `<img src=${url} /><p>&nbsp;&nbsp;</p>`)
+        lastEditRange = selection.getRangeAt(0)
+        $('#uploadFile').val('')
+      })
+    }
+
+    function uploadFile(e){
+      if(editor.innerHTML.split('<img').length - 1 >= 9) {
+        $('.tip').show()
+        $('.tipWord').html('最多上传9张图片')
+        return false
+      }
+      let file = e.target.files[0]
+      uploadImgToQiniu(file)
+      // editor.focus()
+      // // 获取选定对象
+      // var selection = getSelection()
+      // // 判断是否有最后光标对象存在
+      // if (lastEditRange) {
+      //   // 存在最后光标对象，选定对象清除所有光标并添加最后光标还原之前的状态
+      //   selection.removeAllRanges()
+      //   selection.addRange(lastEditRange)
+      // }
+      // document.execCommand('insertHTML', false, `<img src=${res} /><p>&nbsp;&nbsp;</p>`)
+      // lastEditRange = selection.getRangeAt(0)
+      // // keepLastIndex(editor)
+      // var ele = document.getElementById('main')
+      // ele.scrollTop = ele.scrollHeight
+      // $('#uploadFile').val('')
+    }
+    function getImgUrl(data) {
+      var editor = document.getElementById('editor')
+      if(editor.innerHTML.split('<img').length - 1 >= 9) {
+        $('.tip').show()
+        $('.tipWord').html('最多上传9张图片')
+        return false
+      }
+      editor.focus()
+      // 获取选定对象
+      var selection = getSelection()
+      // 判断是否有最后光标对象存在
+      if (lastEditRange) {
+        // 存在最后光标对象，选定对象清除所有光标并添加最后光标还原之前的状态
+        selection.removeAllRanges()
+        selection.addRange(lastEditRange)
+      }
+      document.execCommand('insertHTML', false, `<img src=${baseImgUrl + data.img} /><p>&nbsp;&nbsp;</p>`)
+      lastEditRange = selection.getRangeAt(0)
+    }
+
+    function handleSubmit() {
+      if(config.score === 0) {
+        $('.tip').show()
+        $('.tipWord').html('还没有点评呢~')
+        return false
+      }
+      if(checkWords(document.getElementById('editor').innerHTML)) {
+        addAssess()
+      }
+    }
+
+    function checkWords(description) {
+      description = description.replace(/(\n)/g, "")
+      description = description.replace(/(\t)/g, "")
+      description = description.replace(/(\r)/g, "")
+      description = description.replace(/<\/?[^>]*>/g, "")
+      description = description.replace(/\s*/g, "")
+      description = description.replace(/&nbsp;/g, "")
+      if(description.length < 15) {
+        $('.tip').show()
+        $('.tipWord').html('再写一点嘛~')
+        return false
+      }
+      if(description.length > 1500) {
+        $('.tip').show()
+        $('.tipWord').html('不能超过1000字~')
+        return false
+      }
+      return true
+    }
+
+    grade(0)
+    function grade(score) {
+      config.score = score
+      var starts = ''
+      var word = ''
+      if(score === 3) {
+        word = '还行'
+      }
+      if(score === 4) {
+        word = '推荐'
+      }
+      if(score === 5) {
+        word = '力荐'
+      }
+      for (let i = 0; i < 5; i++) {
+        if(i < score) {
+          starts += `<img class="starts star${i}" src="img/icon-start_active.png" alt="" onclick="grade(${i+1})" />`
+        } else {
+          starts += `<img class="starts star${i}" src="img/icon-star_default.png" alt="" onclick="grade(${i+1})" />`
+        }   
+      }
+      $('.startsContet').html(starts)
+      $('.star-word').html(word)
+    }
+
+    function keepLastIndex(obj) {
+      if (window.getSelection) {//ie11 10 9 ff safari
+        obj.focus(); //解决ff不获取焦点无法定位问题
+        var range = window.getSelection();//创建range
+        range.selectAllChildren(obj);//range 选择obj下所有子内容
+        range.collapseToEnd();//光标移至最后
+      } else if (document.selection) {//ie10 9 8 7 6 5
+        var range = document.selection.createRange();//创建选择对象
+        range.moveToElementText(obj);//range定位到obj
+        range.collapse(false);//光标移至最后
+        range.select();
+      }
+    }
+
+    function handleGoBack() {
+      callBack()
+    }
+
+    /***
+     * 触发返回按钮
+     */
+     function callBack() {
+      if (browser.versions.android) {
+        window.titi_js.callBack();
+      } else if (browser.versions.iPhone || browser.versions.iPad) {
+        window.webkit.messageHandlers.callBack.postMessage(null);
+      }
+    }
+
+    /***
+     * 发布成功跳转APP页面
+     */
+    function callComplete() {
+      var obj = {
+        game_id: config.game_id,
+        game_score_fraction: config.score
+      }
+      if (browser.versions.android) {
+        window.titi_js.callComplete();
+        window.titi_js.callGameScore(JSON.stringify(obj));
+      } else if (browser.versions.iPhone || browser.versions.iPad) {
+        window.webkit.messageHandlers.callComplete.postMessage(null);
+        window.webkit.messageHandlers.callGameScore.postMessage({
+          app_id: config.game_id,
+          game_score_fraction: config.score
+        });
+      }
+    }
+
+    function makeRandomArr(arrList, num){
+      // var tempArr = arrList.concat()
+      var tempArr = arrList.slice(0)
+      var newArrList = []
+      if(num > arrList.length){
+        return tempArr
+      }
+      for(var i = 0; i < num; i++){
+        var random = Math.floor(Math.random()*(tempArr.length-1))
+        var arr = tempArr[random]
+        tempArr.splice(random, 1)
+        newArrList.push(arr)
+      }
+      return newArrList
+    }
+
+    function closeModal() {
+      $(".tip").hide()
+    }
+
+    function handleCloseTag() {
+      $(".pup").hide()
+    }
+
+    function handleCloseLink() {
+      $(".link").hide()
+    }
+    
+    $(".addTag").click(function () {
+      $(".pup").show()
+    })
+</script>
